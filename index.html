@@ -258,6 +258,33 @@ button:active{transform:scale(.97)}
 .vz small{display:block;color:var(--dim);font-size:11.5px}
 .vz .gen{flex:0 0 auto;font-size:15px}
 
+/* v5: ditado + botão flutuante Enviar em todas as telas */
+#flutua{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 74px);z-index:36;display:none;align-items:center;gap:10px;padding:10px 12px;max-width:560px;margin:0 auto;background:#1a0d14;border:2px solid var(--red);box-shadow:0 10px 36px rgba(0,0,0,.6),0 0 24px rgba(255,77,94,.4)}
+#flutua.on{display:flex}
+#flutua .rec{width:12px;height:12px;border-radius:50%;background:var(--red);animation:pisca 1s ease-in-out infinite;flex:0 0 auto}
+#flutua .ft{flex:1;min-width:0}#flutua .ft b{display:block;font:700 15px var(--mono);color:#fff}
+#flutua .ft small{display:block;color:#c9cbe0;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#flutua button{flex:0 0 auto;border-radius:14px;font:700 16px var(--f)}
+#flutua .bno{width:46px;height:50px}#flutua .bok{padding:0 22px;height:50px}
+#prev .sug{font-size:12.5px;color:var(--cy);margin:2px 0 8px}
+#ligar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff}
+/* aba Aprovar: perguntas de permissão dos terminais */
+.apv{padding:14px;margin-bottom:12px;border-color:rgba(255,210,74,.5)}
+.apv.risco{border:2px solid var(--red);background:linear-gradient(180deg,rgba(255,77,94,.20),rgba(255,77,94,.07));box-shadow:0 0 22px rgba(255,77,94,.35)}
+.apv .ah{display:flex;align-items:center;gap:8px;font:700 16px var(--f)}
+.apv .ah .tm{margin-left:auto;font:500 11.5px var(--mono);color:var(--dim)}
+.apv .alerta{margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--red);color:#fff;font:700 13.5px var(--f);line-height:1.35}
+.apv .aq{margin:10px 0;padding:12px;border-radius:12px;background:rgba(0,0,0,.45);border:1px solid var(--line);font:12.5px/1.5 var(--mono);color:#e6e9ff;white-space:pre-wrap;word-break:break-word;max-height:46vh;overflow:auto;-webkit-user-select:text;user-select:text}
+.apv.risco .aq{border-color:rgba(255,77,94,.6)}
+.apv .ab{display:flex;flex-wrap:wrap;gap:8px}
+.apv .ab button{flex:1 1 40%;padding:15px 10px;border-radius:13px;font:700 15px var(--f)}
+.apv .ab .perm{background:linear-gradient(135deg,var(--grn),#1fa866);color:#03140b}
+.apv .ab .perm2{background:rgba(62,224,143,.18);color:var(--grn);border:1px solid rgba(62,224,143,.5)}
+.apv .ab .neg{background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff}
+.apv .ab .outra{background:var(--glass2);color:var(--txt);border:1px solid var(--line)}
+.apv .ab button:disabled{opacity:.5}
+#nav button{font-size:10.5px}#nav button i{font-size:21px}
+
 /* v3.1: iPhone maior e esticado até embaixo */
 #app{inset:auto;left:0;top:0;right:0;height:100vh;height:100dvh}
 #pararMini{display:none;flex:0 0 auto;width:44px;height:44px;border-radius:13px;font:700 17px var(--f);background:linear-gradient(135deg,#ff4d5e,#b3122a);color:#fff;box-shadow:0 0 14px rgba(255,77,94,.35)}
@@ -308,11 +335,12 @@ button:active{transform:scale(.97)}
   <main id="corpo">
     <section id="pLig" class="painel on">
       <div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
-      <div id="versao">VERSÃO v4</div>
-      <div id="estadoLig">Toque no botão verde para ligar</div>
+      <div id="versao">VERSÃO v5</div>
+      <div id="estadoLig">Toque no microfone para ditar</div>
       <div id="legenda"></div>
       <div class="tit">Terminais ao vivo</div>
       <div id="vivo"></div>
+      <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
       <div id="resumoLig"><button class="vidro" data-ir="pIdeias">💡 Ideias <b id="rIdeias">0</b></button><button class="vidro" data-ir="pAvisos">🔔 Avisos <b id="rAvisos">0</b></button><button class="vidro" data-ir="pPrint">📷 Print do PC</button></div>
     </section>
     <section id="pTerm" class="painel">
@@ -327,20 +355,25 @@ button:active{transform:scale(.97)}
     <section id="pTar" class="painel"><div class="tit">Tarefas de todos os terminais</div><div id="listaTar"></div></section>
     <section id="pIdeias" class="painel"><div class="tit">Ideias do PC <span id="ideiasN"></span><span class="sp"></span><button class="btop bok" id="aprovaTodas">Aprovar todas</button></div><div id="ideiasInfo" class="vazio" style="padding:0 2px 8px;text-align:left"></div><div id="listaIdeias"></div></section>
     <section id="pAvisos" class="painel"><div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
+    <section id="pAprovar" class="painel"><div class="tit">Aprovar <span id="aprovarN"></span></div>
+      <div class="vazio" style="padding:0 2px 10px;text-align:left">Quando um terminal para numa pergunta de permissão ou confirmação, ela aparece aqui (e chega como notificação). Sua resposta vai direto para o terminal.</div>
+      <div id="listaAprovar"></div></section>
     <section id="pPrint" class="painel"><div class="tit">Print do PC</div>
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
       <div id="printInfo" class="vazio" style="padding:0 2px 10px;text-align:left">O PC só tira o print quando você toca no botão. Ficam guardados os últimos 10.</div>
       <div id="gradePrints"></div></section>
   </main>
   <section id="prev" class="vidro"></section>
+  <div id="flutua" class="vidro"><span class="rec"></span><div class="ft"><b id="flT">● 0:00</b><small id="flX"></small></div><button id="flCancel" class="bno" title="Cancelar">✕</button><button id="flEnvia" class="bok">Enviar</button></div>
   <div id="teclado"><input id="txt" placeholder="Escreva para o Jarvis…" enterkeyhint="send" autocomplete="off"><button id="enviaTxt">Enviar</button></div>
-  <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="ligar" title="Ligação">📞</button><button id="tecBtn" title="Escrever">⌨</button></div>
+  <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="ligar" title="Ditar"></button><button id="tecBtn" title="Escrever">⌨</button></div>
   <nav id="nav">
-    <button data-p="pLig" class="on"><i>📞</i>Ligação</button>
+    <button data-p="pLig" class="on"><i>🎙</i>Ditar</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
     <button data-p="pTar"><i>☰</i>Tarefas</button>
     <button data-p="pIdeias"><i>💡</i>Ideias</button>
     <button data-p="pAvisos"><i>🔔</i>Avisos</button>
+    <button data-p="pAprovar"><i>🔐</i>Aprovar</button>
     <button data-p="pPrint"><i>📷</i>Print</button>
   </nav>
 </div>
@@ -348,9 +381,9 @@ button:active{transform:scale(.97)}
 <div id="zoom"><button id="zoomX">✕</button><img id="zoomImg" alt=""><div id="zoomI"></div></div>
 <div class="cartao" id="cfg"><div class="caixa vidro">
   <h2>⚙ Configurações</h2>
-  <p class="s">Voz do Jarvis (português do Brasil). A automática escolhe a voz masculina mais natural do seu iPhone.</p>
+  <p class="s">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
   <div id="listaVozes"></div>
-  <p class="s" style="margin:16px 0 8px">Depois que eu parar de falar, esperar antes de enviar:</p><div id="esperaOp" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0"></p>
   <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
@@ -509,7 +542,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v4";
+const VERSAO = "v5";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -588,7 +621,7 @@ function iniciaSync(){
 async function olhando(){   // o PC manda a saída ao vivo mais rápido enquanto o app está aberto
   try{ await rest("jarvis_olhando?on_conflict=id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ id: 1, ate: new Date(Date.now() + 45000).toISOString() }) }); }catch(e){}
 }
-const CAMPOS = "nome,estado,texto,pct,total,feito,fila,seg,pausada,cpu,ram,atualizado_em";
+const CAMPOS = "nome,estado,texto,pct,total,feito,fila,seg,pausada,cpu,ram,atualizado_em,pergunta";
 function verTerminal(){ return painelAtual === "pTerm" || (largo() && painelAtual === "pTerm"); }
 const largo = () => matchMedia("(min-width:760px)").matches;
 async function puxa(){
@@ -631,7 +664,45 @@ async function puxaAvisos(){
 }
 
 /* ---------- desenho ---------- */
-function desenhaTudo(){ desenhaTopo(); desenhaVivo(); desenhaTerminal(); desenhaTarefas(); desenhaIdeias(); desenhaBadges(); desenhaParar(); }
+function desenhaTudo(){ desenhaTopo(); desenhaVivo(); desenhaTerminal(); desenhaTarefas(); desenhaIdeias(); avisaPerguntas(); desenhaAprovar(); desenhaBadges(); desenhaParar(); }
+/* ---------- aba Aprovar: perguntas de permissão/confirmação dos terminais ---------- */
+const perguntasAbertas = () => abas.filter(a => a.pergunta && a.pergunta.id);
+let perguntasVistas = null;
+function avisaPerguntas(){
+  const ps = perguntasAbertas();
+  if(perguntasVistas === null){ perguntasVistas = {}; ps.forEach(a => perguntasVistas[a.pergunta.id] = 1); return; }
+  ps.forEach(a => { const q = a.pergunta; if(perguntasVistas[q.id]) return; perguntasVistas[q.id] = 1; toast((q.risco ? "🚨 PEDIDO PERIGOSO · " : "🔐 Permissão · ") + a.nome, (q.texto || "").split(String.fromCharCode(10)).filter(Boolean).slice(-3).join(" ")); });
+}
+function rotuloOpcao(o){
+  const t = String(o.t || ""), tl = t.toLowerCase();
+  if(/^sim, sempre/i.test(t)) return { txt: "✓ Permitir sempre", cls: "perm2", perm: true };
+  if(/^sim$/i.test(t) || /^yes/i.test(tl)) return { txt: "✓ Permitir", cls: "perm", perm: true };
+  if(/^n[ãa]o$/i.test(t) || /^no\b/i.test(tl)) return { txt: "✗ Negar", cls: "neg", perm: false };
+  return { txt: t, cls: "outra", perm: false };
+}
+function desenhaAprovar(){
+  const l = $q("listaAprovar"), ps = perguntasAbertas(); l.innerHTML = ""; $q("aprovarN").textContent = ps.length ? "(" + ps.length + ")" : "";
+  if(!ps.length){ l.innerHTML = '<div class="vazio vidro">Nenhum terminal esperando permissão agora ✓</div>'; return; }
+  ps.sort((a, b) => (b.pergunta.risco - a.pergunta.risco)).forEach(a => {
+    const q = a.pergunta, d = document.createElement("div"); d.className = "apv vidro" + (q.risco ? " risco" : "");
+    d.innerHTML = '<div class="ah"><i class="d"></i><span></span><span class="tm"></span></div><div class="alerta"></div><div class="aq"></div><div class="ab"></div>';
+    d.querySelector(".ah span").textContent = a.nome; d.querySelector(".ah .d").style.background = q.risco ? "var(--red)" : "var(--yel)";
+    d.querySelector(".tm").textContent = "esperando há " + dur(Math.max(0, Date.now() / 1000 - (q.desde || 0)));
+    const al = d.querySelector(".alerta"); al.textContent = q.risco ? "🚨 PEDE PARA APAGAR OU GASTAR DINHEIRO (" + (q.motivo || "risco") + "). Leia com atenção antes de permitir." : ""; al.style.display = q.risco ? "" : "none";
+    d.querySelector(".aq").textContent = q.texto || "";
+    const ab = d.querySelector(".ab");
+    (q.opcoes || []).forEach((o, i) => {
+      const r = rotuloOpcao(o), b = document.createElement("button"); b.className = r.cls; b.textContent = r.txt;
+      b.onclick = async () => {
+        if(q.risco && r.perm && !confirm("⚠ ATENÇÃO: este pedido envolve APAGAR arquivos ou GASTAR DINHEIRO.\n\nPermitir mesmo assim em " + a.nome + "?")) return;
+        ab.querySelectorAll("button").forEach(x => x.disabled = true);
+        await comando("responder", a.nome, q.id + "|" + i, "Enviando a resposta ao terminal…"); puxa();
+      };
+      ab.appendChild(b);
+    });
+    l.appendChild(d);
+  });
+}
 function desenhaTopo(){
   const c = $q("chips"); c.innerHTML = "";
   abas.forEach(a => {
@@ -758,7 +829,7 @@ function desenhaBadges(){
   const vistos = ARM.get("jv_avisto") || 0, nAv = avisos.filter(x => x.id > vistos).length, urg = avisos.some(x => x.id > vistos && /pix|captcha|login/.test(x.tipo));
   const erros = abas.reduce((s, a) => s + filaDe(a).filter(x => x.e === "erro").length, 0), exec = abas.filter(a => atualDe(a)).length;
   const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
-  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv, urg);
+  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv, urg); bd("pAprovar", perguntasAbertas().length, true);
   bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
   $q("rIdeias").textContent = ideias.length; $q("rAvisos").textContent = nAv;
 }
@@ -886,9 +957,9 @@ function desenhaVozes(){
   $q("vozDica").textContent = !temM ? "Seu iPhone não tem voz masculina em português do Brasil. Baixe uma em Ajustes > Acessibilidade > Conteúdo Falado > Vozes > Português (Brasil) > Felipe (escolha a versão Aprimorada ou Premium)."
     : qualidadeVoz(melhorM) < 3 ? "Para uma voz ainda mais natural, baixe a versão Premium ou Aprimorada em Ajustes > Acessibilidade > Conteúdo Falado > Vozes > Português (Brasil)." : "";
 }
-function desenhaEspera(){
-  const l = $q("esperaOp"); l.innerHTML = ""; const atual = ARM.get("jv_espera") || 3.5;
-  [2.5, 3.5, 5, 8].forEach(v => { const b = document.createElement("button"); b.className = "chip" + (v === atual ? " sel" : ""); b.textContent = String(v).replace(".", ",") + " s" + (v === 3.5 ? " (padrão)" : ""); b.onclick = () => { ARM.set("jv_espera", v); desenhaEspera(); }; l.appendChild(b); });
+function desenhaFalaTg(){
+  const b = $q("falaTg"), on = !!ARM.get("jv_fala"); b.className = "vz" + (on ? " sel" : ""); b.querySelector(".vn").textContent = on ? "Jarvis responde falando: LIGADO" : "Jarvis responde falando: desligado";
+  b.querySelector("small").textContent = on ? "Toque para desligar (a voz abaixo é a que ele usa)" : "O app só mostra texto. Toque para ligar a voz de resposta.";
 }
 function testaVoz(){ desbloqueiaAudio(); try{ speechSynthesis.cancel(); }catch(e){} const u = new SpeechSynthesisUtterance("Olá, eu sou o Jarvis. Esta é a minha voz."); u.lang = "pt-BR"; if(vozPt) u.voice = vozPt; u.pitch = vozPitch; u.rate = 1; try{ speechSynthesis.speak(u); }catch(e){} }
 if("speechSynthesis" in window){ achaVoz(); speechSynthesis.onvoiceschanged = achaVoz; }
@@ -897,68 +968,73 @@ function legenda(t, pequeno){ const l = $q("legenda"); l.textContent = t || ""; 
 function falar(texto){
   legenda(texto);
   return new Promise(res => {
-    if(!("speechSynthesis" in window)){ res(); return; }
+    if(!ARM.get("jv_fala") || !("speechSynthesis" in window)){ res(); return; }       // o Jarvis NÃO responde falando (dá para ligar em ⚙)
     try{ speechSynthesis.cancel(); }catch(e){}
-    falando = true; paraRec();
+    falando = true;
     const u = new SpeechSynthesisUtterance(texto); u.lang = "pt-BR"; if(vozPt) u.voice = vozPt; u.rate = 1.02; u.pitch = vozPitch;
     let feito = false;
-    const fim = () => { if(feito) return; feito = true; falando = false; res(); if(ligado && !pensando && !previa) setTimeout(escuta, 250); };
+    const fim = () => { if(feito) return; feito = true; falando = false; res(); };
     u.onend = fim; u.onerror = fim;
     setTimeout(fim, 2500 + texto.length * 90);                 // o iPhone às vezes não avisa o fim
     speechSynthesis.speak(u);
   });
 }
 
-/* ---------- voz: ouvir (Ligação contínua, pt-BR) ---------- */
+/* ---------- DITADO (como no WhatsApp): toca no microfone, fala, toca em Enviar ---------- */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, ligado = false, pensando = false, hist = [];
+let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, ligado = false, pensando = false, hist = [], gravT0 = 0, gravTimer = null;   // "ligado" = está gravando
 function paraRec(){ if(rec){ try{ rec.onend = null; rec.abort(); }catch(e){} rec = null; } ouvindoAgora = false; }
-/* O app espera VOCÊ TERMINAR: junta tudo o que você falou (mesmo com pausas e com o iPhone reiniciando o microfone) e só envia depois de alguns
-   segundos de silêncio (⚙ muda o tempo) ou quando você tocar no texto. */
-let acumFala = "", timerEnvio = null;
-const esperaMs = () => (ARM.get("jv_espera") || 3.5) * 1000;
-function zeraFala(){ clearTimeout(timerEnvio); timerEnvio = null; acumFala = ""; }
-function enviaFala(){ clearTimeout(timerEnvio); timerEnvio = null; const t = acumFala.trim(); acumFala = ""; if(t.length < 2) return; paraRec(); pergunta(t); }
+let acumFala = "";
+const zeraFala = () => { acumFala = ""; };
+const tempoGrav = () => { const s = Math.floor((Date.now() - gravT0) / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+/* A gravação NÃO para quando você troca de tela no app: ela vive aqui, fora das telas. O iOS encerra o microfone em pausas; religa sozinho e CONTINUA juntando a fala. */
 function escuta(){
-  if(!ligado || falando || pensando || previa) return;
-  if(!SR){ legenda("Este navegador não reconhece voz.", "Use o ⌨ (o ditado do teclado do iPhone também funciona)."); return; }
+  if(!ligado || previa) return;
   paraRec();
   const r = new SR(); rec = r; r.lang = "pt-BR"; r.interimResults = true; r.continuous = true; r.maxAlternatives = 1;
   iniciouEm = Date.now(); const base = acumFala;
-  r.onstart = () => { ouvindoAgora = true; $q("estadoLig").textContent = "● Ouvindo… envio " + (esperaMs() / 1000).toString().replace(".", ",") + " s depois que você parar"; };
+  r.onstart = () => { ouvindoAgora = true; };
   r.onresult = e => {
     let todo = ""; for(let i = 0; i < e.results.length; i++) todo += e.results[i][0].transcript + " ";
     acumFala = (base + " " + todo.trim()).trim();
     nivel = Math.min(1, .35 + Math.min(.5, acumFala.length / 60));
-    if(acumFala) legenda(acumFala, "toque aqui para enviar agora");
-    clearTimeout(timerEnvio); timerEnvio = setTimeout(enviaFala, esperaMs());
+    if(acumFala) legenda(acumFala, "gravando… toque em Enviar quando terminar");
+    desenhaGrav();
   };
   r.onerror = e => {
-    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ desliga(); legenda("O iPhone bloqueou o microfone.", "Ajustes > Safari > Microfone (ou Ajustes > Jarvis) e toque no botão verde de novo."); }
+    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ cancelaGravacao(); legenda("O iPhone bloqueou o microfone.", "Ajustes > Safari > Microfone (ou Ajustes > Jarvis) e toque no microfone de novo."); }
   };
   r.onend = () => {
     ouvindoAgora = false; nivel = 0;
     if(Date.now() - iniciouEm < 700) rapidos++; else rapidos = 0;
-    if(ligado && !falando && !pensando && !previa){
-      if(rapidos >= 8){ desliga(); legenda("O iPhone cortou o microfone.", "Toque no botão verde para ligar de novo."); return; }
-      setTimeout(escuta, Math.min(2500, 200 + rapidos * 300));        // o iOS encerra o microfone em pausas: religa e CONTINUA juntando a fala
+    if(ligado && !previa){
+      if(rapidos >= 8){ cancelaGravacao(); legenda("O iPhone cortou o microfone.", "Toque no microfone para ditar de novo."); return; }
+      setTimeout(escuta, Math.min(2500, 200 + rapidos * 300));
     }
   };
   try{ r.start(); }catch(e){ setTimeout(escuta, 800); }
 }
-const ICO_TEL = '<svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
-const ICO_DESL = '<svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor" style="transform:rotate(135deg)"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
-function liga(){
-  desbloqueiaAudio(); ligado = true; rapidos = 0; atualizaLig(); mantemTela();
-  falar(hist.length ? "Voltei. Pode falar." : "Oi, aqui é o Jarvis. Pode falar.");
+const ICO_MIC = '<svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>';
+const ICO_ENVIA = '<svg viewBox="0 0 24 24" width="38" height="38" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>';
+function iniciaGravacao(){
+  if(ligado) return;
+  if(!SR){ toast("Este navegador não tem ditado", "Use o ⌨ e o microfone do teclado do iPhone."); $q("teclado").classList.add("on"); $q("txt").focus(); return; }
+  ligado = true; zeraFala(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 500); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
 }
-function desliga(){ ligado = false; pensando = false; zeraFala(); paraRec(); try{ speechSynthesis.cancel(); }catch(e){} falando = false; atualizaLig(); if(atualizarDepois) location.reload(); }
-function atualizaLig(){
-  $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_DESL : ICO_TEL;
-  const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Em ligação" : "Toque no botão verde para ligar";
+function cancelaGravacao(){ ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav(); if(atualizarDepois) location.reload(); }
+function enviaGravacao(){
+  const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
+  if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
+  abreConfirma(t);
+}
+function desenhaGrav(){
+  const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
+  $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_ENVIA : ICO_MIC;
+  const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Toque no microfone para ditar";
+  if(ligado){ $q("flT").textContent = "● " + tempoGrav(); $q("flX").textContent = acumFala ? acumFala.slice(-80) : "fale agora…"; }
 }
 
-/* ---------- cérebro: Claude Haiku (Edge Function jarvis-cerebro; a chave fica no Supabase) ---------- */
+/* ---------- cérebro (Edge Function jarvis-cerebro; a chave fica no Supabase) ---------- */
 async function chamaCerebro(corpo){
   try{
     const t = await token();
@@ -968,100 +1044,62 @@ async function chamaCerebro(corpo){
     return j;
   }catch(e){ return { erro: String(e.message || e) }; }
 }
-async function pergunta(texto){
-  if(/^(desliga|desligar|tchau|encerra|encerrar)( a ligacao| a ligação)?\.?$/i.test(texto.trim())){ await falar("Tchau! Desligando."); desliga(); return; }
-  pensando = true; $q("estadoLig").textContent = "● Pensando…"; legenda(texto, "pensando…");
-  const resp = await chamaCerebro({ fala: texto, hist: hist.slice(-6), aba: destino });
-  pensando = false;
-  let fala, prop = null;
-  if(resp && resp.resposta){
-    fala = resp.resposta;
-    if(resp.proposta) prop = Object.assign({ pergunta: resp.proposta.terminal ? "" : resp.resposta }, resp.proposta);   // pedido já reescrito pelo Sonnet; o app só mostra e espera o toque em Enviar
-  } else {
-    const r = reserva(texto, !(resp && resp.sem_ia)); fala = r.fala; prop = r.prop;
-  }
-  hist.push({ q: texto, r: fala }); hist = hist.slice(-8);
-  if(prop){
-    const espera = mostraPrevia(prop);                       // o pedido reescrito aparece já; só sai no toque em Enviar (nunca sozinho)
-    if(ligado || !SR) falar(fala); else legenda(fala);
-    const r = await espera;
-    const fim = r.cancelado ? "Tudo bem, cancelei." : r.ok ? "Enviei para " + r.terminal + "." : "Não consegui enviar. Verifique a internet.";
-    hist.push({ q: "(confirmação)", r: fim }); hist = hist.slice(-8);
-    if(ligado || !SR) await falar(fim); else legenda(fim);
-    if(ligado && !falando) setTimeout(escuta, 250);
-    return;
-  }
-  if(ligado || !SR) await falar(fala); else legenda(fala);
-  if(ligado && !falando) setTimeout(escuta, 250);
-}
-/* ---------- pedido reescrito pela IA: o app NUNCA manda a fala crua; mostra o pedido organizado e só envia no toque em "Enviar" ---------- */
+/* ---------- confirmar e enviar: o texto ditado + o terminal (já selecionado: o que a IA achar certo ou o último usado); só depois o cérebro reescreve e manda ---------- */
 const TERM_PADRAO = ["Jarvis", "Cuida Aí Lojas", "Jarvis Carro", "Jarvis Trade", "Site Cuida Aí Lojas"];
 const nomesTerm = () => { const n = abas.map(a => a.nome); TERM_PADRAO.forEach(x => { if(!n.includes(x)) n.push(x); }); return n; };
-const complementosDe = nome => { const a = abas.find(x => x.nome === nome); return filaDe(a || {}).filter(x => (x.e === "exec" || x.e === "fila") && x.n).map(x => ({ n: String(x.n), t: String(x.t || "").slice(0, 90) })); };
-function compoePedido(p){      // mesmo texto que a função monta: cabeçalho + itens numerados
-  const itens = (p.itens || []).map(x => String(x).trim()).filter(Boolean);
-  const cab = p.tipo === "complemento" && p.complemento_n ? "Complemento da tarefa " + p.complemento_n + (p.complemento_titulo ? " — " + p.complemento_titulo : "") + " (não criar outra):" : String(p.titulo || "Pedido").trim().replace(/[:.]+$/, "") + ":";
-  return (cab + "\n" + (itens.length > 1 ? itens.map((x, i) => (i + 1) + ") " + x).join("\n") : (itens[0] || ""))).trim();
-}
 function usaTerminal(nome){ destino = nome; ARM.set("jv_destino", nome); desenhaTopo(); }   // o último terminal usado fica selecionado para o próximo pedido
 let previa = null;
-function mostraPrevia(p){
-  return new Promise(res => { if(previa) fechaPrevia({ cancelado: true }); previa = Object.assign({ itens: [], tipo: "nova", complemento_n: "", complemento_titulo: "", editando: false, ocupado: false }, p, { sel: p.terminal || null, res: res }); desenhaPrevia(); });
+function abreConfirma(texto){
+  texto = String(texto || "").trim();
+  if(previa) fechaPrevia();
+  previa = { sel: destino && nomesTerm().includes(destino) ? destino : nomesTerm()[0], mudou: false, sugestao: "", sugerindo: false, ocupado: false, estado: "" };
+  const el = $q("prev");
+  el.innerHTML = '<div class="pq">Confirmar pedido</div><div class="pn"></div><div class="pc"></div><div class="sug"></div><textarea class="pe" rows="6" placeholder="Escreva ou dite o pedido…"></textarea><div class="pm"></div><div class="pb"><button class="bno x">✕</button><button class="bok env">Enviar</button></div>';
+  const ta = el.querySelector(".pe"); ta.value = texto;
+  el.querySelector(".x").onclick = fechaPrevia; el.querySelector(".env").onclick = enviaConfirma;
+  el.classList.add("on"); desenhaGrav(); atualizaPrevia();
+  if(texto.length >= 3) sugereTerminal(previa); else ta.focus();
 }
-function fechaPrevia(r){ const p = previa; if(!p) return; previa = null; desenhaPrevia(); p.res(r); }
-async function enviaPrevia(){
-  const p = previa; if(!p || !p.sel || !String(p.pedido || "").trim() || p.ocupado) return;
-  p.ocupado = true; desenhaPrevia();
-  const ok = await mandaPedido(p.sel, p.pedido);
-  if(!ok){ p.ocupado = false; toast("Não consegui enviar", "Verifique a internet e toque em Enviar de novo."); desenhaPrevia(); return; }
-  usaTerminal(p.sel); previa = null; desenhaPrevia(); toast("Enviado · " + p.sel, p.pedido);
-  p.res({ ok: true, terminal: p.sel });
+function atualizaPrevia(){
+  const p = previa, el = $q("prev"); if(!p) return;
+  const pn = el.querySelector(".pn"); pn.innerHTML = "Para: <b></b>"; pn.querySelector("b").textContent = p.sel;
+  const pc = el.querySelector(".pc"); pc.innerHTML = "";
+  nomesTerm().forEach(n => { const b = document.createElement("button"); b.textContent = n; if(n === p.sel) b.className = "sel"; b.disabled = p.ocupado; b.onclick = () => { p.sel = n; p.mudou = true; p.sugestao = ""; usaTerminal(n); atualizaPrevia(); }; pc.appendChild(b); });
+  const sg = el.querySelector(".sug"); sg.textContent = p.sugerindo ? "IA escolhendo o terminal…" : p.sugestao; sg.style.display = sg.textContent ? "" : "none";
+  const pm = el.querySelector(".pm"); pm.textContent = p.estado; pm.style.display = p.estado ? "" : "none";
+  el.querySelector(".pe").disabled = p.ocupado;
+  const env = el.querySelector(".env"); env.disabled = p.ocupado; env.textContent = p.ocupado ? "Enviando…" : "Enviar";
 }
-async function ajustaComIA(instrucao, rascunho){
-  const p = previa; if(!p) return; p.ocupado = true; p.aviso = "Ajustando com a IA…"; desenhaPrevia();
-  const r = await chamaCerebro({ fala: p.original || p.pedido, aba: destino, ajuste: { instrucao: instrucao, rascunho: rascunho, original: p.original || p.pedido } });
+function fechaPrevia(){ previa = null; const el = $q("prev"); el.classList.remove("on"); el.innerHTML = ""; desenhaGrav(); }
+async function sugereTerminal(p){
+  p.sugerindo = true; atualizaPrevia();
+  const r = await chamaCerebro({ modo: "rotear", fala: p.texto || $q("prev").querySelector(".pe").value, aba: destino });
+  p.sugerindo = false;
   if(previa !== p) return;
-  p.ocupado = false;
-  if(r && r.proposta){ const n = r.proposta; Object.assign(p, n, { sel: n.terminal || p.sel, bruto: false, aviso: "", editando: false, editado: false, original: p.original || n.original }); }
-  else { p.aviso = "Não consegui ajustar com a IA agora. Edite o texto à mão."; }
-  desenhaPrevia();
+  let t = r && r.terminal, motivo = r && r.motivo;
+  if(!t && (!r || r.sem_ia || r.erro)){ const l = rotaPorAssunto(sem($q("prev").querySelector(".pe").value)); if(l){ t = l; motivo = "pelo assunto"; } }
+  if(t && !p.mudou){ p.sel = t; p.sugestao = "IA: " + (motivo || "terminal sugerido"); }
+  else if(t && t !== p.sel){ p.sugestao = "IA sugere " + t + (motivo ? " (" + motivo + ")" : ""); }
+  atualizaPrevia();
 }
-function desenhaPrevia(){
-  const el = $q("prev"), p = previa;
-  if(!p){ el.classList.remove("on"); el.innerHTML = ""; return; }
-  el.innerHTML = '<div class="pq"></div><div class="pa"></div><div class="pn"></div><div class="pc"></div><div class="comp"></div><div class="pt"></div><textarea class="pe" rows="7"></textarea><div class="aj"><input class="ai" placeholder="ou diga o que mudar (ex.: separe em dois itens)"><button class="bno" data-a="ia">Ajustar com IA</button></div><div class="pm"></div><div class="pb"></div>';
-  const q = s => el.querySelector(s), edit = !!p.editando;
-  q(".pq").textContent = p.bruto ? "Pedido (sem reescrita da IA)" : "Pedido reescrito pela IA";
-  const pa = q(".pa"); pa.textContent = p.aviso || (p.bruto ? "A IA não reescreveu: este é o texto do que você disse. Revise e toque em Enviar." : ""); pa.style.display = pa.textContent ? "" : "none";
-  const pn = q(".pn"); pn.innerHTML = p.sel ? "Para: <b></b>" : ""; if(p.sel) pn.querySelector("b").textContent = p.sel; else pn.textContent = p.pergunta || "Para qual terminal eu mando? Escolha abaixo."; pn.classList.toggle("duv", !p.sel);
-  const ordem = !p.sel && p.opcoes && p.opcoes.length ? p.opcoes.concat(nomesTerm().filter(x => !p.opcoes.includes(x))) : nomesTerm();
-  ordem.forEach(nome => {
-    const b = document.createElement("button"); b.textContent = nome; if(nome === p.sel) b.className = "sel";
-    b.onclick = () => { p.sel = nome; usaTerminal(nome); if(p.tipo === "complemento" && !complementosDe(nome).some(x => x.n === p.complemento_n)){ p.tipo = "nova"; p.complemento_n = ""; p.complemento_titulo = ""; if(!p.editado && !p.bruto) p.pedido = compoePedido(p); } desenhaPrevia(); };
-    q(".pc").appendChild(b);
-  });
-  const comps = p.sel && !p.bruto ? complementosDe(p.sel) : [];
-  const cp = q(".comp"); cp.style.display = comps.length ? "" : "none";
-  if(comps.length){
-    const mk = (txt, ativo, fn) => { const b = document.createElement("button"); b.textContent = txt; if(ativo) b.className = "sel"; b.onclick = fn; cp.appendChild(b); };
-    mk("Tarefa nova", p.tipo !== "complemento", () => { p.tipo = "nova"; p.complemento_n = ""; p.complemento_titulo = ""; if(!p.editado) p.pedido = compoePedido(p); desenhaPrevia(); });
-    comps.forEach(c => mk("Complemento da #" + c.n + " · " + c.t.slice(0, 28), p.tipo === "complemento" && p.complemento_n === c.n, () => { p.tipo = "complemento"; p.complemento_n = c.n; p.complemento_titulo = c.t; if(!p.editado) p.pedido = compoePedido(p); desenhaPrevia(); }));
-  }
-  const pt = q(".pt"), pe = q(".pe"), aj = q(".aj");
-  pt.textContent = p.pedido || ""; pt.style.display = edit ? "none" : ""; pe.style.display = edit ? "" : "none"; aj.style.display = edit ? "" : "none"; pe.value = p.pedido || "";
-  const pm = q(".pm"); pm.textContent = (!edit && p.motivo && !p.bruto ? "Assunto: " + p.motivo : "") + (!edit && p.original && !p.bruto ? (p.motivo ? " · " : "") + "você disse: “" + String(p.original).slice(0, 140) + (String(p.original).length > 140 ? "…" : "") + "”" : ""); pm.style.display = pm.textContent ? "" : "none";
-  const pb = q(".pb");
-  const mk = (txt, cls, fn, dis) => { const b = document.createElement("button"); b.textContent = txt; b.className = cls; b.disabled = !!dis; b.onclick = fn; pb.appendChild(b); return b; };
-  if(edit){
-    mk("Voltar", "bno", () => { p.editando = false; desenhaPrevia(); });
-    mk("Salvar correção", "bok", () => { p.pedido = pe.value.trim(); p.editado = true; p.editando = false; desenhaPrevia(); });
-    q('[data-a="ia"]').onclick = () => { const ins = q(".ai").value.trim(); if(ins) ajustaComIA(ins, pe.value); };
-  } else {
-    mk("✕", "bno x", () => fechaPrevia({ cancelado: true }));
-    mk("Corrigir", "bno", () => { p.editando = true; desenhaPrevia(); }, p.ocupado);
-    mk(p.ocupado ? "Enviando…" : "Enviar", "bok", enviaPrevia, !p.sel || !String(p.pedido || "").trim() || p.ocupado);
-  }
-  el.classList.add("on");
+async function enviaConfirma(){
+  const p = previa; if(!p || p.ocupado) return;
+  const texto = $q("prev").querySelector(".pe").value.trim(); if(!texto || !p.sel) return;
+  p.ocupado = true; p.estado = "Organizando o pedido…"; atualizaPrevia();
+  const r = await chamaCerebro({ modo: "reescrever", fala: texto, terminal: p.sel, aba: p.sel });      // Haiku (curto) ou Sonnet (longo/complicado)
+  if(previa !== p) return;
+  const reescrito = r && r.proposta && String(r.proposta.pedido || "").trim();
+  const pedido = (reescrito || texto).slice(0, 3900);
+  if(!await mandaPedido(p.sel, pedido)){ p.ocupado = false; p.estado = "Não consegui enviar. Verifique a internet e toque em Enviar de novo."; atualizaPrevia(); return; }
+  usaTerminal(p.sel); guardaEnviado(p.sel, pedido, reescrito ? r.proposta.modelo : "texto original");
+  fechaPrevia();
+  toast("Enviado · " + p.sel, pedido + (reescrito ? "" : "  (a IA estava fora: enviei o texto como você confirmou)"));
+}
+function guardaEnviado(aba, pedido, via){ const l = ARM.get("jv_enviados") || []; l.unshift({ t: Date.now(), aba: aba, pedido: pedido, via: via }); ARM.set("jv_enviados", l.slice(0, 8)); desenhaEnviados(); }
+function desenhaEnviados(){
+  const el = $q("enviados"); if(!el) return; const l = ARM.get("jv_enviados") || []; el.innerHTML = "";
+  if(!l.length){ el.innerHTML = '<div class="vazio vidro">Os pedidos que você enviar aparecem aqui (com o texto que foi para o terminal).</div>'; return; }
+  l.forEach(x => { const d = document.createElement("div"); d.className = "avi vidro"; d.innerHTML = '<div class="ic">➤</div><div class="c"><div class="t"></div><div class="x" style="white-space:pre-wrap"></div><div class="h"></div></div>'; d.querySelector(".t").textContent = x.aba; d.querySelector(".x").textContent = x.pedido; d.querySelector(".h").textContent = hm(x.t) + (x.via ? " · " + x.via : ""); el.appendChild(d); });
 }
 /* sem IA (chave ainda não configurada ou sem rede para a IA): regras simples, como o app v1 */
 const sem = s => Array.from(s).map(c => c.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()).join("");
@@ -1218,9 +1256,9 @@ $q("zoomX").onclick = fechaZoom;
 addEventListener("keydown", e => { if(e.key === "Escape"){ if(zel.classList.contains("on")) fechaZoom(); else if(cheiaOn) fechaCheia(); } });
 
 /* ---------- botões ---------- */
-$q("cfgBtn").onclick = () => { $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaEspera(); };
+$q("cfgBtn").onclick = () => { $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
 $q("fechaCfg").onclick = () => { $q("cfg").classList.remove("on"); try{ speechSynthesis.cancel(); }catch(e){} };
-$q("vozTeste").onclick = testaVoz;
+$q("vozTeste").onclick = testaVoz; $q("falaTg").onclick = () => { ARM.set("jv_fala", !ARM.get("jv_fala")); desenhaFalaTg(); };
 $q("abreCheia").onclick = () => abreCheia(termSel && cheiaModo !== "todos" ? termSel : "todos");
 $q("fechaCheia").onclick = fechaCheia;
 const trocaFonte = d => { cheiaFonte = Math.min(22, Math.max(8, cheiaFonte + d)); ARM.set("jv_fonte", cheiaFonte); $q("cheia").style.setProperty("--fs", cheiaFonte + "px"); document.querySelectorAll("#cheiaCorpo pre").forEach(p => { if(p.dataset.fim === "1") p.scrollTop = p.scrollHeight; }); };
@@ -1229,14 +1267,14 @@ $q("fonteMais").onclick = () => trocaFonte(1);
 $q("tiraPrint").onclick = tiraPrint;
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
-$q("ligar").onclick = () => ligado ? desliga() : liga();
-$q("legenda").onclick = () => { if(acumFala.trim()) enviaFala(); };
-atualizaLig();
+$q("ligar").onclick = () => ligado ? enviaGravacao() : iniciaGravacao();
+$q("flEnvia").onclick = enviaGravacao; $q("flCancel").onclick = cancelaGravacao;
+desenhaGrav(); desenhaEnviados();
 $q("parar").onclick = pararTudo; $q("pararMini").onclick = pararTudo;
 $q("aprovaTodas").onclick = aprovaTodas;
 $q("ativaPush").onclick = ativaPush;
 $q("tecBtn").onclick = () => { const k = $q("teclado"); k.classList.toggle("on"); if(k.classList.contains("on")) $q("txt").focus(); };
-const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("txt").value = ""; desbloqueiaAudio(); paraRec(); pergunta(v); };
+const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("txt").value = ""; $q("teclado").classList.remove("on"); abreConfirma(v); };
 $q("enviaTxt").onclick = enviaTexto;
 $q("txt").addEventListener("keydown", e => { if(e.key === "Enter") enviaTexto(); });
 document.querySelectorAll("#nav button").forEach(b => b.onclick = () => vaiPara(b.dataset.p));
