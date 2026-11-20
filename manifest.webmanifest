@@ -1,12 +1,13 @@
 {
-  "name": "Jarvis Celular",
+  "name": "Jarvis",
   "short_name": "Jarvis",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#05060a",
-  "theme_color": "#05060a",
+  "background_color": "#070b18",
+  "theme_color": "#070b18",
   "lang": "pt-BR",
   "icons": [
     {

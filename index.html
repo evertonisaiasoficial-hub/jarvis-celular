@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#05060a">
+<meta name="theme-color" content="#070b18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -10,11 +10,11 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 <style>
   /* HOLOGRAMA: fundo escuro profundo, vidro fosco com reflexo, luz neon rosa/violeta discreta nas bordas, orbe no cabeçalho, varredura de luz. Inter. */
   :root{
-    --bg:#0f1735; --bg2:#1a2552; --bg3:#31407f;
+    --bg:#070b18; --bg2:#0c1430; --bg3:#1a2858;   /* v24: modo escuro mais profundo (contraste no carro) */
     --cy:#ffc15e; --cy2:#ffe2ad; --acc2:#ff8a3d;
     --txt:#ffffff; --dim:#c9d2f5; --line:rgba(255,255,255,.09);
     --glass:rgba(255,255,255,.05); --glass2:rgba(255,255,255,.09);
@@ -24,11 +24,15 @@
   }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font:14px/1.4 var(--f);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(60% 50% at 50% 50%,color-mix(in srgb,var(--cy) 24%,transparent),transparent 74%),radial-gradient(130% 90% at 50% 42%,var(--bg3) 0%,var(--bg2) 55%,var(--bg) 100%)}
+/* v24: fundo transparente (a tela do app pinta o fundo escuro); só um brilho suave atrás do símbolo, que some antes da borda (sem emenda) */
+body{background:radial-gradient(closest-side at 50% 50%,color-mix(in srgb,var(--cy) 20%,transparent),transparent 100%)}
+html{background:transparent}   /* v24: sem emenda com o fundo da tela do app */
+body.mudo #stage{opacity:.38}
+body.mudo #orbwrap,body.mudo #orbwrap>i{animation-play-state:paused}   /* v24: mudo = símbolo apagado e parado (menos CPU) */
 body.bolha{background:transparent}
 #stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);transition:filter .45s}
 
-#msg{position:absolute;left:0;right:0;bottom:6%;text-align:center;color:var(--dim);font-size:16px;letter-spacing:.04em;padding:0 8%}
+#msg{display:none;position:absolute;left:0;right:0;bottom:6%;text-align:center;color:var(--dim);font-size:16px;letter-spacing:.04em;padding:0 8%}
 body.bolha #msg{display:none}
 /* símbolo: copiado do painel do PC (painel.html) */
   #orbwrap{--s:176px;width:var(--s);height:var(--s);position:relative;flex:0 0 auto;display:grid;place-items:center;animation:float 6s ease-in-out infinite}
@@ -37,7 +41,7 @@ body.bolha #msg{display:none}
   #orbwrap .tick{inset:0;background:repeating-conic-gradient(color-mix(in srgb,var(--cy) 85%,transparent) 0 .8deg,transparent .8deg 5deg);
     -webkit-mask:radial-gradient(farthest-side,transparent 92%,#000 93%);mask:radial-gradient(farthest-side,transparent 92%,#000 93%);animation:spin 60s linear infinite;opacity:.75}
   #orbwrap .seg{inset:8%;background:conic-gradient(var(--cy) 0 70deg,transparent 70deg 120deg,color-mix(in srgb,var(--cy) 60%,transparent) 120deg 200deg,transparent 200deg 250deg,var(--cy) 250deg 300deg,transparent 300deg);
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));animation:spin 14s linear infinite;filter:drop-shadow(0 0 5px var(--cy))}
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));animation:spin 14s linear infinite;opacity:.95}   /* v24: sem drop-shadow animado (pesava a GPU fraca da central) */
   #orbwrap .dash{inset:17%;background:repeating-conic-gradient(color-mix(in srgb,var(--cy) 70%,transparent) 0 10deg,transparent 10deg 16deg);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));animation:spin 22s linear infinite reverse}
   #orbwrap .wave{inset:30%;border:1px solid var(--cy);opacity:0;animation:wave 3.4s ease-out infinite}#orbwrap .wave.w2{animation-delay:1.7s}
@@ -50,117 +54,191 @@ body.bolha #msg{display:none}
   @keyframes pulse{50%{opacity:.4}}
 
 
-/* ====== app do celular ====== */
+/* ====== Jarvis iPhone v2 ====== */
+:root{--red:#ff4d5e;--grn:#3ee08f;--yel:#ffd24a;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--navh:64px}
 html,body{height:100%;overscroll-behavior:none}
-body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-#stage{top:44%}
-#topo{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 8px);display:flex;gap:8px;padding:6px 14px;overflow-x:auto;scrollbar-width:none;z-index:5}
-#topo::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--txt);font:500 12.5px var(--f);white-space:nowrap}
-.chip.sel{border-color:color-mix(in srgb,var(--cy) 55%,transparent);background:color-mix(in srgb,var(--cy) 12%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--cy) 18%,transparent)}
-.chip .d{width:8px;height:8px;border-radius:50%;background:#6f738f}
-.chip[data-e="trab"] .d{background:#ffd24a;animation:pisca 1s ease-in-out infinite}
-.chip[data-e="livre"] .d{background:#4ade80}
-.chip[data-e="perg"] .d{background:#ff5a5a}
+body{background:radial-gradient(120% 70% at 50% 0%,#14204a 0%,var(--bg) 55%) fixed,var(--bg);-webkit-text-size-adjust:100%}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);z-index:2}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.97)}
+/* topo: terminais + máquina */
+#topo{display:flex;align-items:center;gap:8px;padding:8px 12px 6px}
+#chips{flex:1;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;min-width:0}
+#chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);font:500 12.5px var(--f);white-space:nowrap}
+.chip.sel{border-color:color-mix(in srgb,var(--cy) 60%,transparent);background:color-mix(in srgb,var(--cy) 14%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--cy) 22%,transparent)}
+.d{width:8px;height:8px;border-radius:50%;background:#6f738f;flex:0 0 auto}
+[data-e="trab"] .d{background:var(--yel);box-shadow:0 0 8px var(--yel);animation:pisca 1s ease-in-out infinite}
+[data-e="livre"] .d{background:var(--grn)}
+[data-e="perg"] .d{background:var(--red);box-shadow:0 0 8px var(--red)}
+[data-p="1"] .d{background:#8a8fb0;animation:none;box-shadow:none}
 .chip .p{color:var(--cy);font-weight:600;font-variant-numeric:tabular-nums}
-@keyframes pisca{50%{opacity:.3}}
-#aviso{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 62px);text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px;z-index:4}
-#legenda{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 150px);text-align:center;padding:0 9%;color:#c9cbe0;font-size:16px;line-height:1.4;min-height:44px;z-index:4}
+@keyframes pisca{50%{opacity:.35}}
+#maq{flex:0 0 auto;font:600 10.5px var(--mono);color:var(--dim);text-align:right;line-height:1.25;letter-spacing:.02em}
+#maq b{color:var(--cy);font-weight:600}
+#aviso{display:none;margin:0 12px 6px;padding:8px 12px;border-radius:12px;background:rgba(255,77,94,.12);border:1px solid rgba(255,77,94,.4);color:#ffb3ba;font-size:12.5px}
+#aviso.on{display:block}
+/* corpo: painéis */
+#corpo{flex:1;min-height:0;position:relative}
+.painel{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 12px 12px}
+.painel.on{display:flex}
+.tit{font:600 11px var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--cy);margin:12px 2px 8px;display:flex;align-items:center;gap:8px}
+.tit .sp{flex:1}
+.vidro{border:1px solid var(--edge);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 30px rgba(0,0,0,.25)}
+/* ligação */
+#pLig{align-items:stretch}
+#orbBox{position:relative;flex:0 0 auto;height:min(29vh,260px);min-height:160px}
+#versao{text-align:center;font:600 11px var(--mono);letter-spacing:.2em;color:var(--dim);opacity:.85;margin-top:-6px}
+#legenda{text-align:center;padding:10px 6% 4px;color:#e3e6fb;font-size:16px;line-height:1.4;min-height:56px}
 #legenda small{display:block;color:var(--dim);font-size:13px;margin-top:4px}
-#barra{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 22px);display:flex;align-items:center;justify-content:center;gap:16px;z-index:6}
-.bt{border:none;color:var(--txt);font:600 14px var(--f);cursor:pointer;border-radius:999px;background:rgba(255,255,255,.08);padding:14px 20px;min-width:52px;-webkit-tap-highlight-color:transparent}
-.bt:active{transform:scale(.96)}
-#mic{width:76px;height:76px;padding:0;font-size:30px;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;box-shadow:0 0 28px color-mix(in srgb,var(--cy) 35%,transparent)}
-#mic.off{background:rgba(255,255,255,.10);color:var(--txt);box-shadow:none}
-#falar{background:color-mix(in srgb,var(--cy) 16%,transparent);color:var(--cy);border:1px solid color-mix(in srgb,var(--cy) 40%,transparent)}
-#ideiasBtn{position:relative}
-#ideiasBtn b{position:absolute;top:-4px;right:-4px;background:var(--acc2);color:#fff;border-radius:999px;font-size:11px;min-width:19px;height:19px;line-height:19px;text-align:center}
-.cartao{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(5,6,10,.86);backdrop-filter:blur(10px);padding:24px}
+#estadoLig{text-align:center;font:600 11px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);min-height:16px}
+#estadoLig.on{color:var(--grn)}
+#vivo{display:flex;flex-direction:column;gap:8px}
+.mini{display:flex;gap:10px;align-items:flex-start;padding:10px 12px}
+.mini .d{margin-top:5px}
+.mini .c{flex:1;min-width:0}
+.mini .n{font:600 13px var(--f);display:flex;gap:8px}
+.mini .n .tm{margin-left:auto;color:var(--dim);font:500 11px var(--mono)}
+.mini .a{font-size:12.5px;color:var(--yel);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.mini .l{font:11px var(--mono);color:#9aa3c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.pz{font:600 10px var(--f);letter-spacing:.1em;color:#c3c7e4;background:rgba(255,255,255,.1);padding:1px 7px;border-radius:99px}
+#resumoLig{display:flex;gap:8px;margin-top:8px}
+#resumoLig button{flex:1;padding:12px;font:600 13px var(--f)}
+#resumoLig b{color:var(--cy)}
+/* terminais ao vivo */
+#termAbas{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 0 8px;flex:0 0 auto}
+#termAbas::-webkit-scrollbar{display:none}
+#termCab{padding:10px 12px;flex:0 0 auto}
+#termCab .l1{display:flex;align-items:center;gap:8px;font:600 14px var(--f)}
+#termCab .l1 .tm{margin-left:auto;font:500 12px var(--mono);color:var(--dim)}
+#termCab .at{margin-top:6px;padding:7px 10px;border-radius:10px;background:rgba(255,210,74,.12);border:1px solid rgba(255,210,74,.45);color:var(--yel);font-size:13px}
+#termCab .at:empty{display:none}
+#termSaida{flex:0 0 auto;height:max(220px,48vh);margin:8px 0;padding:10px 12px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre-wrap;word-break:break-word;
+  font:11.5px/1.45 var(--mono);color:#d7dcf5;background:rgba(0,0,0,.42);border:1px solid var(--line);border-radius:14px;-webkit-user-select:text;user-select:text}
+#termFila{flex:0 0 auto}
+#voltaFim{position:sticky;bottom:6px;align-self:center;display:none;padding:6px 14px;border-radius:99px;background:var(--cy);color:#1a1206;font:600 12px var(--f)}
+/* tarefas */
+.tar{display:flex;align-items:center;gap:8px;padding:9px 10px;margin-bottom:6px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.035);font-size:13px;line-height:1.35}
+.tar .nn{flex:0 0 auto;min-width:28px;font:600 12px var(--mono);color:var(--dim)}
+.tar .tt{flex:1;min-width:0;word-break:break-word}
+.tar .tt small{display:block;color:#ff9aa4;font-size:12px;margin-top:2px}
+.tar[data-e="exec"]{border-color:rgba(255,210,74,.55);background:rgba(255,210,74,.12)}
+.tar[data-e="exec"] .nn,.tar[data-e="exec"] .tt{color:var(--yel)}
+.tar[data-e="erro"]{border-color:rgba(255,77,94,.55);background:rgba(255,77,94,.10)}
+.tar[data-e="erro"] .nn,.tar[data-e="erro"] .tt{color:#ff8a95}
+.tar.pm{border-color:color-mix(in srgb,var(--cy) 70%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--cy) 25%,transparent)}
+.bpm,.bcor{flex:0 0 auto;padding:8px 10px;border-radius:10px;font:600 12px var(--f);background:rgba(255,255,255,.08)}
+.bpm.on{background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206}
+.bcor{background:rgba(255,77,94,.22);color:#ffd0d4;border:1px solid rgba(255,77,94,.5)}
+.vazio{padding:16px;text-align:center;color:var(--dim);font-size:13px}
+/* ideias e avisos */
+.idea{padding:12px;margin-bottom:10px}
+.idea .pr{font:600 10px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+.idea h3{font:600 14px var(--f);margin:5px 0 4px}
+.idea p{font-size:12.5px;color:#b8bedf;line-height:1.45}
+.idea .ac{display:flex;gap:8px;margin-top:10px}
+.idea .ac button{flex:1;padding:11px;border-radius:11px;font:600 13px var(--f)}
+.bok{background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206}
+.bno{background:rgba(255,255,255,.09)}
+.btop{padding:8px 12px;border-radius:10px;font:600 12px var(--f)}
+.avi{display:flex;gap:10px;padding:10px 12px;margin-bottom:7px}
+.avi .ic{font-size:18px;line-height:1}
+.avi .c{flex:1;min-width:0}
+.avi .t{font:600 13px var(--f)}
+.avi .x{font-size:12.5px;color:#b8bedf;margin-top:2px;word-break:break-word}
+.avi .h{font:11px var(--mono);color:var(--dim);margin-top:3px}
+.avi[data-t="pix"],.avi[data-t="captcha"],.avi[data-t="login"]{border-color:rgba(255,77,94,.5)}
+/* ações (uma mão) */
+#acoes{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 14px 6px}
+#ligar{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;box-shadow:0 0 30px rgba(62,224,143,.35),inset 0 2px 0 rgba(255,255,255,.3)}
+#ligar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;box-shadow:0 0 34px rgba(255,77,94,.5);animation:anel 1.6s ease-out infinite}
+@keyframes anel{0%{box-shadow:0 0 0 0 rgba(255,77,94,.55)}100%{box-shadow:0 0 0 22px rgba(255,77,94,0)}}
+#parar{min-width:96px;height:52px;padding:0 14px;border-radius:16px;font:700 13px var(--f);letter-spacing:.04em;background:linear-gradient(135deg,#ff4d5e,#b3122a);color:#fff;box-shadow:0 0 18px rgba(255,77,94,.35)}
+#parar.ret{background:linear-gradient(135deg,var(--grn),#1fa866);color:#03140b;box-shadow:none}
+#tecBtn{width:52px;height:52px;border-radius:16px;background:var(--glass2);font-size:20px}
+#teclado{display:none;gap:8px;padding:0 12px 6px}
+#teclado.on{display:flex}
+#teclado input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
+#teclado button{padding:0 16px;border-radius:999px;background:var(--cy);color:#1a1206;font:600 14px var(--f)}
+/* navegação de baixo */
+#nav{flex:0 0 auto;display:flex;padding:4px 6px calc(env(safe-area-inset-bottom) + 4px);border-top:1px solid var(--line);background:rgba(7,11,24,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#nav button{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px;font:600 10.5px var(--f);color:var(--dim)}
+#nav button i{font-style:normal;font-size:19px;line-height:1.1}
+#nav button.on{color:var(--cy)}
+#nav b{position:absolute;top:2px;left:calc(50% + 6px);min-width:17px;height:17px;line-height:17px;padding:0 4px;border-radius:99px;font-size:10px;background:var(--acc2);color:#fff}
+#nav b.r{background:var(--red)}
+/* cartões (login) e toast */
+.cartao{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(5,6,10,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:24px}
 .cartao.on{display:flex}
-.caixa{width:100%;max-width:380px;max-height:86%;overflow:auto;border:1px solid var(--line);border-radius:20px;background:rgba(20,22,40,.96);padding:20px}
-.caixa h2{font:600 17px var(--f);margin-bottom:6px}
+.caixa{width:100%;max-width:380px;padding:22px}
+.caixa h2{font:600 18px var(--f);margin-bottom:6px}
 .caixa p.s{color:var(--dim);font-size:13px;line-height:1.5;margin-bottom:14px}
 .caixa input{width:100%;padding:13px 14px;margin-bottom:10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
-.caixa .ok{width:100%;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206}
-.caixa .err{color:#ff7a7a;font-size:13px;min-height:18px;margin-bottom:8px}
-.idea{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.04)}
-.idea .pr{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
-.idea h3{font:600 14px var(--f);margin:5px 0 4px}
-.idea p{font-size:12.5px;color:#aeb2cf;line-height:1.45}
-.idea .ac{display:flex;gap:8px;margin-top:10px}
-.idea .ac button{flex:1;padding:10px;border-radius:10px;border:none;font:600 13px var(--f);cursor:pointer}
-.idea .ac .a{background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206}
-.idea .ac .d{background:rgba(255,255,255,.10);color:var(--txt)}
-#teclado{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 104px);z-index:25;display:flex;gap:8px}   /* SEMPRE visível, até com a lista de tarefas aberta */
-#teclado input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
-#instala{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 118px);z-index:9;display:none;padding:12px 14px;border-radius:14px;background:rgba(20,22,40,.96);border:1px solid color-mix(in srgb,var(--cy) 35%,transparent);font-size:13px;line-height:1.5}
-#instala.on{display:block}
-#tarefasBtn{position:relative}
-#tarefasBtn b{position:absolute;top:-4px;right:-4px;background:#ffd24a;color:#1a1206;border-radius:999px;font-size:11px;min-width:19px;height:19px;line-height:19px;text-align:center}
-#tarefas{inset:0 0 auto 0;align-items:flex-start;padding:calc(env(safe-area-inset-top) + 12px) 16px 0;background:rgba(5,6,10,.92)}
-#tarefas .caixa{max-height:none;overflow:visible}
-/* CAIXA DE TAREFAS: no MÁXIMO 10 linhas à vista (20px + 2px cada); o resto continua na lista e aparece rolando; uma tarefa por linha, sem sobrepor */
-#listaTar{max-height:min(220px,33vh);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:block;scrollbar-width:thin;scrollbar-color:rgba(255,210,74,.55) transparent}
-#listaTar::-webkit-scrollbar{width:6px} #listaTar::-webkit-scrollbar-thumb{background:rgba(255,210,74,.5);border-radius:3px}
-#listaTar .tar{flex:0 0 auto;display:flex;align-items:center;height:20px;line-height:20px;padding:0 10px;margin-bottom:2px;font-size:12px;white-space:nowrap;overflow:hidden}
-#listaTar .tar .tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#listaTar .tar .nn{min-width:30px}
-#listaTar .tabaH{height:20px;line-height:20px;margin:0 0 2px}
-#listaAtu{max-height:15vh;overflow-y:auto}
-.tar .mt{font-weight:400;color:#ff8a8a}
-.tar.vazio{justify-content:center;color:#4ade80}
-.tabaH{font:600 10px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--cy);margin:12px 0 6px}
-.tar{display:flex;gap:8px;align-items:baseline;padding:8px 10px;margin-bottom:6px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:13px;line-height:1.35;transition:opacity 1s}
-.tar .nn{flex:0 0 auto;min-width:26px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--dim)}
-.tar .tt{flex:1;word-break:break-word}
-.tar .mk{flex:0 0 auto;font-weight:700}
-.tar[data-e="exec"]{border-color:#ffd24a88;background:rgba(255,210,74,.10)}
-.tar[data-e="exec"] .nn,.tar[data-e="exec"] .mk{color:#ffd24a}
-.tar[data-e="fila"] .nn,.tar[data-e="fila"] .tt{color:#fff}
-.tar[data-e="feito"] .nn{color:#4ade80}
-.tar[data-e="erro"] .nn,.tar[data-e="trav"] .nn,.tar[data-e="erro"] .tt,.tar[data-e="trav"] .tt{color:#ff5a5a}
-.tar[data-e="feito"] .mk{color:#4ade80}
-.tar[data-e="erro"],.tar[data-e="trav"]{border-color:#ff5a5a88;background:rgba(255,90,90,.10);color:#ff8a8a}
-.tar[data-e="erro"] .nn,.tar[data-e="trav"] .nn,.tar[data-e="erro"] .mk,.tar[data-e="trav"] .mk{color:#ff5a5a}
-.atu{font-size:12px;color:var(--dim);line-height:1.4;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-#atuTit{cursor:pointer;-webkit-tap-highlight-color:transparent}
-#toast{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 100px);z-index:30;display:none;padding:10px 14px;border-radius:14px;background:rgba(20,22,40,.97);border:1px solid color-mix(in srgb,var(--cy) 45%,transparent);font-size:13px;line-height:1.4}
+.caixa .ok{width:100%;padding:14px;border-radius:14px}
+.caixa .err{color:#ff8a95;font-size:13px;min-height:18px;margin-bottom:8px}
+#toast{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 56px);z-index:50;display:none;padding:11px 14px;font-size:13.5px;line-height:1.4}
 #toast.on{display:block}
-#toast small{display:block;color:var(--dim);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#toast small{display:block;color:var(--dim);margin-top:2px}
+#instala{display:none;margin:0 12px 6px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+#instala.on{display:block}
+/* iPad / tela larga: Ligação fixa à esquerda + painel escolhido à direita (funciona dividido ao lado de outro app) */
+@media (min-width:760px){
+  #corpo{display:grid;grid-template-columns:minmax(300px,38%) 1fr;gap:0}
+  .painel{position:relative;inset:auto;min-height:0}
+  #pLig{display:flex;border-right:1px solid var(--line)}
+  #nav button[data-p="pLig"]{display:none}
+  #orbBox{height:min(30vh,280px)}
+}
+@media (max-height:640px){#orbBox{height:150px;min-height:150px}#ligar{width:70px;height:70px}}
 </style></head>
 <body class="idle">
 
-<div id="topo"></div>
-<div id="aviso"></div>
-<div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div>
-<div id="legenda"></div>
-<div id="teclado"><input id="txt" placeholder="Digite (ou use o microfone do teclado)…" enterkeyhint="send" autocomplete="off"><button class="bt" id="enviaTxt">Enviar</button></div>
-<div id="barra">
-  <button class="bt" id="ideiasBtn">Ideias</button>
-  <button class="bt" id="tarefasBtn">Tarefas</button>
-  <button class="bt" id="mic" title="Conversa contínua">🎙</button>
-  <button class="bt" id="falar">Tocar para falar</button>
-  <button class="bt" id="tecBtn">⌨</button>
+<div id="app">
+  <header id="topo"><div id="chips"></div><div id="maq"></div></header>
+  <div id="aviso"></div>
+  <div id="instala" class="vidro"></div>
+  <main id="corpo">
+    <section id="pLig" class="painel on">
+      <div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
+      <div id="versao">VERSÃO v2</div>
+      <div id="estadoLig">Toque no botão verde para ligar</div>
+      <div id="legenda"></div>
+      <div class="tit">Terminais ao vivo</div>
+      <div id="vivo"></div>
+      <div id="resumoLig"><button class="vidro" data-ir="pIdeias">💡 Ideias <b id="rIdeias">0</b></button><button class="vidro" data-ir="pAvisos">🔔 Avisos <b id="rAvisos">0</b></button></div>
+    </section>
+    <section id="pTerm" class="painel">
+      <div class="tit">Terminais</div>
+      <div id="termAbas"></div>
+      <div id="termCab" class="vidro"><div class="l1"><i class="d"></i><span id="tcNome"></span><span id="tcPz"></span><span class="tm" id="tcTempo"></span></div><div class="at" id="tcAtual"></div></div>
+      <pre id="termSaida">Carregando a saída do terminal…</pre>
+      <button id="voltaFim">↓ ao vivo</button>
+      <div class="tit">Fila deste terminal</div>
+      <div id="termFila"></div>
+    </section>
+    <section id="pTar" class="painel"><div class="tit">Tarefas de todos os terminais</div><div id="listaTar"></div></section>
+    <section id="pIdeias" class="painel"><div class="tit">Ideias novas <span class="sp"></span><button class="btop bok" id="aprovaTodas">Aprovar todas</button></div><div id="listaIdeias"></div></section>
+    <section id="pAvisos" class="painel"><div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
+  </main>
+  <div id="teclado"><input id="txt" placeholder="Escreva para o Jarvis…" enterkeyhint="send" autocomplete="off"><button id="enviaTxt">Enviar</button></div>
+  <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="ligar" title="Ligação">📞</button><button id="tecBtn" title="Escrever">⌨</button></div>
+  <nav id="nav">
+    <button data-p="pLig" class="on"><i>📞</i>Ligação</button>
+    <button data-p="pTerm"><i>▤</i>Terminais</button>
+    <button data-p="pTar"><i>☰</i>Tarefas</button>
+    <button data-p="pIdeias"><i>💡</i>Ideias</button>
+    <button data-p="pAvisos"><i>🔔</i>Avisos</button>
+  </nav>
 </div>
-<div id="instala"></div>
-<div id="toast"></div>
-
-<div class="cartao" id="login"><div class="caixa">
-  <h2>Jarvis Celular</h2>
-  <p class="s">Entre com a mesma conta do Cuida Aí. Só o dono vê e controla o Jarvis.</p>
+<div id="toast" class="vidro"></div>
+<div class="cartao" id="login"><div class="caixa vidro">
+  <h2>Jarvis</h2>
+  <p class="s">Entre com a conta do dono (a mesma do Cuida Aí). Só o dono vê e controla o Jarvis.</p>
   <input id="em" type="email" placeholder="E-mail" autocomplete="username" autocapitalize="none">
   <input id="sn" type="password" placeholder="Senha" autocomplete="current-password">
   <div class="err" id="loginErr"></div>
-  <button class="bt ok" id="entrar">Entrar</button>
-</div></div>
-<div class="cartao" id="tarefas"><div class="caixa">
-  <h2>Tarefas do PC</h2><p class="s" id="tarInfo"></p><div id="listaTar"></div>
-  <div class="tabaH" id="atuTit">Atualizações ▸</div><div id="listaAtu" style="display:none"></div>
-  <button class="bt" id="fechaTar" style="width:100%;margin-top:10px">Fechar</button>
-</div></div>
-<div class="cartao" id="ideias"><div class="caixa">
-  <h2>Ideias do gerente</h2><p class="s" id="ideiasInfo"></p><div id="listaIdeias"></div>
-  <button class="bt" id="fechaIdeias" style="width:100%;margin-top:6px">Fechar</button>
+  <button class="ok bok" id="entrar">Entrar</button>
 </div></div>
 
 <script src="config.js"></script>
@@ -228,11 +306,12 @@ statFor("on");
 const NR = 30, PAT = Array.from({length:NR}, (_, i) => .5 + .5 * Math.abs(Math.sin(i * 2.399)));            // padrão FIXO dos raios
 const NW = 140, PATW = Array.from({length:NW}, (_, i) => .5 + .5 * Math.sin(i * 1.7) * Math.cos(i * .9));   // perfil FIXO da onda
 let lvl = 0, lr = 0, env = 0, dim = 1, last = performance.now(), lastKey = "";
-let REC = false, orbRaf = 0, eqRaf = 0;                          // REC: painel recolhido/oculto -> pausa os requestAnimationFrame
+let REC = false, orbRaf = 0, eqRaf = 0, lastDraw = 0;                          // REC: painel recolhido/oculto -> pausa os requestAnimationFrame
 function seg(g, fr, centers, span){ g.beginPath(); for(const c of centers){ g.moveTo(C + Rc*fr*Math.cos((c-span/2)*RAD), C + Rc*fr*Math.sin((c-span/2)*RAD)*TILT); g.ellipse(C, C, Rc*fr, Rc*fr*TILT, 0, (c-span/2)*RAD, (c+span/2)*RAD); } }
 function drawOrb(now){
   if(REC || document.hidden){ orbRaf = 0; return; }
   orbRaf = requestAnimationFrame(drawOrb);
+  if(now - lastDraw < 30){ return; } lastDraw = now;                                 // v24: no máximo ~30 quadros/s (central fraca; continua suave)
   const dt = Math.min(.1, (now - last) / 1000); last = now;
   const st = MODO === 2 ? "on" : !ATIVO ? "mudo" : MODO === 1 ? "ouve" : "quieto";   // MUDO = lilás apagado · ATIVO ouvindo = azul · falando = âmbar
   if(st !== state){ state = st; pal = PAL[st]; lastKey = ""; document.documentElement.style.setProperty("--cy", CYS[st]); }
@@ -305,15 +384,16 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 
-/* ====== app do celular ====== */
+/* ====== Jarvis iPhone v2 ====== */
+const VERSAO = "v2";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
+const $q = id => document.getElementById(id);
 let sess = ARM.get("jv_sess");
-let abas = [], ideias = [], destino = ARM.get("jv_destino") || "";
-let esperando = {};                 // abas para as quais EU mandei pedido: quando terminarem, o app fala
-let falando = false, conversa = false, acordadoAte = 0, ouvindoAgora = false, nivel = 0, modo = 0, semSinal = false;
+let abas = [], ideias = [], avisos = [], destino = ARM.get("jv_destino") || "", termSel = ARM.get("jv_term") || "";
+let painelAtual = "pLig", semSinal = false;
 
-/* ---------- acesso ao Supabase (REST + login), sem bibliotecas ---------- */
+/* ---------- Supabase (REST + login), sem bibliotecas ---------- */
 async function authPost(caminho, corpo){
   const r = await fetch(CFG.url + "/auth/v1/" + caminho, { method: "POST", headers: { apikey: CFG.anon, "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
   const j = await r.json().catch(() => ({}));
@@ -321,9 +401,13 @@ async function authPost(caminho, corpo){
   return j;
 }
 function guardaSessao(j){ sess = { access_token: j.access_token, refresh_token: j.refresh_token, expira: Date.now() + (j.expires_in || 3600) * 1000 - 60000 }; ARM.set("jv_sess", sess); }
+let renovando = null;
 async function token(){
   if(!sess) throw new Error("sem login");
-  if(Date.now() > sess.expira){ guardaSessao(await authPost("token?grant_type=refresh_token", { refresh_token: sess.refresh_token })); }
+  if(Date.now() > sess.expira){
+    renovando = renovando || authPost("token?grant_type=refresh_token", { refresh_token: sess.refresh_token }).then(guardaSessao).finally(() => { renovando = null; });
+    await renovando;
+  }
   return sess.access_token;
 }
 async function rest(caminho, opc){
@@ -332,12 +416,11 @@ async function rest(caminho, opc){
   const r = await fetch(CFG.url + "/rest/v1/" + caminho, Object.assign({}, opc, { headers: Object.assign({ apikey: CFG.anon, Authorization: "Bearer " + t, "Content-Type": "application/json" }, opc.headers || {}) }));
   if(r.status === 401){ sess = null; ARM.del("jv_sess"); mostraLogin(); throw new Error("sessão expirou"); }
   const txt = await r.text();
-  if(!r.ok) throw new Error(txt.slice(0, 140));
+  if(!r.ok) throw new Error(txt.slice(0, 160));
   return txt ? JSON.parse(txt) : null;
 }
 
-/* ---------- login e dono ---------- */
-const $q = id => document.getElementById(id);
+/* ---------- login (só o dono) ---------- */
 function mostraLogin(){ $q("login").classList.add("on"); }
 async function entrar(){
   $q("loginErr").textContent = ""; $q("entrar").disabled = true;
@@ -356,320 +439,455 @@ async function garanteDono(){
   if(eh !== true){ sess = null; ARM.del("jv_sess"); throw new Error("Esta conta não é a do dono do Jarvis."); }
 }
 
+/* ---------- util ---------- */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hm = ms => { const d = new Date(ms), p = x => String(x).padStart(2, "0"); return p(d.getDate()) + "/" + p(d.getMonth() + 1) + " " + p(d.getHours()) + ":" + p(d.getMinutes()); };
+function dur(s){ if(s == null) return ""; s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? h + "h" + String(m).padStart(2, "0") : m ? m + "min " + String(x).padStart(2, "0") + "s" : x + "s"; }
+let toastT = null;
+function toast(titulo, texto){
+  const t = $q("toast"); t.innerHTML = "<div></div><small></small>"; t.children[0].textContent = titulo; t.children[1].textContent = (texto || "").replace(/\s+/g, " ").slice(0, 140);
+  t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 5500);
+}
+const ESTADO = { trab: "Trabalhando", livre: "Livre", perg: "Esperando você" };
+const filaDe = a => Array.isArray(a.fila) ? a.fila : [];
+const atualDe = a => filaDe(a).find(x => x.e === "exec");
+
 /* ---------- sincronia com o PC ---------- */
-let sync = null;
-function iniciaSync(){ if(sync) return; puxa(); sync = setInterval(() => { if(!document.hidden) puxa(); }, 3000); }
+let sync = null, ocupado = false, ultAviso = ARM.get("jv_ultaviso") || 0, avisoIni = false;
+function iniciaSync(){
+  if(sync) return;
+  puxa(); puxaAvisos(); olhando(); salvaPushSilencioso();
+  sync = setInterval(() => { if(!document.hidden) puxa(); }, 3000);
+  setInterval(() => { if(!document.hidden) puxaAvisos(); }, 8000);
+  setInterval(() => { if(!document.hidden) olhando(); }, 20000);
+}
+async function olhando(){   // o PC manda a saída ao vivo mais rápido enquanto o app está aberto
+  try{ await rest("jarvis_olhando?on_conflict=id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ id: 1, ate: new Date(Date.now() + 45000).toISOString() }) }); }catch(e){}
+}
+const CAMPOS = "nome,estado,texto,pct,total,feito,fila,seg,pausada,cpu,ram,atualizado_em";
+function verTerminal(){ return painelAtual === "pTerm" || (largo() && painelAtual === "pTerm"); }
+const largo = () => matchMedia("(min-width:760px)").matches;
 async function puxa(){
+  if(ocupado) return; ocupado = true;
   try{
-    const [a, i] = await Promise.all([rest("jarvis_abas?select=*&order=nome.asc"), rest("jarvis_ideias?select=*&decisao=is.null&order=id.asc")]);
-    const antes = abas; abas = a || []; ideias = i || [];
+    const qs = [rest("jarvis_abas?select=" + CAMPOS + "&order=nome.asc"), rest("jarvis_ideias?select=*&decisao=is.null&order=id.asc")];
+    if(verTerminal() && termSel) qs.push(rest("jarvis_abas?select=nome,saida&nome=eq." + encodeURIComponent(termSel)));
+    const [a, i, s] = await Promise.all(qs);
+    const antes = abas;
+    abas = a || []; ideias = i || [];
+    if(s && s[0]){ const x = abas.find(y => y.nome === s[0].nome); if(x) x.saida = s[0].saida; }
     const agora = Date.now();
     semSinal = !abas.length || abas.every(x => agora - new Date(x.atualizado_em).getTime() > 90000);
     if(!destino || !abas.find(x => x.nome === destino)) destino = (abas.find(x => x.nome === "Jarvis") || abas[0] || {}).nome || "";
-    avisaTerminou(antes, abas);
-    desenhaChips(); desenhaBotaoIdeias();
-    puxaTarefas();
-    $q("aviso").textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis)." : "";
-  }catch(e){ $q("aviso").textContent = "Sem conexão com o Supabase…"; }
+    if(!termSel || !abas.find(x => x.nome === termSel)) termSel = destino;
+    terminou(antes, abas);
+    desenhaTudo();
+    const av = $q("aviso"); av.classList.toggle("on", semSinal); av.textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar." : "";
+  }catch(e){ const av = $q("aviso"); av.classList.add("on"); av.textContent = "Sem conexão com o Supabase… tentando de novo."; }
+  ocupado = false;
 }
-/* ---------- lista de tarefas, atualizações e aviso de prompt enviado ---------- */
-const T_TRAVA = 900000;
-let tarefas = [], tarVistas = null, conVisto = null, atuAberto = false, toastT = null, tarOcupado = false;
-let tarNum = ARM.get("jv_tarnum") || { c: {}, m: {} };             // numeração por aba quando o PC não manda "n"
-function numeroDe(t){
-  if(t.n != null && t.n !== "") return Number(t.n);
-  const k = t.aba || "";
-  if(tarNum.m[t.id] == null){ tarNum.c[k] = (tarNum.c[k] || 0) + 1; tarNum.m[t.id] = tarNum.c[k]; ARM.set("jv_tarnum", tarNum); }
-  return tarNum.m[t.id];
-}
-function dh(ms){ const d = new Date(ms), p = x => String(x).padStart(2, "0"); return p(d.getDate()) + "/" + p(d.getMonth() + 1) + " " + p(d.getHours()) + ":" + p(d.getMinutes()); }
-function mostraToast(titulo, texto){
-  const t = $q("toast"); t.innerHTML = "<div></div><small></small>"; t.children[0].textContent = titulo; t.children[1].textContent = (texto || "").replace(/\s+/g, " ").slice(0, 90);
-  t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 6000);
-}
-async function puxaTarefas(){
-  if(tarOcupado) return; tarOcupado = true;
-  try{
-    const lista = await rest("jarvis_tarefas?select=*&order=atualizado_em.desc&limit=150");
-    let conv = [];
-    try{ conv = await rest("jarvis_conversa?select=*&order=id.desc&limit=15") || []; }catch(e){}
-    tarefas = Array.isArray(lista) ? lista : [];
-    const asc = [...tarefas].sort((a, b) => new Date(a.atualizado_em) - new Date(b.atualizado_em));
-    asc.forEach(numeroDe);                                           // atribui números na ordem de chegada
-    const novasT = [];
-    if(tarVistas === null){ tarVistas = {}; tarefas.forEach(t => tarVistas[t.id] = 1); }
-    else tarefas.forEach(t => { if(!tarVistas[t.id]){ tarVistas[t.id] = 1; novasT.push(t); } });
-    const ultCon = conv.length ? Math.max.apply(null, conv.map(c => Number(c.id) || 0)) : 0;
-    const novasC = conVisto === null ? [] : conv.filter(c => (Number(c.id) || 0) > conVisto).reverse();
-    conVisto = Math.max(conVisto || 0, ultCon);
-    const abasToast = {};
-    novasT.sort((a, b) => numeroDe(a) - numeroDe(b)).forEach(t => { abasToast[t.aba] = 1; mostraToast("Prompt copiado e enviado – tarefa " + numeroDe(t), (t.aba ? t.aba + ": " : "") + (t.texto || t.titulo || "")); });
-    novasC.forEach(c => {
-      if(c.origem === "celular" || abasToast[c.aba]) return;
-      if(c.quem === "voce" || (c.quem === "sistema" && /copiad|enviad/i.test(c.texto || ""))){
-        const mesma = tarefas.find(t => t.aba === c.aba && (t.estado === "exec" || t.estado === "fila"));
-        mostraToast("Prompt copiado e enviado" + (mesma ? " – tarefa " + numeroDe(mesma) : ""), (c.aba ? c.aba + ": " : "") + (c.texto || ""));
-      }
-    });
-    desenhaTarefas();
-  }catch(e){ /* sem tabela/rede: ignora */ }
-  tarOcupado = false;
-}
-/* REGRA 2026-11-19 (igual ao painel do PC): número fixo (cada tarefa guarda o que recebeu, ver numeroDe);
-   CONCLUÍDA some na hora e só vai para Atualizações; fazendo = amarelo no topo; esperando = branco na ordem;
-   ERRO = vermelho com ✗ e o motivo até o dono ver (abrir e fechar a lista); lista vazia = "Nenhuma tarefa — tudo feito ✓". */
-let errVistos = ARM.get("jv_errvistos") || {}, errMostrados = {};
-function estadoVis(t, agora){
-  const idade = agora - new Date(t.atualizado_em).getTime();
-  if(t.estado === "feito") return null;
-  if(t.estado === "erro") return errVistos[t.id] ? null : { e: "erro", o: 1, idade: idade };
-  if(t.estado === "exec" && idade > T_TRAVA) return { e: "trav", o: 1, idade: idade };
-  return { e: t.estado === "exec" ? "exec" : "fila", o: 1, idade: idade };
-}
-function desenhaTarefas(){
-  const agora = Date.now(), por = {}; let rodando = 0, erros = 0;
-  tarefas.forEach(t => { const v = estadoVis(t, agora); if(!v) return; (por[t.aba || "?"] = por[t.aba || "?"] || []).push({ t: t, v: v, n: numeroDe(t) }); if(v.e === "exec") rodando++; if(v.e === "erro" || v.e === "trav") erros++; });
-  const b = $q("tarefasBtn"); b.innerHTML = "Tarefas" + (rodando + erros ? "<b" + (erros ? ' style="background:#ff5a5a;color:#fff"' : "") + ">" + (rodando + erros) + "</b>" : "");
-  if(!$q("tarefas").classList.contains("on")) return;
-  const l = $q("listaTar"), rolou = l.scrollTop; l.innerHTML = "";
-  const nomes = Object.keys(por).sort(), ord = { exec: 0, trav: 0, erro: 1, fila: 2 };
-  $q("tarInfo").textContent = "Amarelo: fazendo agora. Branco: esperando. ✗ erro (fica até você ver).";
-  if(!nomes.length){ const v = document.createElement("div"); v.className = "tar vazio"; v.textContent = "Nenhuma tarefa — tudo feito ✓"; l.appendChild(v); }
-  nomes.forEach(nm => {
-    if(nomes.length > 1){ const h = document.createElement("div"); h.className = "tabaH"; h.textContent = nm; l.appendChild(h); }   // título da aba só quando há mais de uma
-    por[nm].sort((a, b) => (ord[a.v.e] - ord[b.v.e]) || (a.n - b.n)).forEach(x => {
-      const d = document.createElement("div"); d.className = "tar"; d.dataset.e = x.v.e;
-      d.innerHTML = '<span class="nn"></span><span class="tt"></span><span class="mk"></span>';
-      d.children[0].textContent = (x.v.e === "erro" || x.v.e === "trav" ? "✗ " : "") + x.n + "."; d.children[1].textContent = x.t.titulo || x.t.texto || "";
-      d.children[2].textContent = x.v.e === "trav" ? "travada" : "";
-      if(x.v.e === "erro" || x.v.e === "trav"){
-        if(x.v.e === "erro") errMostrados[x.t.id] = 1;
-        const m = document.createElement("span"); m.className = "mt"; m.textContent = " — " + String(x.t.motivo || x.t.erro || x.t.detalhe || (x.v.e === "trav" ? "sem sinal há mais de 15 minutos" : "sem motivo informado")).slice(0, 140); d.children[1].appendChild(m);
-      }
-      d.title = d.children[0].textContent + " " + d.children[1].textContent;   // legenda com o texto inteiro (a linha é cortada com reticências)
-      l.appendChild(d);
-    });
-  });
-  l.scrollTop = rolou;
-  const feitas = tarefas.filter(t => t.estado === "feito").slice(0, 60);   // toda tarefa que fica ✓ entra em Atualizações (data/hora + frase curta)
-  $q("atuTit").textContent = "Atualizações (" + feitas.length + ") " + (atuAberto ? "▾" : "▸");
-  const a = $q("listaAtu"); a.style.display = atuAberto ? "block" : "none"; a.innerHTML = "";
-  if(atuAberto) feitas.forEach(t => { const d = document.createElement("div"); d.className = "atu"; d.textContent = dh(new Date(t.atualizado_em).getTime()) + " " + (t.titulo || t.texto || "").slice(0, 90); a.appendChild(d); });
-}
-setInterval(() => { if(!document.hidden && sess && tarefas.length) desenhaTarefas(); }, 5000);   // atualiza cores/estado (nada some por tempo)
-function avisaTerminou(antes, depois){
+function terminou(antes, depois){
+  if(!antes.length) return;
   depois.forEach(n => {
     const o = antes.find(x => x.nome === n.nome);
-    if(esperando[n.nome] && o && o.estado === "trab" && n.estado !== "trab"){
-      delete esperando[n.nome];
-      falar(n.nome + (n.estado === "perg" ? " está esperando sua resposta." : " terminou.") + (n.texto && n.estado !== "perg" ? " " + n.texto : ""));
-    }
-    if(o && o.estado !== "perg" && n.estado === "perg") falar(n.nome + " está esperando sua resposta.");
+    if(o && o.estado !== "perg" && n.estado === "perg" && ligado) falar(n.nome + " está esperando sua resposta.");
   });
 }
-function desenhaChips(){
-  const t = $q("topo"); t.innerHTML = "";
+async function puxaAvisos(){
+  try{
+    const l = await rest("jarvis_avisos?select=*&order=id.desc&limit=60") || [];
+    const novos = avisoIni ? l.filter(x => x.id > ultAviso) : [];
+    avisoIni = true;
+    if(l.length) { ultAviso = Math.max(ultAviso, l[0].id); ARM.set("jv_ultaviso", ultAviso); }
+    avisos = l;
+    novos.reverse().forEach(x => { toast(x.titulo, x.texto); if(ligado && /pix|captcha|login/.test(x.tipo)) falar(x.titulo.replace(/^\W+/, "") + ". " + (x.texto || "")); });
+    desenhaAvisos();
+  }catch(e){}
+}
+
+/* ---------- desenho ---------- */
+function desenhaTudo(){ desenhaTopo(); desenhaVivo(); desenhaTerminal(); desenhaTarefas(); desenhaIdeias(); desenhaBadges(); desenhaParar(); }
+function desenhaTopo(){
+  const c = $q("chips"); c.innerHTML = "";
   abas.forEach(a => {
-    const c = document.createElement("button"); c.className = "chip" + (a.nome === destino ? " sel" : ""); c.dataset.e = a.estado;
-    const pct = a.estado === "trab" && a.pct != null ? Math.round(a.pct) + "%" : "";
-    c.innerHTML = '<i class="d"></i><span></span><span class="p"></span>'; c.children[1].textContent = a.nome; c.children[2].textContent = pct;
-    c.onclick = () => { destino = a.nome; ARM.set("jv_destino", destino); desenhaChips(); legenda("Pedidos vão para: " + a.nome); };
-    t.appendChild(c);
+    const b = document.createElement("button"); b.className = "chip" + (a.nome === destino ? " sel" : ""); b.dataset.e = a.estado; b.dataset.p = a.pausada ? "1" : "0";
+    b.innerHTML = '<i class="d"></i><span></span><span class="p"></span>'; b.children[1].textContent = a.nome;
+    b.children[2].textContent = a.pausada ? "⏸" : (a.estado === "trab" && a.pct != null ? Math.round(a.pct) + "%" : "");
+    b.onclick = () => { destino = a.nome; termSel = a.nome; ARM.set("jv_destino", destino); ARM.set("jv_term", termSel); desenhaTudo(); if(painelAtual === "pLig" && !largo()) toast("Pedidos vão para " + a.nome, "A IA ainda escolhe o terminal pelo assunto, se você disser."); else puxa(); };
+    c.appendChild(b);
+  });
+  const m = abas.find(x => x.cpu != null);
+  $q("maq").innerHTML = m ? "CPU <b>" + Math.round(m.cpu) + "%</b><br>RAM <b>" + Math.round(m.ram) + "%</b>" : "";
+}
+function desenhaVivo(){
+  const v = $q("vivo"); v.innerHTML = "";
+  if(!abas.length){ v.innerHTML = '<div class="vazio vidro">Sem terminais agora.</div>'; return; }
+  abas.forEach(a => {
+    const at = atualDe(a), fila = filaDe(a).filter(x => x.e === "fila").length;
+    const d = document.createElement("button"); d.className = "mini vidro"; d.dataset.e = a.estado; d.dataset.p = a.pausada ? "1" : "0"; d.style.textAlign = "left";
+    d.innerHTML = '<i class="d"></i><div class="c"><div class="n"><span></span>' + (a.pausada ? '<span class="pz">PAUSADO</span>' : "") + '<span class="tm"></span></div><div class="a"></div><div class="l"></div></div>';
+    d.querySelector(".n span").textContent = a.nome;
+    d.querySelector(".tm").textContent = a.estado === "trab" ? "⏱ " + dur(a.seg) : (ESTADO[a.estado] || a.estado);
+    d.querySelector(".a").textContent = at ? "▶ " + at.t : "";
+    d.querySelector(".l").textContent = (a.texto || "") + (fila ? "  ·  " + fila + " na fila" : "");
+    d.onclick = () => { termSel = a.nome; ARM.set("jv_term", termSel); vaiPara("pTerm"); puxa(); };
+    v.appendChild(d);
   });
 }
-function desenhaBotaoIdeias(){
-  const b = $q("ideiasBtn"); b.innerHTML = "Ideias" + (ideias.length ? "<b>" + ideias.length + "</b>" : "");
-  if($q("ideias").classList.contains("on")) desenhaIdeias();
+let saidaFim = true;
+function desenhaTerminal(){
+  const ta = $q("termAbas"); ta.innerHTML = "";
+  abas.forEach(a => {
+    const b = document.createElement("button"); b.className = "chip" + (a.nome === termSel ? " sel" : ""); b.dataset.e = a.estado; b.dataset.p = a.pausada ? "1" : "0";
+    b.innerHTML = '<i class="d"></i><span></span>'; b.children[1].textContent = a.nome;
+    b.onclick = () => { termSel = a.nome; ARM.set("jv_term", termSel); saidaFim = true; desenhaTerminal(); puxa(); };
+    ta.appendChild(b);
+  });
+  const a = abas.find(x => x.nome === termSel);
+  if(!a){ $q("termSaida").textContent = "Escolha um terminal."; return; }
+  const cab = $q("termCab"); cab.dataset.e = a.estado; cab.dataset.p = a.pausada ? "1" : "0";
+  $q("tcNome").textContent = a.nome + " · " + (a.pausada ? "Pausado" : (ESTADO[a.estado] || a.estado));
+  $q("tcPz").innerHTML = a.pausada ? '<span class="pz">PAUSADO</span>' : "";
+  $q("tcTempo").textContent = a.estado === "trab" ? "⏱ " + dur(a.seg) : "";
+  const at = atualDe(a); $q("tcAtual").textContent = at ? "▶ Fazendo agora: " + (at.n ? at.n + ". " : "") + at.t : "";
+  const s = $q("termSaida");
+  if(a.saida != null){
+    const novo = a.saida || "(sem saída ainda)";
+    if(s.textContent !== novo){ s.textContent = novo; if(saidaFim) s.scrollTop = s.scrollHeight; }
+  }
+  desenhaFila($q("termFila"), a, false);
+}
+function linhaTarefa(a, x){
+  const d = document.createElement("div"); d.className = "tar" + (x.pm ? " pm" : ""); d.dataset.e = x.e;
+  d.innerHTML = '<span class="nn"></span><span class="tt"></span>';
+  d.children[0].textContent = (x.e === "erro" ? "✗ " : x.e === "exec" ? "▶ " : "") + (x.n ? x.n + "." : "");
+  d.children[1].textContent = x.t;
+  if(x.e === "erro" && x.m){ const m = document.createElement("small"); m.textContent = x.m; d.children[1].appendChild(m); }
+  if(x.o === "p" && x.n && x.e === "fila"){
+    const b = document.createElement("button"); b.className = "bpm" + (x.pm ? " on" : ""); b.textContent = x.pm ? "★ Máxima" : "☆ Prioridade";
+    b.onclick = () => comando(x.pm ? "pmax_off" : "pmax", a.nome, x.n, x.pm ? "Tirando a prioridade máxima…" : "Marcando prioridade máxima…");
+    d.appendChild(b);
+  }
+  if(x.o === "p" && x.n && x.e === "erro"){
+    const b = document.createElement("button"); b.className = "bcor"; b.textContent = "Corrigir";
+    b.onclick = () => comando("corrigir", a.nome, x.n, "Mandando corrigir a tarefa " + x.n + "…");
+    d.appendChild(b);
+  }
+  return d;
+}
+const ORD = { exec: 0, erro: 1, fila: 2 };
+function desenhaFila(el, a, comTitulo){
+  const l = filaDe(a).slice().sort((p, q) => (ORD[p.e] - ORD[q.e]) || (q.pm - p.pm));
+  if(comTitulo && l.length){ const h = document.createElement("div"); h.className = "tit"; h.textContent = a.nome + (a.pausada ? " · pausado" : ""); el.appendChild(h); }
+  if(!comTitulo) el.innerHTML = "";
+  if(!l.length && !comTitulo){ el.innerHTML = '<div class="vazio">Nenhuma tarefa na fila — tudo feito ✓</div>'; return 0; }
+  l.forEach(x => el.appendChild(linhaTarefa(a, x)));
+  return l.length;
+}
+function desenhaTarefas(){
+  const el = $q("listaTar"); el.innerHTML = "";
+  let n = 0; abas.forEach(a => { n += desenhaFila(el, a, true); });
+  if(!n) el.innerHTML = '<div class="vazio vidro">Nenhuma tarefa em andamento — tudo feito ✓</div>';
 }
 function desenhaIdeias(){
   const l = $q("listaIdeias"); l.innerHTML = "";
-  $q("ideiasInfo").textContent = ideias.length ? "Aprove ou descarte. Aprovar já manda fazer no PC." : "Nenhuma ideia nova no momento.";
+  $q("aprovaTodas").style.display = ideias.length > 1 ? "" : "none";
+  if(!ideias.length){ l.innerHTML = '<div class="vazio vidro">Nenhuma ideia nova agora.</div>'; return; }
   ideias.forEach((x, k) => {
-    const d = document.createElement("div"); d.className = "idea";
-    d.innerHTML = '<div class="pr"></div><h3></h3><p></p><div class="ac"><button class="a">Aprovar</button><button class="d">Descartar</button></div>';
+    const d = document.createElement("div"); d.className = "idea vidro";
+    d.innerHTML = '<div class="pr"></div><h3></h3><p></p><div class="ac"><button class="bno">✗ Recusar</button><button class="bok">✓ Aprovar</button></div>';
     d.querySelector(".pr").textContent = (x.prio || "ideia") + " · nº " + (k + 1); d.querySelector("h3").textContent = x.titulo; d.querySelector("p").textContent = x.detalhe || "";
-    d.querySelector(".a").onclick = () => decide(x.id, "aprovada"); d.querySelector(".d").onclick = () => decide(x.id, "descartada");
+    d.querySelector(".bok").onclick = () => decide(x.id, "aprovada"); d.querySelector(".bno").onclick = () => decide(x.id, "descartada");
     l.appendChild(d);
   });
 }
+const ICONE = { concluida: "✅", ideia: "💡", captcha: "🧩", login: "🔑", pix: "💸", alerta: "⚠️" };
+function desenhaAvisos(){
+  const l = $q("listaAvisos"); l.innerHTML = "";
+  if(!avisos.length){ l.innerHTML = '<div class="vazio vidro">Nenhum aviso ainda. Ative as notificações para receber no iPhone mesmo com o app fechado.</div>'; }
+  avisos.forEach(x => {
+    const d = document.createElement("div"); d.className = "avi vidro"; d.dataset.t = x.tipo;
+    d.innerHTML = '<div class="ic"></div><div class="c"><div class="t"></div><div class="x"></div><div class="h"></div></div>';
+    d.querySelector(".ic").textContent = ICONE[x.tipo] || "🔔"; d.querySelector(".t").textContent = x.titulo; d.querySelector(".x").textContent = x.texto || ""; d.querySelector(".h").textContent = hm(new Date(x.criado_em).getTime());
+    l.appendChild(d);
+  });
+  desenhaBadges();
+}
+function desenhaBadges(){
+  const vistos = ARM.get("jv_avisto") || 0, nAv = avisos.filter(x => x.id > vistos).length, urg = avisos.some(x => x.id > vistos && /pix|captcha|login/.test(x.tipo));
+  const erros = abas.reduce((s, a) => s + filaDe(a).filter(x => x.e === "erro").length, 0), exec = abas.filter(a => atualDe(a)).length;
+  const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
+  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv, urg);
+  bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
+  $q("rIdeias").textContent = ideias.length; $q("rAvisos").textContent = nAv;
+}
+function desenhaParar(){
+  const todas = abas.length && abas.every(a => a.pausada), b = $q("parar");
+  b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
+}
+function vaiPara(p){
+  if(largo() && p === "pLig") p = "pTerm";
+  painelAtual = p;
+  document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === p));
+  if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
+  if(p === "pTerm"){ saidaFim = true; puxa(); }
+}
+
+/* ---------- ações ---------- */
 async function decide(id, decisao){
   try{
     await rest("jarvis_ideias?id=eq." + encodeURIComponent(id), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ decisao: decisao, decidido_em: new Date().toISOString() }) });
-    ideias = ideias.filter(x => x.id !== id); desenhaIdeias(); desenhaBotaoIdeias();
+    ideias = ideias.filter(x => x.id !== id); desenhaIdeias(); desenhaBadges();
     return true;
-  }catch(e){ legenda("Não consegui salvar a decisão."); return false; }
+  }catch(e){ toast("Não consegui salvar a decisão", String(e.message || e)); return false; }
+}
+async function aprovaTodas(){
+  const l = ideias.slice(); if(!l.length) return;
+  if(!confirm("Aprovar as " + l.length + " ideias?")) return;
+  let ok = 0; for(const x of l){ if(await decide(x.id, "aprovada")) ok++; }
+  toast("Aprovadas: " + ok + " de " + l.length, "O PC começa a fazer em alguns segundos.");
+}
+async function comando(tipo, aba, n, msg){
+  try{
+    const r = await rest("jarvis_comandos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ tipo: tipo, aba: aba || null, n: n != null ? String(n) : null }) });
+    const id = r && r[0] && r[0].id; toast(msg || "Enviado ao PC", semSinal ? "O PC está sem sinal: sai quando ele voltar." : "");
+    for(let k = 0; id && k < 12; k++){
+      await new Promise(ok => setTimeout(ok, 1500));
+      const s = await rest("jarvis_comandos?select=resultado,feito&id=eq." + id);
+      if(s && s[0] && s[0].resultado && s[0].resultado !== "em andamento"){ toast(/^erro/.test(s[0].resultado) ? "✗ " + s[0].resultado : "✓ " + s[0].resultado, aba || ""); puxa(); return s[0].resultado; }
+    }
+  }catch(e){ toast("Não consegui mandar ao PC", String(e.message || e)); }
+  return null;
+}
+async function pararTudo(){
+  const todas = abas.length && abas.every(a => a.pausada);
+  if(todas){ comando("retomar_tudo", null, null, "Retomando todos os terminais…"); return; }
+  if(!confirm("PARAR TUDO? Todos os terminais e agentes do PC ficam pausados até você tocar em Retomar.")) return;
+  if(ligado) falar("Parando todos os terminais.");
+  comando("parar_tudo", null, null, "Pausando todos os terminais…");
 }
 async function mandaPedido(aba, texto){
-  try{
-    await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ aba: aba, texto: texto }) });
-    esperando[aba] = true;
-    return true;
-  }catch(e){ return false; }
+  try{ await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ aba: aba, texto: texto }) }); return true; }catch(e){ return false; }
 }
 
-/* ---------- voz: falar (TTS) ---------- */
-let vozPt = null;
-function achaVoz(){ const v = speechSynthesis.getVoices(); vozPt = v.find(x => /pt[-_]BR/i.test(x.lang)) || v.find(x => /^pt/i.test(x.lang)) || null; }
+/* ---------- notificações (Web Push) ---------- */
+function b64u(s){ const p = "=".repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+async function salvaInscricao(sub){
+  const j = sub.toJSON();
+  await rest("jarvis_push?on_conflict=endpoint", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth }) });
+}
+async function ativaPush(){
+  const instalado = navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+  if(!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){
+    toast("Notificações indisponíveis aqui", /iphone|ipad/i.test(navigator.userAgent) && !instalado ? "No iPhone: adicione o Jarvis à Tela de Início e abra pelo ícone (iOS 16.4 ou mais novo)." : "Este navegador não aceita notificações."); return;
+  }
+  try{
+    const p = await Notification.requestPermission();
+    if(p !== "granted"){ toast("Notificações bloqueadas", "Libere em Ajustes > Notificações > Jarvis."); return; }
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(CFG.vapid) });
+    await salvaInscricao(sub);
+    $q("ativaPush").textContent = "🔔 Ativadas ✓";
+    toast("Notificações ativadas ✓", "Tarefa concluída, ideia nova, captcha/login e Pix chegam no iPhone.");
+  }catch(e){ toast("Não consegui ativar", String(e.message || e)); }
+}
+async function salvaPushSilencioso(){
+  try{
+    if(!("serviceWorker" in navigator) || !("PushManager" in window) || Notification.permission !== "granted") return;
+    const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+    if(sub){ await salvaInscricao(sub); $q("ativaPush").textContent = "🔔 Ativadas ✓"; }
+  }catch(e){}
+}
+
+/* ---------- voz: falar ---------- */
+let vozPt = null, falando = false;
+function achaVoz(){
+  const v = speechSynthesis.getVoices().filter(x => /^pt[-_]BR/i.test(x.lang));
+  vozPt = v.find(x => /premium|enhanced|aprimorad|natural|neural/i.test(x.name)) || v.find(x => /luciana|felipe|francisca|thalita/i.test(x.name)) || v[0]
+       || speechSynthesis.getVoices().find(x => /^pt/i.test(x.lang)) || null;
+}
 if("speechSynthesis" in window){ achaVoz(); speechSynthesis.onvoiceschanged = achaVoz; }
 function desbloqueiaAudio(){ try{ const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); }catch(e){} }
+function legenda(t, pequeno){ const l = $q("legenda"); l.textContent = t || ""; if(pequeno){ const s = document.createElement("small"); s.textContent = pequeno; l.appendChild(s); } }
 function falar(texto){
   legenda(texto);
   return new Promise(res => {
     if(!("speechSynthesis" in window)){ res(); return; }
     try{ speechSynthesis.cancel(); }catch(e){}
     falando = true; paraRec();
-    const u = new SpeechSynthesisUtterance(texto); u.lang = "pt-BR"; if(vozPt) u.voice = vozPt; u.rate = 1.02;
+    const u = new SpeechSynthesisUtterance(texto); u.lang = "pt-BR"; if(vozPt) u.voice = vozPt; u.rate = 1.04; u.pitch = 1;
     let feito = false;
-    const fim = () => { if(feito) return; feito = true; falando = false; res(); if(conversa) setTimeout(() => escuta(false), 300); };
+    const fim = () => { if(feito) return; feito = true; falando = false; res(); if(ligado && !pensando) setTimeout(escuta, 250); };
     u.onend = fim; u.onerror = fim;
-    setTimeout(fim, 2500 + texto.length * 95);               // o iPhone às vezes não avisa o fim
+    setTimeout(fim, 2500 + texto.length * 90);                 // o iPhone às vezes não avisa o fim
     speechSynthesis.speak(u);
   });
 }
-function legenda(t, pequeno){ const l = $q("legenda"); l.textContent = t || ""; if(pequeno){ const s = document.createElement("small"); s.textContent = pequeno; l.appendChild(s); } }
 
-/* ---------- voz: ouvir (reconhecimento) ---------- */
+/* ---------- voz: ouvir (Ligação contínua, pt-BR) ---------- */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let rec = null, rapidos = 0, iniciouEm = 0;
+let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, ligado = false, pensando = false, hist = [];
 function paraRec(){ if(rec){ try{ rec.onend = null; rec.abort(); }catch(e){} rec = null; } ouvindoAgora = false; }
-function escuta(direto){
-  if(!SR){ legenda("Este navegador não tem reconhecimento de voz. Use o teclado ⌨ (ditado do iPhone)."); return; }
-  if(falando) return;
+function escuta(){
+  if(!ligado || falando || pensando) return;
+  if(!SR){ legenda("Este navegador não reconhece voz.", "Use o ⌨ (o ditado do teclado do iPhone também funciona)."); return; }
   paraRec();
-  const r = new SR(); rec = r; r.lang = "pt-BR"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
-  iniciouEm = Date.now();
-  r.onstart = () => { ouvindoAgora = true; };
+  const r = new SR(); rec = r; r.lang = "pt-BR"; r.interimResults = true; r.continuous = true; r.maxAlternatives = 1;
+  iniciouEm = Date.now(); let enviado = false, ultimo = "", silencio = null;
+  const envia = () => { if(enviado) return; const t = ultimo.trim(); if(t.length < 2) return; enviado = true; paraRec(); pergunta(t); };
+  r.onstart = () => { ouvindoAgora = true; $q("estadoLig").textContent = "● Ouvindo…"; };
   r.onresult = e => {
     let txt = "", final = false;
     for(let i = e.resultIndex; i < e.results.length; i++){ txt += e.results[i][0].transcript; if(e.results[i].isFinal) final = true; }
-    nivel = Math.min(1, .35 + Math.min(.5, txt.length / 60));
+    nivel = Math.min(1, .35 + Math.min(.5, txt.length / 60)); ultimo = txt;
     if(txt.trim()) legenda(txt.trim());
-    if(final){ rapidos = 0; trata(txt.trim(), direto); }
+    clearTimeout(silencio);
+    if(final){ rapidos = 0; envia(); } else silencio = setTimeout(envia, 1600);   // pausa de 1,6 s = fim da frase (o iOS demora a dar "final")
   };
   r.onerror = e => {
-    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ conversa = false; atualizaMic(); legenda("O iPhone bloqueou o microfone. Permita em Ajustes e toque em “Tocar para falar”."); }
+    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ desliga(); legenda("O iPhone bloqueou o microfone.", "Ajustes > Safari > Microfone (ou Ajustes > Jarvis) e toque no botão verde de novo."); }
   };
   r.onend = () => {
-    ouvindoAgora = false; nivel = 0;
+    ouvindoAgora = false; nivel = 0; clearTimeout(silencio);
+    if(!enviado && ultimo.trim().length >= 2){ envia(); return; }
     if(Date.now() - iniciouEm < 700) rapidos++; else rapidos = 0;
-    if(conversa && !falando && !direto){
-      if(rapidos >= 8){ conversa = false; atualizaMic(); legenda("O iPhone cortou o microfone.", "Toque em “Tocar para falar”."); return; }
-      setTimeout(() => escuta(false), Math.min(3000, 250 + rapidos * 300));
+    if(ligado && !falando && !pensando){
+      if(rapidos >= 8){ desliga(); legenda("O iPhone cortou o microfone.", "Toque no botão verde para ligar de novo."); return; }
+      setTimeout(escuta, Math.min(2500, 200 + rapidos * 300));
     }
   };
-  try{ r.start(); }catch(e){ legenda("Não consegui abrir o microfone. Toque em “Tocar para falar”."); }
+  try{ r.start(); }catch(e){ setTimeout(escuta, 800); }
 }
-function atualizaMic(){ $q("mic").classList.toggle("off", !conversa); }
+const ICO_TEL = '<svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
+const ICO_DESL = '<svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor" style="transform:rotate(135deg)"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
+function liga(){
+  desbloqueiaAudio(); ligado = true; rapidos = 0; atualizaLig(); mantemTela();
+  falar(hist.length ? "Voltei. Pode falar." : "Oi, aqui é o Jarvis. Pode falar.");
+}
+function desliga(){ ligado = false; pensando = false; paraRec(); try{ speechSynthesis.cancel(); }catch(e){} falando = false; atualizaLig(); if(atualizarDepois) location.reload(); }
+function atualizaLig(){
+  $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_DESL : ICO_TEL;
+  const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Em ligação" : "Toque no botão verde para ligar";
+}
 
-/* ---------- entender o que foi dito ---------- */
-const sem = s => Array.from(s).map(c => c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()).join("");
-const NUMS = { um: 1, uma: 1, dois: 2, duas: 2, tres: 3, quatro: 4, cinco: 5, seis: 6, sete: 7, oito: 8, nove: 9, dez: 10 };
-function aliasesDe(nome){
-  const n = sem(nome), a = [n];
-  if(/cuida/.test(n)) a.push("cuida ai", "cuidai", "cuida a", "loja", "lojas", "cuida");
-  if(/carro/.test(n)) a.push("carro", "do carro");
-  return a.sort((x, y) => y.length - x.length);
-}
-function achaDestino(restoNorm){
-  let melhor = null;
-  [...abas].sort((x, y) => y.nome.length - x.nome.length).forEach(a => {
-    aliasesDe(a.nome).forEach(al => { if(!melhor && restoNorm.startsWith(al) && !/[a-z0-9]/.test(restoNorm.charAt(al.length) || " ")) melhor = { aba: a, len: al.length }; });
-  });
-  return melhor;
-}
-async function trata(original, direto){
-  const n = sem(original);
-  let corte = 0;
-  if(!direto){
-    const m = n.match(/\b(jarvis|jarvi|jarves|jarbas|ja vis|jair vis)\b/);
-    if(m) corte = m.index + m[0].length;
-    else if(Date.now() < acordadoAte) corte = 0;
-    else return;                                              // fala sem "Jarvis": ignora
+/* ---------- cérebro: Claude Haiku (Edge Function jarvis-cerebro; a chave fica no Supabase) ---------- */
+async function pergunta(texto){
+  if(/^(desliga|desligar|tchau|encerra|encerrar)( a ligacao| a ligação)?\.?$/i.test(texto.trim())){ await falar("Tchau! Desligando."); desliga(); return; }
+  pensando = true; $q("estadoLig").textContent = "● Pensando…"; legenda(texto, "pensando…");
+  let resp = null;
+  try{
+    const t = await token();
+    const r = await fetch(CFG.url + "/functions/v1/jarvis-cerebro", { method: "POST", headers: { apikey: CFG.anon, Authorization: "Bearer " + t, "Content-Type": "application/json" },
+      body: JSON.stringify({ fala: texto, hist: hist.slice(-6), aba: destino }) });
+    resp = await r.json().catch(() => null);
+    if(!r.ok && !(resp && resp.sem_ia)) throw new Error((resp && resp.erro) || ("erro " + r.status));
+  }catch(e){ resp = { erro: String(e.message || e) }; }
+  pensando = false;
+  let fala;
+  if(resp && resp.resposta){
+    fala = resp.resposta;
+    (resp.tarefas || []).forEach(x => toast(x.ok ? "Tarefa criada · " + x.terminal : "Não consegui criar a tarefa", x.pedido));
+  } else if(resp && resp.sem_ia){
+    fala = await reserva(texto);
+  } else {
+    fala = await reserva(texto, true);
   }
-  acordadoAte = 0;
-  const cmdN = n.slice(corte).replace(/^[ ,.!?:]+/, ""), cmdO = original.slice(corte).replace(/^[ ,.!?:]+/, "");
-  if(!cmdN || /^(ta ai|esta ai|voce esta ai|tu ta ai|me ajuda|me ajude|oi|ola|e ai)( |$|\?)/.test(cmdN)){ acordadoAte = Date.now() + 10000; modo = 1; await falar(cmdN && /ajud/.test(cmdN) ? "Claro. Pode falar." : cmdN ? "Estou aqui. Pode falar." : "Pois não?"); return; }   // "Olá Jarvis", "Jarvis, tá aí?", "Jarvis, me ajuda"
-  await executa(cmdN, cmdO);
+  hist.push({ q: texto, r: fala }); hist = hist.slice(-8);
+  if(ligado || !SR) await falar(fala); else legenda(fala);
+  if(ligado && !falando) setTimeout(escuta, 250);
 }
-async function executa(n, o){
+/* sem IA (chave ainda não configurada ou sem rede para a IA): regras simples, como o app v1 */
+const sem = s => Array.from(s).map(c => c.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()).join("");
+function aliasesDe(nome){ const n = sem(nome), a = [n]; if(/site/.test(n)) a.push("site"); else if(/cuida/.test(n)) a.push("cuida ai", "cuidai", "loja", "lojas", "cuida"); if(/carro/.test(n)) a.push("carro"); if(/trade/.test(n)) a.push("trade", "bolsa"); return a.sort((x, y) => y.length - x.length); }
+async function reserva(o, falhou){
+  const n = sem(o).replace(/^jarvis[ ,]*/, "");
   if(/^(status|como (esta|estao|anda|andam)|o que (esta|estao)|resumo)/.test(n)){
-    if(!abas.length){ await falar("O PC está sem sinal."); return; }
-    await falar(abas.map(a => a.nome + ": " + ({ trab: "trabalhando" + (a.pct != null ? " " + Math.round(a.pct) + " por cento" : ""), livre: "livre", perg: "esperando sua resposta" }[a.estado] || a.estado)).join(". ") + "."); return;
+    if(!abas.length) return "O PC está sem sinal.";
+    return abas.map(a => a.nome + ": " + (a.pausada ? "pausado" : ({ trab: "trabalhando", livre: "livre", perg: "esperando sua resposta" }[a.estado] || a.estado))).join(". ") + ".";
   }
-  if(/(o que (foi feito|fizemos|voce fez|o pc fez)|feito hoje|resumo do dia|como foi o dia|bom dia|resumo da manha)/.test(n)){      // cérebro único: o que o PC fez (hoje; "bom dia" = desde ontem)
-    const hoje = new Date(); hoje.setHours(0, 0, 0, 0); if(/bom dia|manha/.test(n)) hoje.setDate(hoje.getDate() - 1);
-    const t = await rest("jarvis_tarefas?select=aba,titulo,estado&atualizado_em=gte." + encodeURIComponent(hoje.toISOString()) + "&order=atualizado_em.desc&limit=60");
-    if(!Array.isArray(t) || !t.length){ await falar("Ainda não tenho registro do que foi feito hoje no PC."); return; }
-    const feitas = t.filter(x => x.estado === "feito"), exec = t.filter(x => x.estado === "exec"), fila = t.filter(x => x.estado === "fila");
-    await falar((/bom dia|manha/.test(n) ? "Bom dia! Desde ontem no PC: " : "Hoje no PC: ") + feitas.length + " tarefa" + (feitas.length === 1 ? "" : "s") + " concluída" + (feitas.length === 1 ? "" : "s") + (exec.length ? ", " + exec.length + " em andamento" : "") + (fila.length ? ", " + fila.length + " na fila" : "") + ". " + feitas.slice(0, 4).map(x => x.aba + ": " + x.titulo).join(". "));
-    return;
-  }
-  if(/^(quais|que|ver|lista|listar|me fala|mostra)?\s*(as )?ideias?\??$/.test(n) || /ideias (novas|do gerente)/.test(n)){
-    $q("ideias").classList.add("on"); desenhaIdeias();
-    await falar(ideias.length ? "Tem " + ideias.length + " ideia" + (ideias.length > 1 ? "s" : "") + ". " + ideias.slice(0, 3).map((x, k) => "Número " + (k + 1) + ": " + x.titulo).join(". ") : "Nenhuma ideia nova."); return;
-  }
-  const mi = n.match(/^(aprova|aprovar|descarta|descartar)(?: a)?(?: ideia)? (\d+|um|uma|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)\b/);
-  if(mi){
-    const k = (NUMS[mi[2]] || parseInt(mi[2], 10)) - 1, x = ideias[k];
-    if(!x){ await falar("Não achei essa ideia."); return; }
-    const ap = /^aprova/.test(mi[1]);
-    if(await decide(x.id, ap ? "aprovada" : "descartada")) await falar((ap ? "Aprovada" : "Descartada") + ": " + x.titulo + "."); return;
-  }
-  // pedido para uma aba: "para o Cuida Aí, revise o login" (igual ao PARA:) ou, sem destino, para a aba selecionada
+  if(/^(oi|ola|e ai|ta ai|esta ai)\b/.test(n) || n.length < 4) return "Estou aqui. " + (falhou ? "A inteligência está fora agora; " : "") + "O que você quer que eu faça?";
   let aba = destino, texto = o;
-  const md = n.match(/^(?:manda|mande|envia|passa|pede|peca)?\s*(?:isso )?(?:para|pra|pro)\s+(?:o |a )?/);
+  const md = n.match(/^(?:manda|mande|envia|passa|pede)?\s*(?:isso )?(?:para|pra|pro)\s+(?:o |a )?/);
   if(md){
-    const dest = achaDestino(n.slice(md[0].length));
-    if(dest){ aba = dest.aba.nome; texto = o.slice(md[0].length + dest.len).replace(/^[ ,.!?:]+/, ""); }
+    const resto = n.slice(md[0].length);
+    achou: for(const a of [...abas].sort((x, y) => y.nome.length - x.nome.length)) for(const al of aliasesDe(a.nome)) if(resto.startsWith(al)){ aba = a.nome; texto = o.slice(o.length - resto.length + al.length).replace(/^[ ,.!?:]+/, ""); break achou; }
   }
-  if(!aba){ await falar("O PC está sem sinal, não sei para onde mandar."); return; }
-  if(!texto.trim()){ await falar("O que eu mando para " + aba + "?"); acordadoAte = Date.now() + 8000; return; }
+  if(!aba) return "O PC está sem sinal, não sei para onde mandar.";
   const ok = await mandaPedido(aba, texto);
-  await falar(ok ? "Enviei para " + aba + "." : "Não consegui enviar. Verifique a conexão.");
+  return ok ? "Mandei para " + aba + "." + (falhou ? "" : "") : "Não consegui enviar. Verifique a internet.";
 }
 
-/* ---------- animação do símbolo (nível de voz) ---------- */
+/* ---------- símbolo (anima com a voz) ---------- */
 setInterval(() => {
-  const t = performance.now() / 1000;
-  let m = 0, n = 0;
+  const t = performance.now() / 1000; let m = 0, n = 0;
   if(falando){ m = 2; n = Math.max(0, Math.min(1, .35 + .30 * (.5 + .5 * Math.sin(t * 9)) * (.6 + .4 * Math.sin(t * 3.1)))); }
   else if(ouvindoAgora && nivel > .2){ m = 1; n = nivel; nivel *= .93; }
-  else if(Date.now() < acordadoAte){ m = 1; n = .12; }
+  else if(pensando){ m = 1; n = .25 + .15 * Math.sin(t * 6); }
+  else if(ligado){ m = 1; n = .1; }
   S.mic = m === 0 ? "nocall" : "on"; S.lvl_claude = n;
   document.body.classList.toggle("idle", m === 0);
 }, 40);
-
-function fit(){ const k = Math.min(innerWidth * .9, innerHeight * .58) / 320; $q("stage").style.transform = "translate(-50%,-50%) scale(" + k + ")"; }
-addEventListener("resize", fit); fit();
+function fit(){ const b = $q("orbBox"), k = Math.min(b.clientWidth * .9, b.clientHeight * .95) / 330; $q("stage").style.transform = "translate(-50%,-50%) scale(" + k + ")"; }
+addEventListener("resize", () => { fit(); vaiPara(painelAtual); }); fit();
 
 /* ---------- botões ---------- */
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
-$q("mic").onclick = () => { desbloqueiaAudio(); conversa = !conversa; atualizaMic(); if(conversa){ legenda("Conversa ligada. Diga “Jarvis…”"); rapidos = 0; escuta(false); } else { paraRec(); legenda("Conversa desligada."); } };
-$q("falar").onclick = () => { desbloqueiaAudio(); legenda("Pode falar…"); escuta(true); };
-$q("ideiasBtn").onclick = () => { $q("ideias").classList.add("on"); desenhaIdeias(); };
-$q("tarefasBtn").onclick = () => { $q("tarefas").classList.add("on"); desenhaTarefas(); };
-$q("fechaTar").onclick = () => { $q("tarefas").classList.remove("on"); Object.keys(errMostrados).forEach(i => errVistos[i] = 1); errMostrados = {}; ARM.set("jv_errvistos", errVistos); desenhaTarefas(); };   // o dono viu os ✗: saem
-$q("atuTit").onclick = () => { atuAberto = !atuAberto; desenhaTarefas(); };
-$q("fechaIdeias").onclick = () => $q("ideias").classList.remove("on");
-$q("tecBtn").onclick = () => $q("txt").focus();
-const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("txt").value = ""; desbloqueiaAudio(); trata(v, true); };
+$q("ligar").onclick = () => ligado ? desliga() : liga();
+atualizaLig();
+$q("parar").onclick = pararTudo;
+$q("aprovaTodas").onclick = aprovaTodas;
+$q("ativaPush").onclick = ativaPush;
+$q("tecBtn").onclick = () => { const k = $q("teclado"); k.classList.toggle("on"); if(k.classList.contains("on")) $q("txt").focus(); };
+const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("txt").value = ""; desbloqueiaAudio(); paraRec(); pergunta(v); };
 $q("enviaTxt").onclick = enviaTexto;
 $q("txt").addEventListener("keydown", e => { if(e.key === "Enter") enviaTexto(); });
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => vaiPara(b.dataset.p));
+document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => vaiPara(b.dataset.ir));
+const ts = $q("termSaida"), vf = $q("voltaFim");
+ts.addEventListener("scroll", () => { saidaFim = ts.scrollHeight - ts.scrollTop - ts.clientHeight < 30; vf.style.display = saidaFim ? "none" : "block"; });
+vf.onclick = () => { saidaFim = true; ts.scrollTop = ts.scrollHeight; vf.style.display = "none"; };
+setInterval(() => { if(!document.hidden && abas.some(a => a.estado === "trab")){ abas.forEach(a => { if(a.estado === "trab" && a.seg != null) a.seg += 1; }); desenhaVivo(); const a = abas.find(x => x.nome === termSel); if(a) $q("tcTempo").textContent = a.estado === "trab" ? "⏱ " + dur(a.seg) : ""; } }, 1000);
 
-/* ---------- tela ligada, instalação e arranque ---------- */
+/* ---------- tela ligada, atualização automática, instalação e arranque ---------- */
 async function mantemTela(){ try{ if("wakeLock" in navigator) await navigator.wakeLock.request("screen"); }catch(e){} }
-document.addEventListener("visibilitychange", () => { if(!document.hidden){ mantemTela(); if(sess) puxa(); } });
-mantemTela();
-if("serviceWorker" in navigator){ navigator.serviceWorker.register("sw.js").catch(() => {}); }
+document.addEventListener("visibilitychange", () => { if(!document.hidden){ mantemTela(); if(sess){ puxa(); puxaAvisos(); olhando(); } confereVersao(); } });
+let swReg = null, atualizarDepois = false;
+if("serviceWorker" in navigator){
+  const tinhaControle = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
+  navigator.serviceWorker.addEventListener("controllerchange", () => {          // versão nova instalada: recarrega (se estiver em ligação, espera desligar)
+    if(!tinhaControle) return;
+    if(ligado){ atualizarDepois = true; toast("Versão nova pronta", "Atualizo quando a ligação terminar."); return; }
+    location.reload();
+  });
+}
+async function confereVersao(){
+  try{
+    const r = await fetch("version.json?t=" + Date.now(), { cache: "no-store" }); const j = await r.json();
+    if(j.versao && j.versao !== VERSAO){
+      if(swReg) await swReg.update().catch(() => {});
+      if(!navigator.serviceWorker || !navigator.serviceWorker.controller){ if(!ligado) location.reload(); else atualizarDepois = true; }
+    }
+  }catch(e){}
+}
+setInterval(() => { if(!document.hidden) confereVersao(); }, 10 * 60 * 1000);
+(function avisaVersao(){
+  const ant = ARM.get("jv_versao");
+  if(ant && ant !== VERSAO) setTimeout(() => toast("Atualizado para " + VERSAO + " ✓", "O app do Jarvis se atualizou sozinho."), 600);
+  ARM.set("jv_versao", VERSAO);
+})();
 (function dicaInstalar(){
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent), standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
-  if(ios && !standalone && !ARM.get("jv_dica")){
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+  if(ios && !standalone && !ARM.get("jv_dica2")){
     const d = $q("instala"); d.classList.add("on");
-    d.innerHTML = 'Para usar como app: toque em <b>Compartilhar</b> (quadrado com seta) e depois em <b>Adicionar à Tela de Início</b>. <button class="bt" style="padding:6px 12px;margin-left:8px" id="dicaOk">Ok</button>';
-    $q("dicaOk").onclick = () => { d.classList.remove("on"); ARM.set("jv_dica", 1); };
+    d.innerHTML = 'Para usar como app (tela cheia e notificações): toque em <b>Compartilhar</b> (quadrado com seta) e depois em <b>Adicionar à Tela de Início</b>. <button class="btop bok" id="dicaOk" style="margin-left:6px">Ok</button>';
+    $q("dicaOk").onclick = () => { d.classList.remove("on"); ARM.set("jv_dica2", 1); };
   }
 })();
+(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : "pLig")); })();
 (async function arranque(){
   if(sess){ try{ await garanteDono(); iniciaSync(); return; }catch(e){ /* cai no login */ } }
   mostraLogin();

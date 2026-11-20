@@ -1,1 +1,1 @@
-window.JARVIS_CFG = {"url": "https://slyrnoqjqcwbakydyynr.supabase.co", "anon": "sb_publishable_V2zdknbxYWUmF-8tkhhuFw_MtQWc6Yl"};
+window.JARVIS_CFG = {"url": "https://slyrnoqjqcwbakydyynr.supabase.co", "anon": "sb_publishable_V2zdknbxYWUmF-8tkhhuFw_MtQWc6Yl", "vapid": "BF3UtScFUYp9ZXPJmAV1l9HZ5H16ESfddWQGAXahdlNWomFGbeNxfQq-tR3Pas8zTqD5ImlcCa7LZTvdWRILFO4"};
