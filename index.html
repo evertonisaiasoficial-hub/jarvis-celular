@@ -177,9 +177,11 @@ button:active{transform:scale(.97)}
 .caixa input{width:100%;padding:13px 14px;margin-bottom:10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
 .caixa .ok{width:100%;padding:14px;border-radius:14px}
 .caixa .err{color:#ff8a95;font-size:13px;min-height:18px;margin-bottom:8px}
-#toast{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 56px);z-index:50;display:none;padding:11px 14px;font-size:13.5px;line-height:1.4}
-#toast.on{display:block}
-#toast small{display:block;color:var(--dim);margin-top:2px}
+#toast{position:relative;flex:0 0 auto;display:none;align-items:center;gap:10px;margin:0 12px 6px;padding:8px 12px;min-height:44px;font-size:13px;line-height:1.35;cursor:pointer;touch-action:pan-y;-webkit-user-select:none;user-select:none;border-color:color-mix(in srgb,var(--cy) 45%,transparent)}
+#toast.on{display:flex;animation:entra .15s ease-out}
+#toast .tx{flex:1;min-width:0}#toast .tt{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toast small{display:block;color:var(--dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toast .cnt{flex:0 0 auto;font:600 12px var(--mono);color:var(--cy)}
 #instala{display:none;margin:0 12px 6px;padding:10px 12px;font-size:12.5px;line-height:1.5}
 #instala.on{display:block}
 /* iPad / tela larga: Ligação fixa à esquerda + painel escolhido à direita (funciona dividido ao lado de outro app) */
@@ -293,7 +295,6 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 #chaveRes.ok{color:var(--grn)}#chaveRes.erro{color:var(--red)}
 /* v6: conversa com a IA, menu Mais, memória, captcha ao vivo */
 #acoes,#teclado{display:none!important}
-#pararMini{display:flex!important;align-items:center;justify-content:center}
 #pLig{padding:0 12px;overflow:hidden}
 #chatTopo{display:flex;align-items:center;gap:10px;padding:6px 2px 6px;flex:0 0 auto}
 #chatTopo #orbBox{width:60px;height:60px;min-height:0;flex:0 0 60px}
@@ -323,6 +324,8 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 #composer #ligar svg{width:26px;height:26px}
 #composer #ligar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);animation:anel 1.6s ease-out infinite}
 #envMsg{width:50px;height:50px;flex:0 0 50px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;font:700 20px var(--f)}
+body.capPisca{animation:capPisca .5s linear 6}
+@keyframes capPisca{50%{box-shadow:inset 0 0 0 100vmax rgba(255,77,94,.35)}}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -333,11 +336,23 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 .mem{display:flex;gap:10px;align-items:flex-start;padding:12px;margin-bottom:8px}
 .mem .c{flex:1;min-width:0}.mem .t{font-size:14.5px;line-height:1.4;word-break:break-word}.mem .h{font:11px var(--mono);color:var(--dim);margin-top:4px}
 .mem .tg{display:inline-block;font:600 10.5px var(--f);letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--cy) 16%,transparent);color:var(--cy);margin-bottom:4px}
-.mem button{flex:0 0 auto;padding:9px 12px;border-radius:10px;background:rgba(255,77,94,.2);color:#ffd0d4;font:600 12.5px var(--f)}
+.mem button{flex:0 0 auto;min-height:44px;padding:9px 12px;border-radius:10px;background:rgba(255,77,94,.2);color:#ffd0d4;font:600 12.5px var(--f)}
 .conv{display:block;width:100%;text-align:left;padding:12px;margin-bottom:8px}
 .conv .h{font:11px var(--mono);color:var(--dim);margin-top:4px}
-#capTela{position:relative;border:2px solid var(--red);border-radius:12px;overflow:hidden;background:#000;touch-action:none}
-#capImg{display:block;width:100%;height:auto;min-height:160px;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;touch-action:none}
+#capTela{position:relative;border:2px solid var(--red);border-radius:12px;overflow:hidden;background:#000;touch-action:none;-webkit-user-select:none;user-select:none}
+#capZ{transform-origin:0 0;will-change:transform;width:100%}
+#capImg{display:block;width:100%;height:auto;min-height:160px;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;touch-action:none;pointer-events:none}
+#capDot{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border:3px solid #ffd54a;border-radius:50%;pointer-events:none;display:none;box-shadow:0 0 0 2px #000}
+#capLupa{position:absolute;width:112px;height:112px;border-radius:50%;border:3px solid var(--cy);overflow:hidden;pointer-events:none;display:none;background:#000;z-index:3}
+#capLupa canvas{width:100%;height:100%;display:block}
+#capBar,#capFino{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}#capBar button,#capFino button{flex:1;min-height:44px;min-width:64px;font-size:13px}
+#capSl{width:100%;height:48px;margin:4px 0;accent-color:var(--cy)}
+#capVivo.cheio{position:fixed;inset:0;z-index:60;background:#05070f;padding:6px 8px;display:flex!important;flex-direction:column;overflow:hidden}
+#capVivo.cheio #capTela{flex:1;min-height:120px}#capVivo.cheio #capZ{height:100%;display:flex;align-items:center;justify-content:center}
+#capVivo.cheio #capImg{width:auto;max-width:100%;max-height:100%;min-height:0}
+#capVivo.cheio #capBar,#capVivo.cheio #capFino{margin:4px 0}#capVivo.cheio #capBar button,#capVivo.cheio #capFino button{min-height:40px}
+#capVivo.cheio #capTec,#capVivo.cheio .capAjuda{display:none}
+@media (orientation:landscape) and (max-height:520px){#capVivo.on-vis{display:flex!important}}
 #capTec{display:flex;gap:8px;margin-top:10px}#capTec input{flex:1;min-width:0;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
 #capTit{font:700 15px var(--f);margin-bottom:8px;color:#ffb3ba}
 .capItem{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px;margin-bottom:10px;border:2px solid var(--red)}
@@ -353,8 +368,7 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
   #topo{padding:10px 12px 8px;gap:8px}
   #cfgBtn{width:44px;height:44px;font-size:21px}
   #app:not([data-p="pLig"]) #acoes,#app:not([data-p="pLig"]) #teclado{display:none}
-  #app:not([data-p="pLig"]) #pararMini{display:flex;align-items:center;justify-content:center}
-  .chip{padding:9px 15px;font-size:14.5px}
+    .chip{padding:9px 15px;font-size:14.5px}
   #maq{font-size:12px}
   .painel{padding:4px 14px 18px}
   .tit{font-size:12.5px;margin:14px 2px 10px}
@@ -384,25 +398,86 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
   .vz{padding:15px;font-size:15.5px}
 }
 @media (max-width:759px) and (max-height:700px){#orbBox{height:130px;min-height:130px}#ligar{width:80px;height:80px}}
+
+/* v9.3: layout (topo fixo, estados, Parar tudo seguro, Avisos, botões 44px, transição 150 ms) */
+#topo{padding:8px 14px 6px;gap:8px;flex:0 0 auto;min-height:52px}
+#topoTit{font:700 17px var(--f);letter-spacing:.01em}
+#topo .sp{flex:1}
+.pcd{width:12px;height:12px;border-radius:50%;background:#6f738f;flex:0 0 auto;box-shadow:0 0 8px rgba(0,0,0,.4)}
+.pcd.ok{background:var(--grn);box-shadow:0 0 10px var(--grn)}.pcd.off{background:var(--red);box-shadow:0 0 10px var(--red)}
+#pcTxt{font:600 11.5px var(--mono);color:var(--dim)}
+#cfgBtn{width:44px;height:44px;font-size:21px;border-radius:12px;flex:0 0 auto}
+#faixa{flex:0 0 auto;padding:0 12px 6px;display:none}
+#app[data-p="pLig"] #faixa,#app[data-p="pTerm"] #faixa{display:block}
+@media (min-width:760px){#faixa{display:block}}
+#chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+.chip{min-height:44px}
+/* estados das listas */
+.est{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:30px 18px;margin:8px 0}
+.est i{font-style:normal;font-size:38px;line-height:1}.est b{font:600 16px var(--f)}.est small{color:var(--dim);font-size:13.5px}
+.est .girando{animation:gira 1.2s linear infinite;display:inline-block}
+@keyframes gira{to{transform:rotate(360deg)}}
+/* início: resumo + atalhos */
+#inicio{display:none;flex:0 0 auto}
+#inicio.on{display:block}
+#resumo{display:flex;align-items:center;gap:6px;padding:12px 14px;margin:4px 0 10px}
+#resumo .rc{flex:1;text-align:center}#resumo .rc b{display:block;font:700 24px var(--f);color:var(--cy)}#resumo .rc span{font:500 12.5px var(--f);color:var(--dim)}
+#resumo #maq{flex:0 0 auto;font:600 11.5px var(--mono);color:var(--dim);text-align:right;line-height:1.3;border-left:1px solid var(--line);padding-left:10px}
+#atalhos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+#atalhos button{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;font:600 15px var(--f);text-align:left}
+#atalhos button i{font-style:normal;font-size:24px}
+#rodape{flex:0 0 auto;text-align:center;padding:2px 0 4px}
+#rodape #versao{margin:0;font:500 10px var(--mono);letter-spacing:.14em;color:var(--dim);opacity:.7}
+/* Parar tudo: segurar 1 s */
+.parar2{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin:6px 0 10px;border-radius:14px;font:700 15.5px var(--f);color:#fff;background:linear-gradient(135deg,#ff4d5e,#b3122a);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.parar2.ret{background:linear-gradient(135deg,var(--grn),#1fa866);color:#03140b}
+.parar2::after{content:"";position:absolute;left:0;bottom:0;height:5px;width:0;background:rgba(255,255,255,.85)}
+.parar2.segurando::after{width:100%;transition:width 1s linear}
+#pTerm .parar2{margin-top:2px}
+/* Mais: grade 2 colunas, sem buraco */
+#maisGrade{grid-template-columns:repeat(2,1fr)}
+@media (min-width:760px){#maisGrade{grid-template-columns:repeat(4,1fr)}}
+.mg{min-height:92px}
+/* botões com pelo menos 44px */
+.btop{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 16px}
+#nav button{min-height:56px}
+.bpm,.bcor{min-height:44px}
+.btn-pr{min-height:56px}
+#cfg .l1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cfg a{color:var(--cy)}
+/* toque dá retorno; troca de tela com 150 ms */
+button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.25);transition:transform .06s,filter .06s}
+.painel.on{animation:entra .15s ease-out}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.painel.on{animation:none}}
+#conf{z-index:60}
 </style></head>
 <body class="idle">
 
 <div id="app" data-p="pLig">
-  <header id="topo"><div id="chips"></div><div id="maq"></div><button id="pararMini" title="Parar tudo">■</button><button id="cfgBtn" title="Configurações">⚙</button></header>
+  <header id="topo"><b id="topoTit">Conversa</b><span class="sp"></span><span id="pcDot" class="pcd" title="PC"></span><span id="pcTxt">PC</span><button id="cfgBtn" title="Configurações">⚙</button></header>
+  <div id="toast" class="vidro" role="status" aria-live="polite"></div>
+  <div id="faixa"><div id="chips"></div></div>
   <div id="aviso"></div>
   <div id="instala" class="vidro"></div>
   <main id="corpo">
     <section id="pLig" class="painel on">
       <div id="chatTopo"><div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
-        <div class="ct"><b>Jarvis</b><div id="versao">VERSÃO v9.2</div><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
+        <div class="ct"><b>Jarvis</b><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
         <button class="btop bno" id="novaConversa">＋ Nova</button></div>
       <div id="capBanner"></div>
+      <div id="inicio">
+        <div id="resumo" class="vidro"><div class="rc"><b id="rTrab">0</b><span>trabalhando</span></div><div class="rc"><b id="rFila">0</b><span>na fila</span></div><div class="rc"><b id="rPend">0</b><span>pendentes</span></div><div id="maq"></div></div>
+        <div id="atalhos"><button class="vidro" data-ir="pTerm"><i>▤</i>Terminais</button><button class="vidro" data-ir="pTar"><i>☰</i>Tarefas</button><button class="vidro" data-ir="pIdeias"><i>💡</i>Ideias</button><button class="vidro" data-ir="pPrint"><i>📷</i>Print do PC</button></div>
+      </div>
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
+      <div id="rodape"><span id="versao">VERSÃO v9.4</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
+      <button class="parar2" id="pararTerm"></button>
       <div id="termAbas"></div>
       <div id="termCab" class="vidro"><div class="l1"><i class="d"></i><span id="tcNome"></span><span id="tcPz"></span><span class="tm" id="tcTempo"></span></div><div class="at" id="tcAtual"></div></div>
       <pre id="termSaida">Carregando a saída do terminal…</pre>
@@ -412,19 +487,18 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
     </section>
     <section id="pTar" class="painel"><div class="tit">Tarefas de todos os terminais</div><div id="listaTar"></div></section>
     <section id="pIdeias" class="painel"><div class="tit">Ideias do PC <span id="ideiasN"></span><span class="sp"></span><button class="btop bok" id="aprovaTodas">Aprovar todas</button></div><div id="ideiasInfo" class="vazio" style="padding:0 2px 8px;text-align:left"></div><div id="listaIdeias"></div></section>
-    <section id="pAvisos" class="painel"><div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
-    <section id="pAprovar" class="painel"><div class="tit">Aprovar <span id="aprovarN"></span></div>
-      <div class="vazio" style="padding:0 2px 10px;text-align:left">Quando um terminal para numa pergunta de permissão ou confirmação, ela aparece aqui (e chega como notificação). Sua resposta vai direto para o terminal.</div>
-      <div id="listaAprovar"></div></section>
+    <section id="pAvisos" class="painel"><div class="tit">Precisa de você <span id="aprovarN"></span></div>
+      <div id="avCap"></div>
+      <div id="listaAprovar"></div>
+      <div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
     <section id="pPrint" class="painel"><div class="tit">Print do PC</div>
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
       <div id="printInfo" class="vazio" style="padding:0 2px 10px;text-align:left">O PC só tira o print quando você toca no botão. Ficam guardados os últimos 10.</div>
       <div id="gradePrints"></div></section>
     <section id="pMais" class="painel"><div class="tit">Mais</div>
+      <button class="parar2" id="pararMais"></button>
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
-        <button class="mg vidro" data-ir="pAvisos"><i>🔔</i>Avisos<b id="rAvisos"></b></button>
-        <button class="mg vidro" data-ir="pCaptcha"><i>🧩</i>Captcha<b id="rCaptcha"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
         <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
         <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
@@ -454,9 +528,13 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
     <section id="pCaptcha" class="painel"><div class="tit">Captcha<span class="sp"></span><button class="btop bno" id="capFecha">Voltar</button></div>
       <div id="capInfo" class="vazio" style="padding:0 2px 10px;text-align:left">Quando aparecer captcha numa loja, ele chega como notificação e você resolve aqui, tocando e arrastando na página ao vivo. A automação nunca resolve sozinha.</div>
       <div id="capLista"></div>
-      <div id="capVivo" style="display:none"><div id="capTit"></div><div id="capTela"><img id="capImg" alt="Página da loja ao vivo" draggable="false"></div>
+      <div id="capVivo" style="display:none"><div id="capTit"></div>
+        <div id="capBar"><button class="btop bno" id="capMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="capMais" aria-label="Mais zoom">+</button><button class="btop bno" id="capAjusta">Ajustar à tela</button><button class="btop bno" id="capAtual">↻ Atualizar</button><button class="btop bno" id="capGira">⤢ Deitar</button></div>
+        <div id="capTela"><div id="capZ"><img id="capImg" alt="Página da loja ao vivo" draggable="false"></div><div id="capDot"></div><div id="capLupa"><canvas id="capLupaC" width="224" height="224"></canvas></div></div>
+        <input id="capSl" type="range" min="0" max="100" value="0" aria-label="Barra deslizante para mover a peça">
+        <div id="capFino"><button class="btop bno" id="capEsq">◀ 1px</button><button class="btop bno" id="capDir">1px ▶</button><button class="btop bok" id="capSolta">Soltar</button><button class="btop bno" id="capDesf">Desfazer</button></div>
         <div id="capTec"><input id="capTxt" placeholder="Digitar na página…" autocomplete="off"><button class="btop bok" id="capTxtEnv">Digitar</button><button class="btop bno" data-tecla="Backspace">⌫</button><button class="btop bno" data-tecla="Enter">↵</button></div>
-        <div class="vazio" style="text-align:left;padding:8px 2px">Toque e arraste na imagem como se fosse a página. Ela atualiza sozinha; ao resolver, esta tela fecha e a automação continua.</div></div>
+        <div class="vazio capAjuda" style="text-align:left;padding:8px 2px">Dois dedos: zoom e mover. Um dedo: toca e arrasta na página (a lupa aparece acima do dedo). Barra: move a peça sem o dedo em cima; marque antes o ponto da peça tocando nela. Ajuste fino: ◀ ▶ e Soltar.</div></div>
     </section>
   </main>
   <section id="prev" class="vidro"></section>
@@ -467,7 +545,7 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
     <button data-p="pLig" class="on"><i>💬</i>Conversa</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
     <button data-p="pTar"><i>☰</i>Tarefas</button>
-    <button data-p="pAprovar"><i>🔐</i>Aprovar</button>
+    <button data-p="pAvisos"><i>🔔</i>Avisos</button>
     <button data-p="pMais"><i>⋯</i>Mais</button>
   </nav>
 </div>
@@ -475,15 +553,16 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 <div id="zoom"><button id="zoomX">✕</button><img id="zoomImg" alt=""><div id="zoomI"></div></div>
 <div class="cartao" id="cfg"><div class="caixa vidro">
   <h2>⚙ Configurações</h2>
-  <p class="s">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
+  <p class="s l1">Escolha a voz do Jarvis. <a href="#" id="saibaMais">Saiba mais</a></p>
+  <p class="s" id="cfgMais" style="display:none">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
   <div id="listaVozes"></div>
   <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
-  <p class="s" id="vozDica" style="margin:12px 0 0"></p>
+  <p class="s" id="vozDica" style="margin:12px 0 0;display:none"></p>
   <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
-  <p class="s" style="margin:10px 0 0">Face ID para abrir o app: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
+  <p class="s l1" style="margin:10px 0 0">Face ID: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
 </div></div>
-<div id="toast" class="vidro"></div>
+<div class="cartao" id="conf"><div class="caixa vidro"><h2 id="confT"></h2><p class="s" id="confX"></p><div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="confNao">Cancelar</button><button class="bok" id="confSim">Sim</button></div></div></div></div>
 <div class="cartao" id="login"><div class="caixa vidro">
   <h2>Jarvis</h2>
   <p class="s">Entre com a conta do dono (a mesma do Cuida Aí). Só o dono vê e controla o Jarvis.</p>
@@ -644,13 +723,34 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v9.2";
+const VERSAO = "v9.4";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
 let sess = ARM.get("jv_sess");
 let abas = [], ideias = [], avisos = [], destino = ARM.get("jv_destino") || "", termSel = ARM.get("jv_term") || "";
 let painelAtual = "pLig", semSinal = false;
+/* ---------- v9.3: estados das listas (carregando / sem conexão / vazio) ---------- */
+/* ---------- v9.3: cartão de confirmação do app (no lugar do confirm nativo) ---------- */
+let confResolve = null;
+function confirmaCartao(titulo, texto, rotuloSim){
+  return new Promise(res => {
+    $q("confT").textContent = titulo; $q("confX").textContent = texto || ""; $q("confSim").textContent = rotuloSim || "Sim";
+    $q("conf").classList.add("on"); confResolve = res;
+  });
+}
+function fechaConf(v){ $q("conf").classList.remove("on"); const r = confResolve; confResolve = null; if(r) r(v); }
+let T0 = Date.now(), carregouAbas = false, carregouAvisos = false, falhaRede = false;
+function estadoDe(carregou){ return carregou ? "ok" : (falhaRede || Date.now() - T0 > 8000 ? "sem" : "carregando"); }
+function pintaEstado(el, carregou, icone, frase, dica){
+  const e = estadoDe(carregou);
+  if(e === "ok"){ el.innerHTML = '<div class="est vidro"><i></i><b></b>' + (dica ? "<small></small>" : "") + "</div>"; el.querySelector("i").textContent = icone; el.querySelector("b").textContent = frase; if(dica) el.querySelector("small").textContent = dica; return; }
+  if(e === "carregando"){ el.innerHTML = '<div class="est vidro"><i class="girando">⏳</i><b>Carregando…</b></div>'; return; }
+  el.innerHTML = '<div class="est vidro"><i>📡</i><b>Sem conexão</b><small>Não consegui falar com o Jarvis.</small><button class="btop bok tenta">Tentar de novo</button></div>';
+  el.querySelector(".tenta").onclick = tentaDeNovo;
+}
+function tentaDeNovo(){ T0 = Date.now(); falhaRede = false; desenhaTudo(); puxa(); puxaAvisos(); }
+setTimeout(() => { if(!carregouAbas) desenhaTudo(); }, 8100);
 
 /* ---------- Supabase (REST + login), sem bibliotecas ---------- */
 async function authPost(caminho, corpo){
@@ -744,11 +844,29 @@ async function garanteDono(){
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const hm = ms => { const d = new Date(ms), p = x => String(x).padStart(2, "0"); return p(d.getDate()) + "/" + p(d.getMonth() + 1) + " " + p(d.getHours()) + ":" + p(d.getMinutes()); };
 function dur(s){ if(s == null) return ""; s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? h + "h" + String(m).padStart(2, "0") : m ? m + "min " + String(x).padStart(2, "0") + "s" : x + "s"; }
-let toastT = null;
-function toast(titulo, texto){
-  const t = $q("toast"); t.innerHTML = "<div></div><small></small>"; t.children[0].textContent = titulo; t.children[1].textContent = (texto || "").replace(/\s+/g, " ").slice(0, 140);
-  t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 5500);
+let toastT = null, toastFila = [], toastAtual = null, toastLoc = ARM.get("jv_locais") || [];
+/* Aviso de tarefa: pequeno, abaixo da barra, 3 s, um por vez (com contador), some com toque ou deslizando; tudo fica guardado em Avisos. */
+function toast(titulo, texto, guardar){
+  titulo = String(titulo || ""); texto = String(texto || "").replace(/\s+/g, " ").slice(0, 140);
+  if(guardar !== false){ toastLoc.unshift({ titulo: titulo, texto: texto, criado_em: new Date().toISOString(), tipo: "app" }); toastLoc = toastLoc.slice(0, 50); ARM.set("jv_locais", toastLoc); if(typeof desenhaAvisos === "function" && painelAtual === "pAvisos") desenhaAvisos(); }
+  toastFila.push({ titulo: titulo, texto: texto });
+  if(!toastAtual) mostraToast(); else pintaContador();
 }
+function pintaContador(){ const c = document.querySelector("#toast .cnt"); if(c) c.textContent = toastFila.length ? "+" + toastFila.length : ""; }
+function mostraToast(){
+  clearTimeout(toastT); const t = $q("toast"), n = toastFila.shift();
+  if(!n){ toastAtual = null; t.classList.remove("on"); return; }
+  toastAtual = n; t.innerHTML = '<div class="tx"><div class="tt"></div><small></small></div><span class="cnt"></span>';
+  t.querySelector(".tt").textContent = n.titulo; t.querySelector("small").textContent = n.texto; pintaContador();
+  t.classList.add("on"); toastT = setTimeout(fechaToast, 3000);
+}
+function fechaToast(){ clearTimeout(toastT); $q("toast").classList.remove("on"); toastAtual = null; setTimeout(mostraToast, 150); }
+(function(){
+  const t = document.getElementById("toast"); let x0 = 0, y0 = 0;
+  t.addEventListener("click", fechaToast);
+  t.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  t.addEventListener("touchend", e => { const c = e.changedTouches[0]; if(Math.abs(c.clientX - x0) > 40 || c.clientY - y0 < -18) fechaToast(); }, { passive: true });
+})();
 const ESTADO = { trab: "Trabalhando", livre: "Livre", perg: "Esperando você" };
 const filaDe = a => Array.isArray(a.fila) ? a.fila : [];
 const atualDe = a => filaDe(a).find(x => x.e === "exec");
@@ -777,6 +895,7 @@ async function puxa(){
     const antes = abas;
     abas = a || []; ideias = i || [];
     if(s && s[0]){ const x = abas.find(y => y.nome === s[0].nome); if(x) x.saida = s[0].saida; }
+    carregouAbas = true; falhaRede = false;
     const agora = Date.now();
     semSinal = !abas.length || abas.every(x => agora - new Date(x.atualizado_em).getTime() > 90000);
     if(!destino || !abas.find(x => x.nome === destino)) destino = (abas.find(x => x.nome === "Jarvis") || abas[0] || {}).nome || "";
@@ -786,7 +905,7 @@ async function puxa(){
     const av = $q("aviso"); av.classList.toggle("on", semSinal); av.textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar." : "";
     if(cheiaOn) puxaCheia();
     puxaCaptchas();
-  }catch(e){ const av = $q("aviso"); av.classList.add("on"); av.textContent = "Sem conexão com o Supabase… tentando de novo."; }
+  }catch(e){ falhaRede = true; if(!carregouAbas) desenhaTudo(); const av = $q("aviso"); av.classList.add("on"); av.textContent = "Sem conexão com o Supabase… tentando de novo."; desenhaPc(); }
   ocupado = false;
 }
 function terminou(antes, depois){
@@ -800,16 +919,17 @@ async function puxaAvisos(){
   try{
     const l = await rest("jarvis_avisos?select=*&order=id.desc&limit=60") || [];
     const novos = avisoIni ? l.filter(x => x.id > ultAviso) : [];
-    avisoIni = true;
+    avisoIni = true; carregouAvisos = true;
     if(l.length) { ultAviso = Math.max(ultAviso, l[0].id); ARM.set("jv_ultaviso", ultAviso); }
     avisos = l;
-    novos.reverse().forEach(x => { toast(x.titulo, x.texto); if(ligado && /pix|captcha|login/.test(x.tipo)) falar(x.titulo.replace(/^\W+/, "") + ". " + (x.texto || "")); });
+    novos.reverse().forEach(x => { toast(x.titulo, x.texto, false); if(ligado && /pix|captcha|login/.test(x.tipo)) falar(x.titulo.replace(/^\W+/, "") + ". " + (x.texto || "")); });
     desenhaAvisos();
   }catch(e){}
 }
 
 /* ---------- desenho ---------- */
-function desenhaTudo(){ desenhaTopo(); desenhaVivo(); desenhaTerminal(); desenhaTarefas(); desenhaIdeias(); avisaPerguntas(); desenhaAprovar(); desenhaBadges(); desenhaParar(); }
+function mostraInicio(){ const c = $q("chat"); $q("inicio").classList.toggle("on", c.querySelectorAll(".bal:not(.nota),.prop").length === 0); }
+function desenhaTudo(){ desenhaPc(); mostraInicio(); desenhaTopo(); desenhaVivo(); desenhaTerminal(); desenhaTarefas(); desenhaIdeias(); avisaPerguntas(); desenhaAprovar(); desenhaBadges(); desenhaParar(); }
 /* ---------- aba Aprovar: perguntas de permissão/confirmação dos terminais ---------- */
 const perguntasAbertas = () => abas.filter(a => a.pergunta && a.pergunta.id);
 let perguntasVistas = null;
@@ -827,7 +947,7 @@ function rotuloOpcao(o){
 }
 function desenhaAprovar(){
   const l = $q("listaAprovar"), ps = perguntasAbertas(); l.innerHTML = ""; $q("aprovarN").textContent = ps.length ? "(" + ps.length + ")" : "";
-  if(!ps.length){ l.innerHTML = '<div class="vazio vidro">Nenhum terminal esperando permissão agora ✓</div>'; return; }
+  if(!ps.length){ if(!captchas.length) pintaEstado(l, carregouAbas, "✅", "Nada esperando você"); else l.innerHTML = ""; return; }
   ps.sort((a, b) => (b.pergunta.risco - a.pergunta.risco)).forEach(a => {
     const q = a.pergunta, d = document.createElement("div"); d.className = "apv vidro" + (q.risco ? " risco" : "");
     d.innerHTML = '<div class="ah"><i class="d"></i><span></span><span class="tm"></span></div><div class="alerta"></div><div class="aq"></div><div class="ab"></div>';
@@ -839,7 +959,7 @@ function desenhaAprovar(){
     (q.opcoes || []).forEach((o, i) => {
       const r = rotuloOpcao(o), b = document.createElement("button"); b.className = r.cls; b.textContent = r.txt;
       b.onclick = async () => {
-        if(q.risco && r.perm && !confirm("⚠ ATENÇÃO: este pedido envolve APAGAR arquivos ou GASTAR DINHEIRO.\n\nPermitir mesmo assim em " + a.nome + "?")) return;
+        if(q.risco && r.perm && !(await confirmaCartao("⚠ Atenção", "Este pedido envolve APAGAR arquivos ou GASTAR DINHEIRO. Permitir mesmo assim em " + a.nome + "?", "Permitir"))) return;
         ab.querySelectorAll("button").forEach(x => x.disabled = true);
         await comando("responder", a.nome, q.id + "|" + i, "Enviando a resposta ao terminal…"); puxa();
       };
@@ -885,7 +1005,7 @@ function desenhaTerminal(){
     ta.appendChild(b);
   });
   const a = abas.find(x => x.nome === termSel);
-  if(!a){ $q("termSaida").textContent = "Escolha um terminal."; return; }
+  if(!a){ $q("termSaida").textContent = estadoDe(carregouAbas) === "ok" ? "Nenhum terminal agora." : estadoDe(carregouAbas) === "sem" ? "Sem conexão. Toque em Tentar de novo (Mais > Atualizar)." : "Carregando…"; return; }
   const cab = $q("termCab"); cab.dataset.e = a.estado; cab.dataset.p = a.pausada ? "1" : "0";
   $q("tcNome").textContent = a.nome + " · " + (a.pausada ? "Pausado" : (ESTADO[a.estado] || a.estado));
   $q("tcPz").innerHTML = a.pausada ? '<span class="pz">PAUSADO</span>' : "";
@@ -921,14 +1041,14 @@ function desenhaFila(el, a, comTitulo){
   const l = filaDe(a).slice().sort((p, q) => (ORD[p.e] - ORD[q.e]) || (q.pm - p.pm));
   if(comTitulo && l.length){ const h = document.createElement("div"); h.className = "tit"; h.textContent = a.nome + (a.pausada ? " · pausado" : ""); el.appendChild(h); }
   if(!comTitulo) el.innerHTML = "";
-  if(!l.length && !comTitulo){ el.innerHTML = '<div class="vazio">Nenhuma tarefa na fila — tudo feito ✓</div>'; return 0; }
+  if(!l.length && !comTitulo){ el.innerHTML = '<div class="vazio">Nenhuma tarefa na fila ✓</div>'; return 0; }
   l.forEach(x => el.appendChild(linhaTarefa(a, x)));
   return l.length;
 }
 function desenhaTarefas(){
   const el = $q("listaTar"); el.innerHTML = "";
   let n = 0; abas.forEach(a => { n += desenhaFila(el, a, true); });
-  if(!n) el.innerHTML = '<div class="vazio vidro">Nenhuma tarefa em andamento — tudo feito ✓</div>';
+  if(!n) pintaEstado(el, carregouAbas, "✅", "Nenhuma tarefa agora", "Tudo feito por aqui.");
 }
 /* ideias: TODAS as do PC (quadro Ideias + IDEIAS-DONO.md), numeradas, com o texto completo e o terminal de cada uma.
    Todas vêm aprovadas; o ✗ marca as que você NÃO quer; "Aprovar todas" manda as outras para a fila do terminal certo e recusa as marcadas. */
@@ -939,7 +1059,7 @@ function desenhaIdeias(){
   $q("ideiasN").textContent = n ? "(" + n + ")" : "";
   const b = $q("aprovaTodas"); b.style.display = n ? "" : "none"; b.textContent = "Aprovar todas (" + (n - nr) + ")";
   $q("ideiasInfo").textContent = n ? "Todas vêm aprovadas. Toque em ✗ nas que você NÃO quer. “Aprovar todas” manda as outras para a fila do terminal de cada uma." : "";
-  if(!n){ l.innerHTML = '<div class="vazio vidro">Nenhuma ideia nova agora.</div>'; return; }
+  if(!n){ pintaEstado(l, carregouAbas, "💡", "Nenhuma ideia nova agora"); return; }
   ideias.forEach((x, k) => {
     const rec = recusadas.has(x.id), d = document.createElement("div"); d.className = "idea vidro" + (rec ? " no" : "");
     d.innerHTML = '<div class="cab"><span class="ideia-n"></span><span class="pr"></span><span class="term"></span></div><h3></h3><div class="txt"></div><div class="ac"><button class="bno">✗ Recusar</button><button class="bok">✓ Aprovar só esta</button></div>';
@@ -958,11 +1078,12 @@ async function decideLote(ids, decisao){
     await rest("jarvis_ideias?id=in.(" + g + ")", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ decisao: decisao, decidido_em: new Date().toISOString() }) });
   }
 }
-const ICONE = { concluida: "✅", ideia: "💡", captcha: "🧩", login: "🔑", pix: "💸", alerta: "⚠️" };
+const ICONE = { app: "💬", concluida: "✅", ideia: "💡", captcha: "🧩", login: "🔑", pix: "💸", alerta: "⚠️" };
 function desenhaAvisos(){
   const l = $q("listaAvisos"); l.innerHTML = "";
-  if(!avisos.length){ l.innerHTML = '<div class="vazio vidro">Nenhum aviso ainda. Ative as notificações para receber no iPhone mesmo com o app fechado.</div>'; }
-  avisos.forEach(x => {
+  const todos = avisos.concat(toastLoc).sort((p, q) => new Date(q.criado_em) - new Date(p.criado_em));
+  if(!todos.length){ pintaEstado(l, carregouAvisos, "🔔", "Nenhum aviso agora", "Ative as notificações para receber com o app fechado."); }
+  todos.forEach(x => {
     const d = document.createElement("div"); d.className = "avi vidro"; d.dataset.t = x.tipo;
     d.innerHTML = '<div class="ic"></div><div class="c"><div class="t"></div><div class="x"></div><div class="h"></div></div>';
     d.querySelector(".ic").textContent = ICONE[x.tipo] || "🔔"; d.querySelector(".t").textContent = x.titulo; d.querySelector(".x").textContent = x.texto || ""; d.querySelector(".h").textContent = hm(new Date(x.criado_em).getTime());
@@ -974,20 +1095,34 @@ function desenhaBadges(){
   const vistos = ARM.get("jv_avisto") || 0, nAv = avisos.filter(x => x.id > vistos).length, urg = avisos.some(x => x.id > vistos && /pix|captcha|login/.test(x.tipo));
   const erros = abas.reduce((s, a) => s + filaDe(a).filter(x => x.e === "erro").length, 0), exec = abas.filter(a => atualDe(a)).length;
   const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); if(!b) return; let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
-  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv, urg); bd("pAprovar", perguntasAbertas().length, true);
+  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv + perguntasAbertas().length + captchas.length, urg || perguntasAbertas().length > 0 || captchas.length > 0);
   bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
-  $q("rIdeias").textContent = ideias.length || ""; $q("rAvisos").textContent = nAv || ""; $q("rCaptcha").textContent = captchas.length || ""; bd("pMais", ideias.length + nAv + captchas.length, captchas.length > 0 || urg);
+  $q("rIdeias").textContent = ideias.length || ""; bd("pMais", ideias.length, false);
+  $q("rTrab").textContent = abas.filter(a => a.estado === "trab").length; $q("rFila").textContent = abas.reduce((n, a) => n + filaDe(a).filter(x => x.e === "fila").length, 0);
+  $q("rPend").textContent = nAv + perguntasAbertas().length + captchas.length;
 }
 function desenhaParar(){
   const todas = abas.length && abas.every(a => a.pausada), b = $q("parar");
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
-  const m = $q("pararMini"); m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶" : "■"; m.title = todas ? "Retomar tudo" : "Parar tudo";
+  document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
+const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pChave: "Chave da IA", pCaptcha: "Captcha" };
+function desenhaPc(){
+  const ok = carregouAbas && !semSinal && !falhaRede;
+  $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
+  $q("pcTxt").textContent = ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…");
+}
+function ajustaGrade(){          // última linha da grade do Mais nunca fica com buraco
+  const g = $q("maisGrade"); if(!g) return; const it = [...g.children].filter(x => x.offsetParent !== null || true); it.forEach(x => x.style.gridColumn = "");
+  const cols = getComputedStyle(g).gridTemplateColumns.split(" ").length, r = it.length % cols;
+  if(r && it.length) it[it.length - 1].style.gridColumn = "span " + (cols - r + 1);
+}
+addEventListener("resize", ajustaGrade);
 function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
-  painelAtual = p; $q("app").dataset.p = p;
+  painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pAvisos: "pMais", pPrint: "pMais", pMemoria: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pMemoria") puxaMemoria();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
@@ -1008,7 +1143,7 @@ async function aprovaTodas(){
   if(!ideias.length) return;
   const por = {}; apr.forEach(x => { const t = x.terminal || "Jarvis"; por[t] = (por[t] || 0) + 1; });
   const resumo = Object.keys(por).map(t => por[t] + " para " + t).join(", ");
-  if(!confirm("Aprovar " + apr.length + " ideia(s)" + (resumo ? " (" + resumo + ")" : "") + " e recusar " + rec.length + "? As aprovadas entram na fila do terminal de cada uma.")) return;
+  if(!(await confirmaCartao("Aprovar ideias", "Aprovar " + apr.length + " ideia(s)" + (resumo ? " (" + resumo + ")" : "") + " e recusar " + rec.length + "? As aprovadas entram na fila do terminal de cada uma.", "Aprovar"))) return;
   try{
     if(apr.length) await decideLote(apr.map(x => x.id), "aprovada");
     if(rec.length) await decideLote(rec.map(x => x.id), "descartada");
@@ -1031,7 +1166,6 @@ async function comando(tipo, aba, n, msg){
 async function pararTudo(){
   const todas = abas.length && abas.every(a => a.pausada);
   if(todas){ comando("retomar_tudo", null, null, "Retomando todos os terminais…"); return; }
-  if(!confirm("PARAR TUDO? Todos os terminais e agentes do PC ficam pausados até você tocar em Retomar.")) return;
   if(ligado) falar("Parando todos os terminais.");
   comando("parar_tudo", null, null, "Pausando todos os terminais…");
 }
@@ -1405,7 +1539,7 @@ addEventListener("keydown", e => { if(e.key === "Escape"){ if(zel.classList.cont
 /* ---------- v6: CONVERSA com a IA (Sonnet), como no Claude ---------- */
 let conversaId = ARM.get("jv_conversa") || ("c" + Date.now()); ARM.set("jv_conversa", conversaId);
 let pendente = null, notaPendente = "", conversando = false;
-function bal(papel, texto, extra){ const c = $q("chat"), d = document.createElement("div"); d.className = "bal " + papel + (extra ? " " + extra : ""); d.textContent = texto; c.appendChild(d); c.scrollTop = c.scrollHeight; return d; }
+function bal(papel, texto, extra){ const c = $q("chat"), d = document.createElement("div"); d.className = "bal " + papel + (extra ? " " + extra : ""); d.textContent = texto; c.appendChild(d); c.scrollTop = c.scrollHeight; mostraInicio(); return d; }
 function rolaChat(){ const c = $q("chat"); c.scrollTop = c.scrollHeight; }
 async function carregaConversa(){
   $q("chat").innerHTML = ""; pendente = null;
@@ -1492,56 +1626,166 @@ async function puxaMemoria(){
   }catch(e){}
 }
 async function apagaMemoria(id){
-  if(!confirm("Apagar este item da memória do Jarvis?")) return;
+  if(!(await confirmaCartao("Apagar da memória", "Apagar este item da memória do Jarvis?", "Apagar"))) return;
   try{ await rest("jarvis_memoria?id=eq." + encodeURIComponent(id), { method: "DELETE", headers: { Prefer: "return=minimal" } }); toast("Apagado da memória", ""); }catch(e){ toast("Não consegui apagar", String(e.message || e)); }
   puxaMemoria();
 }
 
 /* ---------- Captcha pelo celular: a página da loja ao vivo; os toques do dono vão para a página ---------- */
+let capDireto = /(^|[?&])p=pCaptcha/.test(location.search);
+function capAlerta(){
+  document.body.classList.add("capPisca"); setTimeout(() => document.body.classList.remove("capPisca"), 3000);
+  try{ if(navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]); }catch(_){}
+  try{ const A = new (window.AudioContext || window.webkitAudioContext)(), o = A.createOscillator(), g = A.createGain(); o.connect(g); g.connect(A.destination); o.type = "square"; o.frequency.value = 880; g.gain.value = 0.08; o.start(); o.frequency.setValueAtTime(660, A.currentTime + 0.25); o.stop(A.currentTime + 0.6); }catch(_){}
+}
 let captchas = [], capSel = null, capTimer = null, capVistos = null, capUrl = null, capOlhaT = 0, capEv = [], capT0 = 0, capDown = false;
 async function puxaCaptchas(){
   try{ captchas = await rest("jarvis_captcha?select=id,loja,url,tipo,quadro,w,h,atualizado_em&estado=eq.aberto&order=atualizado_em.desc") || []; }catch(e){ return; }
   if(capVistos === null){ capVistos = {}; captchas.forEach(c => capVistos[c.id] = 1); }
-  else captchas.forEach(c => { if(!capVistos[c.id]){ capVistos[c.id] = 1; toast("🧩 Captcha em " + c.loja, "Toque no aviso vermelho para resolver pelo celular."); } });
+  else captchas.forEach(c => { if(!capVistos[c.id]){ capVistos[c.id] = 1; toast("🧩 Captcha em " + c.loja, "Resolva pelo celular."); capAlerta(); if(!capSel && !document.hidden) abreCaptcha(c.id); } });
+  if(capDireto && captchas.length && !capSel){ capDireto = false; abreCaptcha(captchas[0].id); }
   if(capSel && !captchas.some(c => c.id === capSel)) fechaCaptcha("Captcha resolvido ✓");
   desenhaCaptchas(); desenhaBadges();
 }
 function desenhaCaptchas(){
   const bn = $q("capBanner"); bn.classList.toggle("on", captchas.length > 0 && !capSel);
   bn.textContent = captchas.length ? "🧩 Captcha em " + captchas[0].loja + (captchas.length > 1 ? " (+" + (captchas.length - 1) + ")" : "") + " — toque para resolver" : "";
+  const av = $q("avCap"); av.innerHTML = "";
+  captchas.forEach((c, i) => { const b = document.createElement("button"); b.className = "capItem vidro"; b.innerHTML = '<span style="font-size:24px">🧩</span><div class="c"><span></span><small></small></div><span class="btop bok">Resolver</span>'; b.querySelector(".c span").textContent = "Captcha em " + c.loja + (captchas.length > 1 ? " (" + (i + 1) + " de " + captchas.length + ")" : ""); b.querySelector("small").textContent = hm(new Date(c.atualizado_em).getTime()); b.onclick = () => abreCaptcha(c.id); av.appendChild(b); });
   const l = $q("capLista"); l.innerHTML = ""; $q("capLista").style.display = capSel ? "none" : "";
   if(!captchas.length && !capSel){ l.innerHTML = '<div class="vazio vidro">Nenhum captcha esperando agora ✓</div>'; return; }
   captchas.forEach(c => { const b = document.createElement("button"); b.className = "capItem vidro"; b.innerHTML = '<span style="font-size:24px">🧩</span><div class="c"><span></span><small></small></div><span class="btop bok">Resolver</span>'; b.querySelector(".c span").textContent = c.loja; b.querySelector("small").textContent = (c.url || "") + " · " + hm(new Date(c.atualizado_em).getTime()); b.onclick = () => abreCaptcha(c.id); l.appendChild(b); });
 }
-function abreCaptcha(id){ capSel = id; vaiPara("pCaptcha"); $q("capVivo").style.display = ""; $q("capTit").textContent = "Abrindo a página da loja…"; capOlhaT = 0; clearInterval(capTimer); capTimer = setInterval(atualizaQuadro, 800); atualizaQuadro(); desenhaCaptchas(); }
+let capS = 1, capTx = 0, capTy = 0, capPtr = {}, capGest = null, capPend = null, capPendT = 0, capBuf = [], capBufT = 0, capFlushT = 0, capUlt = 0, capAncora = null, capFimP = null, capIni = null, capSeg = null, capPrimeira = true, capBusyF = false, capTick = 0, capFila = Promise.resolve(), capIgnora = false, capCheio = false;
+function abreCaptcha(id){
+  capSel = id; capS = 1; capTx = 0; capTy = 0; capPrimeira = true; capAncora = capFimP = capIni = capSeg = null; capUlt = Date.now();
+  vaiPara("pCaptcha"); $q("capVivo").style.display = ""; $q("capTit").textContent = "Abrindo a página da loja…"; capOlhaT = 0;
+  clearInterval(capTimer); capTimer = setInterval(capRoda, 300); atualizaQuadro(); desenhaCaptchas(); capLayout();
+}
+function capRoda(){ capTick++; if(Date.now() - capUlt < 5000 || capTick % 3 === 0) atualizaQuadro(); }
 async function olhaCaptcha(){ if(!capSel) return; try{ await rest("jarvis_captcha?id=eq." + encodeURIComponent(capSel), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString() }) }); }catch(e){} }
 async function atualizaQuadro(){
-  if(!capSel || document.hidden) return;
+  if(!capSel || document.hidden || capBusyF) return;
   if(Date.now() - capOlhaT > 15000){ capOlhaT = Date.now(); olhaCaptcha(); }
   const c = captchas.find(x => x.id === capSel);
   if(!c || !c.quadro){ $q("capTit").textContent = "Esperando a imagem da loja (o PC começa a mandar em alguns segundos)…"; return; }
+  capBusyF = true;
   try{
     const t = await token();
     const r = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-captcha/" + encodeURIComponent(c.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
     if(!r.ok) return;
-    const u = URL.createObjectURL(await r.blob()), velho = capUrl; capUrl = u; $q("capImg").src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000);
-    $q("capTit").textContent = "🧩 " + c.loja + " — ao vivo";
-  }catch(e){}
+    const u = URL.createObjectURL(await r.blob()), velho = capUrl; capUrl = u; const im = $q("capImg");
+    im.onload = () => { if(capPrimeira){ capPrimeira = false; capS = 2; const t2 = $q("capTela"); capTx = -(t2.clientWidth * (capS - 1)) / 2; capTy = -(t2.clientHeight * (capS - 1)) / 2; capAplica(); } };
+    im.src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000);
+    $q("capTit").textContent = "🧩 " + c.loja + " — ao vivo" + (captchas.length > 1 ? " (" + (captchas.findIndex(x => x.id === capSel) + 1) + " de " + captchas.length + ")" : "");
+  }catch(e){} finally{ capBusyF = false; }
 }
-function fechaCaptcha(msg){ capSel = null; clearInterval(capTimer); $q("capVivo").style.display = "none"; if(msg) toast(msg, "A automação continua sozinha."); desenhaCaptchas(); }
+function fechaCaptcha(msg){
+  capSel = null; clearInterval(capTimer); clearInterval(capFlushT); capBuf = []; capSeg = null; capCheio = false; capLayout();
+  $q("capVivo").style.display = "none"; const im = $q("capImg"); im.onload = null; im.removeAttribute("src"); if(capUrl){ try{ URL.revokeObjectURL(capUrl); }catch(_){} capUrl = null; }
+  if(msg) toast(msg, "A automação continua sozinha."); desenhaCaptchas();
+}
+function capLayout(){ capS = 1; capTx = 0; capTy = 0; $q("capVivo").classList.toggle("cheio", !!capSel && (capCheio || (matchMedia("(orientation:landscape)").matches && innerHeight < 520))); setTimeout(capAplica, 60); }
+addEventListener("resize", () => { if(capSel) capLayout(); });
+function capAplica(){
+  const t = $q("capTela"), w = t.clientWidth, h = t.clientHeight;
+  capS = Math.min(5, Math.max(1, capS));
+  capTx = Math.min(0, Math.max(w - w * capS, capTx)); capTy = Math.min(0, Math.max(h - h * capS, capTy));
+  $q("capZ").style.transform = "translate(" + capTx + "px," + capTy + "px) scale(" + capS + ")";
+  capPosDot();
+}
+function capZoom(f){ const t = $q("capTela"), cx = t.clientWidth / 2, cy = t.clientHeight / 2, s0 = capS; capS = Math.min(5, Math.max(1, capS * f)); const k = capS / s0; capTx = cx - (cx - capTx) * k; capTy = cy - (cy - capTy) * k; capAplica(); }
 const capPos = e => { const r = $q("capImg").getBoundingClientRect(); return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) }; };
-async function mandaCapEventos(evs){
-  if(!capSel || !evs.length) return;
-  try{ await rest("jarvis_captcha_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ captcha: capSel, eventos: evs }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e)); }
+function capPosDot(){
+  const d = $q("capDot"), p = capFimP || capAncora; if(!p || !capSel){ d.style.display = "none"; return; }
+  const r = $q("capImg").getBoundingClientRect(), tr = $q("capTela").getBoundingClientRect();
+  d.style.left = (r.left - tr.left + p.x * r.width) + "px"; d.style.top = (r.top - tr.top + p.y * r.height) + "px"; d.style.display = "block";
 }
+function capLupa(cx, cy, ver){
+  const l = $q("capLupa"); if(!ver){ l.style.display = "none"; return; }
+  const im = $q("capImg"), c = $q("capLupaC"), r = im.getBoundingClientRect(), tr = $q("capTela").getBoundingClientRect(); if(!im.naturalWidth) return;
+  const k = im.naturalWidth / r.width, reg = 56 * k, sx = (cx - r.left) * k - reg / 2, sy = (cy - r.top) * k - reg / 2, g = c.getContext("2d");
+  g.fillStyle = "#000"; g.fillRect(0, 0, c.width, c.height); try{ g.drawImage(im, sx, sy, reg, reg, 0, 0, c.width, c.height); }catch(_){}
+  g.strokeStyle = "#ff4d5e"; g.lineWidth = 2; g.beginPath(); g.moveTo(c.width / 2, c.height / 2 - 14); g.lineTo(c.width / 2, c.height / 2 + 14); g.moveTo(c.width / 2 - 14, c.height / 2); g.lineTo(c.width / 2 + 14, c.height / 2); g.stroke();
+  let x = cx - tr.left - 56, y = cy - tr.top - 150; if(y < 0){ y = cy - tr.top + 40; }
+  l.style.left = Math.min(tr.width - 112, Math.max(0, x)) + "px"; l.style.top = Math.min(tr.height - 112, Math.max(0, y)) + "px"; l.style.display = "block";
+}
+/* envio em lotes curtos (~120 ms) e em ordem, para a peça andar no PC enquanto o dedo anda */
+function mandaCapEventos(evs){
+  if(!capSel || !evs.length) return; const id = capSel;
+  capFila = capFila.then(async () => { try{ await rest("jarvis_captcha_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ captcha: id, eventos: evs.slice(0, 400) }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e)); } });
+}
+function capPush(t, p, extra){ capBuf.push(Object.assign({ t: t, dt: Math.max(0, Date.now() - capBufT) }, p || {}, extra || {})); capUlt = Date.now(); }
+function capFlush(){ if(!capBuf.length) return; const e = capBuf; capBuf = []; capBufT = Date.now(); mandaCapEventos(e); }
+function capComeca(p){ capBufT = Date.now(); capBuf = []; clearInterval(capFlushT); capFlushT = setInterval(capFlush, 120); capPush("baixo", p); capFlush(); capIni = p; capAncora = p; capDown = true; capPosDot(); }
+function capTermina(p){ capPush("cima", p); capFlush(); clearInterval(capFlushT); capDown = false; capFimP = p; capPosDot(); capLupa(0, 0, false); }
 (function toquesCaptcha(){
-  const img = $q("capImg");
-  img.addEventListener("pointerdown", e => { if(!capSel) return; e.preventDefault(); try{ img.setPointerCapture(e.pointerId); }catch(_){} capDown = true; capT0 = Date.now(); capEv = [Object.assign({ t: "baixo", dt: 0 }, capPos(e))]; });
-  img.addEventListener("pointermove", e => { if(!capDown) return; const dt = Date.now() - capT0, u = capEv[capEv.length - 1]; if(dt - u.dt < 25) return; capEv.push(Object.assign({ t: "move", dt: dt }, capPos(e))); });
-  const fim = e => { if(!capDown) return; capDown = false; capEv.push(Object.assign({ t: "cima", dt: Date.now() - capT0 }, capPos(e))); mandaCapEventos(capEv.slice(0, 400)); capEv = []; };
-  img.addEventListener("pointerup", fim); img.addEventListener("pointercancel", fim);
-  img.addEventListener("dragstart", e => e.preventDefault());
+  const tela = $q("capTela"); let ult = null;
+  const envia = e => { if(capPend){ clearTimeout(capPendT); const p = capPend.p; capPend = null; capComeca(p); } };
+  tela.addEventListener("pointerdown", e => {
+    if(!capSel) return; e.preventDefault(); try{ tela.setPointerCapture(e.pointerId); }catch(_){}
+    capPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(capPtr);
+    if(ids.length >= 2){
+      clearTimeout(capPendT); capPend = null; capIgnora = true;
+      if(capDown){ capTermina(capFimP || capIni); }
+      const a = capPtr[ids[0]], b = capPtr[ids[1]], tr = tela.getBoundingClientRect();
+      capGest = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: capS, tx: capTx, ty: capTy, cx: (a.x + b.x) / 2 - tr.left, cy: (a.y + b.y) / 2 - tr.top }; return;
+    }
+    if(capIgnora) return;
+    if(capSeg){ capSoltar(); }
+    ult = { x: e.clientX, y: e.clientY }; capPend = { p: capPos(e) }; capPendT = setTimeout(envia, 90); capLupa(e.clientX, e.clientY, true);
+  });
+  tela.addEventListener("pointermove", e => {
+    if(!capPtr[e.pointerId]) return; capPtr[e.pointerId] = { x: e.clientX, y: e.clientY };
+    const ids = Object.keys(capPtr);
+    if(capGest && ids.length >= 2){
+      const a = capPtr[ids[0]], b = capPtr[ids[1]], tr = tela.getBoundingClientRect(), d = Math.hypot(a.x - b.x, a.y - b.y) || 1, cx = (a.x + b.x) / 2 - tr.left, cy = (a.y + b.y) / 2 - tr.top;
+      capS = Math.min(5, Math.max(1, capGest.s * d / capGest.d)); const k = capS / capGest.s;
+      capTx = cx - (capGest.cx - capGest.tx) * k; capTy = cy - (capGest.cy - capGest.ty) * k; capAplica(); return;
+    }
+    if(capIgnora) return;
+    if(capPend && ult && Math.hypot(e.clientX - ult.x, e.clientY - ult.y) > 5) envia();
+    if(capDown){ const p = capPos(e); capPush("move", p); capFimP = p; capPosDot(); capLupa(e.clientX, e.clientY, true); }
+    else if(capPend) capLupa(e.clientX, e.clientY, true);
+  });
+  const fim = e => {
+    if(!capPtr[e.pointerId]) return; delete capPtr[e.pointerId]; const n = Object.keys(capPtr).length;
+    if(capGest){ if(n < 2) capGest = null; if(n === 0) capIgnora = false; return; }
+    if(capIgnora){ if(n === 0) capIgnora = false; return; }
+    if(capPend){ clearTimeout(capPendT); const p = capPend.p; capPend = null; capComeca(p); }
+    if(capDown) capTermina(capPos(e)); else capLupa(0, 0, false);
+  };
+  tela.addEventListener("pointerup", fim); tela.addEventListener("pointercancel", fim);
+  tela.addEventListener("dragstart", e => e.preventDefault());
 })();
+/* barra deslizante: segura a peça no ponto marcado e anda para a direita com a barra */
+(function barraCaptcha(){
+  const sl = $q("capSl");
+  sl.addEventListener("input", () => {
+    if(!capSel) return; const a = capAncora || capFimP || { x: 0.12, y: 0.5 };
+    if(!capSeg){ capSeg = { x: a.x, y: a.y, x0: a.x }; capBufT = Date.now(); capBuf = []; clearInterval(capFlushT); capFlushT = setInterval(capFlush, 120); capPush("baixo", a); capIni = a; capAncora = a; }
+    const x = capSeg.x0 + (sl.value / 100) * (0.97 - capSeg.x0); capSeg.x = x; capPush("move", { x: x, y: capSeg.y }); capFimP = { x: x, y: capSeg.y }; capPosDot();
+  });
+  const solta = () => { if(capSeg){ capSoltar(); } sl.value = 0; };
+  sl.addEventListener("change", solta);
+})();
+function capSoltar(){ if(!capSeg) return; capPush("cima", { x: capSeg.x, y: capSeg.y }); capFlush(); clearInterval(capFlushT); capFimP = { x: capSeg.x, y: capSeg.y }; capSeg = null; $q("capSl").value = 0; capPosDot(); }
+function capFino(dir){
+  if(!capSel) return; const c = captchas.find(x => x.id === capSel), W = (c && c.w) || $q("capImg").naturalWidth || 400;
+  if(!capSeg){ const a = capFimP || capAncora || { x: 0.12, y: 0.5 }; capSeg = { x: a.x, y: a.y, x0: a.x }; capBufT = Date.now(); capBuf = []; capPush("baixo", a); capIni = capIni || a; capAncora = a; }
+  capSeg.x = Math.min(1, Math.max(0, capSeg.x + dir / W)); capPush("move", { x: capSeg.x, y: capSeg.y }); capFimP = { x: capSeg.x, y: capSeg.y }; capFlush(); capPosDot();
+}
+function capDesfaz(){
+  if(!capSel) return; if(capSeg) capSoltar(); const a = capFimP, b = capIni; if(!a || !b){ capFimP = capAncora = null; capPosDot(); return; }
+  capBufT = Date.now(); capBuf = []; capPush("baixo", a);
+  for(let i = 1; i <= 6; i++){ capBuf.push({ t: "move", dt: i * 40, x: a.x + (b.x - a.x) * i / 6, y: a.y + (b.y - a.y) * i / 6 }); }
+  capBuf.push({ t: "cima", dt: 300, x: b.x, y: b.y }); capFlush(); capFimP = b; capPosDot(); toast("Desfeito", "A peça voltou ao ponto inicial.", false);
+}
+$q("capMenos").onclick = () => capZoom(1 / 1.4); $q("capMais").onclick = () => capZoom(1.4);
+$q("capAjusta").onclick = () => { capS = 1; capTx = 0; capTy = 0; capAplica(); };
+$q("capAtual").onclick = () => { capOlhaT = 0; capUlt = Date.now(); atualizaQuadro(); toast("Atualizando", "Pedi a imagem mais nova da loja.", false); };
+$q("capGira").onclick = () => { capCheio = !capCheio; $q("capGira").textContent = capCheio ? "⤡ Voltar" : "⤢ Deitar"; capLayout(); };
+$q("capEsq").onclick = () => capFino(-1); $q("capDir").onclick = () => capFino(1); $q("capSolta").onclick = capSoltar; $q("capDesf").onclick = capDesfaz;
 
 /* ---------- botões ---------- */
 $q("cfgBtn").onclick = () => { desenhaFace(); $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
@@ -1566,14 +1810,24 @@ $q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pMais"); };
 $q("capTxtEnv").onclick = () => { const v = $q("capTxt").value.slice(0, 64); if(!v) return; $q("capTxt").value = ""; mandaCapEventos([{ t: "texto", texto: v, dt: 0 }]); };
 document.querySelectorAll("#capTec [data-tecla]").forEach(b => b.onclick = () => mandaCapEventos([{ t: "tecla", tecla: b.dataset.tecla, dt: 0 }])); $q("flCancel").onclick = cancelaGravacao;
 desenhaGrav(); desenhaEnviados();
-$q("parar").onclick = pararTudo; $q("pararMini").onclick = pararTudo;
+$q("parar").onclick = pararTudo;
+document.querySelectorAll(".parar2").forEach(b => {                       // Retomar: um toque. Parar: segurar 1 s (a barra branca enche)
+  let t = null;
+  const para = () => { clearTimeout(t); t = null; b.classList.remove("segurando"); };
+  b.addEventListener("pointerdown", e => { if(b.classList.contains("ret")) return; e.preventDefault(); b.classList.add("segurando"); t = setTimeout(() => { para(); if(navigator.vibrate) try{ navigator.vibrate(60); }catch(_){} pararTudo(); }, 1000); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(ev => b.addEventListener(ev, para));
+  b.addEventListener("click", () => { if(b.classList.contains("ret")) pararTudo(); });
+  b.addEventListener("contextmenu", e => e.preventDefault());
+});
+$q("confNao").onclick = () => fechaConf(false); $q("confSim").onclick = () => fechaConf(true);
+$q("saibaMais").onclick = e => { e.preventDefault(); const m = $q("cfgMais"), v = $q("vozDica"); const abre = m.style.display === "none"; m.style.display = abre ? "" : "none"; v.style.display = abre ? "" : "none"; };
 $q("aprovaTodas").onclick = aprovaTodas;
 $q("ativaPush").onclick = ativaPush;
 $q("tecBtn").onclick = () => { const k = $q("teclado"); k.classList.toggle("on"); if(k.classList.contains("on")) $q("txt").focus(); };
 const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("txt").value = ""; $q("teclado").classList.remove("on"); abreConfirma(v); };
 $q("enviaTxt").onclick = enviaTexto;
 $q("txt").addEventListener("keydown", e => { if(e.key === "Enter") enviaTexto(); });
-document.querySelectorAll("#nav button").forEach(b => b.onclick = () => vaiPara(b.dataset.p));
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => { if(b.dataset.p === "pAvisos" && captchas.length) abreCaptcha(captchas[0].id); else vaiPara(b.dataset.p); });
 document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => vaiPara(b.dataset.ir));
 const ts = $q("termSaida"), vf = $q("voltaFim");
 ts.addEventListener("scroll", () => { saidaFim = ts.scrollHeight - ts.scrollTop - ts.clientHeight < 30; vf.style.display = saidaFim ? "none" : "block"; });
