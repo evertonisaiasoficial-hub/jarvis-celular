@@ -392,6 +392,15 @@ body.capPisca{animation:capPisca .5s linear 6}
 #avZ{transform-origin:0 0;will-change:transform;width:100%}#avImg{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none;min-height:160px}
 #avDot{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border:3px solid #ffd54a;border-radius:50%;pointer-events:none;display:none;box-shadow:0 0 0 2px #000}
 #avBar{display:flex;gap:6px;margin:6px 0;flex-wrap:wrap}#avBar select{flex:2 1 160px;min-height:44px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:14px var(--f)}#avBar button{flex:1;min-width:56px;min-height:44px}
+/* v38: Ver terminais (só mostrar) */
+#verChips{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:2px 0 8px}#verChips .chip{justify-content:center;text-align:center;white-space:normal;line-height:1.15;padding:6px 6px;font-size:12.5px;min-height:44px}
+#verCorpo{display:flex;flex-direction:column;gap:8px;height:calc(100dvh - 330px);min-height:380px}
+#verTxtW,#verTelaW{position:relative;flex:1 1 0;min-height:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#05080f}
+#verTxt{position:absolute;inset:0;margin:0;padding:28px 8px 8px;overflow:auto;white-space:pre;font:var(--vf,11px)/1.3 var(--mono);color:#cfe3ff;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+#verTelaW{border-color:var(--cy);touch-action:none;-webkit-user-select:none;user-select:none}
+#verZ{transform-origin:0 0;will-change:transform;width:100%;height:100%}#verImg{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+.verEt{position:absolute;left:8px;top:6px;z-index:2;font:600 10.5px var(--mono);letter-spacing:.08em;color:#9fb4d9;background:#0b1426;border:1px solid var(--line);padding:2px 7px;border-radius:8px;pointer-events:none}
+#verMsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--dim);font:500 13.5px var(--f);pointer-events:none}
 #avAviso{margin:4px 0 6px;padding:8px 10px;border-radius:12px;background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.5);color:#ffb3ba;font:600 13px var(--f)}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
@@ -540,12 +549,11 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <div id="aviso"></div>
   <div id="instala" class="vidro"></div>
   <main id="corpo">
-    <section id="pInicio" class="painel"><div class="tit">Agora no PC</div>
-      <div id="inPc" class="vidro"></div>
-      <div id="inManha"></div>
-      <div id="inSil"></div>
+    <section id="pInicio" class="painel">
       <div id="inCorpo">
-        <div class="tit">Gasto do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
+        <div class="tit">Gastos do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
+        <div id="inManha"></div>
+        <div id="inSil"></div>
         <div class="tit">Terminais</div><div id="inTerm"></div>
         <button id="inAut" class="vidro"><span>Autorizações esperando você</span><b>0</b></button>
         <div class="tit">Último aviso importante</div><div id="inAviso"></div>
@@ -566,7 +574,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v37</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v45</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -593,6 +601,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pVer"><i>👁</i>Ver terminais</button>
         <button class="mg vidro" data-ir="pAoVivo"><i>🖥</i>Ao vivo</button>
         <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
         <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
@@ -611,6 +620,14 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="avBar"><select id="avAlvo" aria-label="Tela ou janela"><option value="tela">Tela inteira</option></select><button class="btop bno" id="avMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="avMais" aria-label="Mais zoom">+</button><button class="btop bno" id="avAjusta">Ajustar</button><button class="btop bno" id="avSobe" aria-label="Rolar para cima">⇧</button><button class="btop bno" id="avDesce" aria-label="Rolar para baixo">⇩</button></div>
       <div id="avTela"><div id="avZ"><img id="avImg" alt="Tela do PC ao vivo" draggable="false"></div><div id="avDot"></div></div>
       <div class="vazio" style="text-align:left;padding:6px 2px">Um toque = um clique no PC. Dois dedos: zoom e mover. Se o toque cair em pagar, excluir, enviar dinheiro ou desligar, o PC pergunta aqui antes de clicar. A imagem não fica guardada.</div>
+    </section>
+    <section id="pVer" class="painel"><div class="tit">Só mostrar <span class="sp"></span><button class="btop bno" id="verParar">■ Parar</button></div>
+      <div id="verChips"></div>
+      <div id="verCorpo">
+        <div id="verTxtW"><span class="verEt" id="verEtT">COMANDOS E CÓDIGO</span><pre id="verTxt">(sem saída ainda)</pre></div>
+        <div id="verTelaW"><span class="verEt" id="verEtP">PROGRAMA</span><div id="verZ"><img id="verImg" alt="Programa do terminal ao vivo" draggable="false"></div><div id="verMsg">Ligando…</div></div>
+      </div>
+      <div class="vazio" style="text-align:left;padding:6px 2px">Só mostrar: nada aqui controla o PC. Dois dedos: zoom (em cima, o tamanho da letra; embaixo, a tela). A imagem não fica guardada e o PC avisa na tela dele que está ao vivo.</div>
     </section>
     <section id="pAgenda" class="painel"><div class="tit">Agendar ordem</div>
       <div id="agForm" class="vidro">
@@ -862,7 +879,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v37";
+const VERSAO = "v45";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1372,12 +1389,13 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pVer: "Ver terminais", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; return; }
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
-  $q("pcTxt").textContent = ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…");
+  const ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
+  $q("pcTxt").textContent = usandoCache ? "Estado guardado de " + hhmm(cacheT) : (ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…")) + (carregouAbas && ult ? " · último contato " + hhmm(ult) + (semSinal ? " (há " + minAtras(ult) + ")" : "") : "");
 }
 function ajustaGrade(){          // última linha da grade do Mais nunca fica com buraco
   const g = $q("maisGrade"); if(!g) return; const it = [...g.children].filter(x => x.offsetParent !== null || true); it.forEach(x => x.style.gridColumn = "");
@@ -1387,10 +1405,11 @@ function ajustaGrade(){          // última linha da grade do Mais nunca fica co
 addEventListener("resize", ajustaGrade);
 function vaiPara(p){
   if(typeof avAtivo !== "undefined" && avAtivo && p !== "pAoVivo") paraAoVivo("Saí da tela Ao vivo");
+  if(typeof verOn !== "undefined" && verOn && p !== "pVer") paraVer();
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pVer: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
@@ -1398,6 +1417,7 @@ function vaiPara(p){
   if(p === "pLojas") puxaLojas();
   if(p === "pAgenda") puxaAgenda();
   if(p === "pAoVivo") abreAoVivo();
+  if(p === "pVer") abreVer();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -1582,7 +1602,19 @@ function cancelaGravacao(){ ligado = false; clearInterval(gravTimer); paraRec();
 function enviaGravacao(){
   const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
   if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
-  $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig"); enviaMensagem(t);
+  $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig");
+  /* (21/11, dono, prioridade A) a fala segue DIRETO e na hora para o terminal selecionado: sem tela de revisão, sem esperar confirmação e sem reescrever antes
+     (assim a resposta do Claude não chega antes da fala corrigida). O texto fica na conversa logo depois. Sem terminal escolhido, cai no fluxo de antes. */
+  if(destino && !RX_MANDA.test(t) && !tentaAgendar(t)){
+    const t0 = performance.now(); bal("dono", t);
+    mandaPedido(destino, t.slice(0, 3900)).then(ok => {
+      const ms = Math.round(performance.now() - t0);
+      if(ok){ guardaEnviado(destino, t, "direto"); toast("Enviado · " + destino, t.slice(0, 120) + " (" + ms + " ms)"); }
+      else toast("Não enviei", "Verifique a internet e fale de novo.");
+    });
+    return;
+  }
+  enviaMensagem(t);
 }
 function desenhaGrav(){
   const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
@@ -2043,11 +2075,7 @@ setInterval(() => { if(painelAtual === "pInicio") puxaSaidaInicio(); }, 2500);
 const hhmm = ms => { const d = new Date(ms), p = x => String(x).padStart(2, "0"); return p(d.getHours()) + ":" + p(d.getMinutes()); };
 async function puxaUsoInicio(){ try{ usoIn = ((await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em")) || [])[0] || null; }catch(e){} desenhaInicio(); }
 function desenhaInicio(){
-  const pc = $q("inPc"); if(!pc) return;
-  const off = !carregouAbas || (semSinal && !usandoCache), ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
-  pc.className = "vidro " + (off && carregouAbas ? "off" : off ? "" : "ok"); pc.innerHTML = "<span></span><small></small>";
-  pc.children[0].textContent = !carregouAbas ? (falhaRede ? "Sem conexão com o Jarvis" : "Conectando…") : usandoCache ? (falhaRede ? "Sem conexão" : "Atualizando…") : semSinal ? "PC offline" : "PC ligado";
-  pc.children[1].textContent = usandoCache ? "mostrando o estado de " + hhmm(cacheT) : carregouAbas && ult ? "último contato " + hhmm(ult) + (semSinal ? " · há " + minAtras(ult) : "") : "";
+  const off = !carregouAbas || (semSinal && !usandoCache);
   $q("inCorpo").classList.toggle("velho", off && carregouAbas);
   // barras do plano (só valores que o PC publicou: nada de estimativa)
   const b = $q("inBarras"); b.innerHTML = ""; const d = (usoIn && usoIn.dados) || {};
@@ -2057,7 +2085,8 @@ function desenhaInicio(){
   $q("inBarras").classList.toggle("velho", !!velhoUso);
   const t = $q("inTerm"); t.innerHTML = "";
   if(!abas.length) t.innerHTML = '<div class="vazio vidro">Sem dados dos terminais.</div>';
-  abas.forEach(a => {
+  const ORD_T = ["Jarvis", "Cuida Aí Lojas", "Jarvis Carro", "Jarvis iPhone", "Site Cuida Aí Lojas", "Jarvis Trade"], pos = n => { const i = ORD_T.indexOf(n); return i < 0 ? 99 : i; };
+  abas.slice().sort((x, y) => pos(x.nome) - pos(y.nome)).forEach(a => {
     const e = a.estado === "perg" ? "perg" : a.estado === "trab" ? "trab" : "livre", x = document.createElement("div"); x.className = "inT vidro " + e;
     x.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small></div><em></em>'; x.querySelector("b").textContent = a.nome;
     x.querySelector("small").textContent = a.pausada ? "pausado" : (a.texto || (e === "livre" ? "parado, sem tarefa" : "")); x.querySelector("em").textContent = e === "perg" ? "ESPERA VOCÊ" : e === "trab" ? "TRABALHANDO" : "PARADO";
@@ -2238,6 +2267,89 @@ $q("avSobe").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $
     ini = null;
   };
   tela.addEventListener("pointerup", fim); tela.addEventListener("pointercancel", fim);
+})();
+
+/* ---------- Ver terminais (v38): SÓ MOSTRAR. Nunca manda toque, clique nem tecla para o PC ---------- */
+const VER_TERM = ["Jarvis", "Cuida Aí Lojas", "Jarvis Carro", "Jarvis iPhone", "Site Cuida Aí Lojas", "Jarvis Trade"];
+let verOn = false, verSel = ARM.get("jv_ver") || VER_TERM[0], verTimers = [], verBusyT = false, verBusyP = false, verFonte = Number(ARM.get("jv_ver_fonte")) || 11;
+let verS = 1, verTx = 0, verTy = 0, verPtr = {}, verGest = null, verVisto = "", verUrl = null, verTxtVisto = "";
+if(VER_TERM.indexOf(verSel) < 0) verSel = VER_TERM[0];
+const verAlvo = () => "ver:" + verSel;
+function verDesenhaChips(){
+  const c = $q("verChips"); c.innerHTML = "";
+  VER_TERM.forEach(n => { const b = document.createElement("button"); b.className = "chip" + (n === verSel ? " sel" : ""); b.textContent = n; b.onclick = () => verTroca(n); c.appendChild(b); });
+}
+async function verLiga(){ try{ await rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString(), alvo: verAlvo() }) }); }catch(e){} }
+function verLimpaImg(msg){ $q("verImg").removeAttribute("src"); if(verUrl){ try{ URL.revokeObjectURL(verUrl); }catch(_){} verUrl = null; } verVisto = ""; $q("verMsg").textContent = msg || ""; $q("verMsg").style.display = msg ? "flex" : "none"; }
+async function abreVer(){
+  if(verOn) return;
+  if(!(await exigeFace("Ver o PC (só mostrar)"))){ vaiPara("pMais"); return; }
+  verOn = true; verS = 1; verTx = verTy = 0; verTxtVisto = ""; verDesenhaChips(); verFonteAplica(); verAplica(); verLimpaImg("Ligando…");
+  await verLiga(); verTimers.push(setInterval(verLiga, 15000), setInterval(verPuxaTxt, 1500), setInterval(verPuxaImg, 1000)); verPuxaTxt(); verPuxaImg();
+}
+function paraVer(){
+  if(!verOn) return; verOn = false; verTimers.forEach(clearInterval); verTimers = [];
+  rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: null }) }).catch(() => {});
+  verLimpaImg("");
+}
+function verTroca(n){
+  verSel = n; ARM.set("jv_ver", n); verS = 1; verTx = verTy = 0; verTxtVisto = ""; verDesenhaChips(); verAplica(); verLimpaImg("Abrindo o programa de " + n + "…");
+  $q("verTxt").textContent = "(carregando…)"; verLiga(); verPuxaTxt();
+}
+async function verPuxaTxt(){
+  if(!verOn || document.hidden || verBusyT) return; verBusyT = true; const nome = verSel;
+  try{
+    const r = ((await rest("jarvis_abas?select=nome,estado,saida&nome=eq." + encodeURIComponent(nome))) || [])[0]; if(!r || nome !== verSel) return;
+    const txt = r.saida || "(sem saída ainda)"; if(txt === verTxtVisto) return; verTxtVisto = txt;
+    const pre = $q("verTxt"), fim = pre.scrollHeight - pre.scrollTop - pre.clientHeight < 40; pre.textContent = txt; if(fim) pre.scrollTop = pre.scrollHeight;
+  }catch(e){} finally{ verBusyT = false; }
+}
+async function verPuxaImg(){
+  if(!verOn || document.hidden || verBusyP) return; verBusyP = true;
+  try{
+    const r = ((await avRow()) || [])[0]; if(!r || r.alvo !== verAlvo()) return;
+    if(r.aviso && /^Sem janela/.test(r.aviso)){ verLimpaImg(r.aviso); return; }
+    if(r.aviso && /^Desligou/.test(r.aviso)){ verLimpaImg(r.aviso + " Toque em Ver terminais de novo."); return; }
+    if(r.quadro && r.atualizado_em !== verVisto){
+      verVisto = r.atualizado_em; const t = await token();
+      const f = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-aovivo/" + encodeURIComponent(r.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
+      if(f.ok && r.alvo === verAlvo()){ const u = URL.createObjectURL(await f.blob()), velho = verUrl; verUrl = u; $q("verImg").src = u; $q("verMsg").style.display = "none"; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000); }
+    }
+  }catch(e){} finally{ verBusyP = false; }
+}
+document.addEventListener("visibilitychange", () => { if(document.hidden && verOn) paraVer(); });
+$q("verParar").onclick = () => { paraVer(); vaiPara("pMais"); };
+function verFonteAplica(){ verFonte = Math.min(30, Math.max(6, verFonte)); $q("verTxt").style.setProperty("--vf", verFonte + "px"); }
+function verAplica(){
+  const t = $q("verTelaW"), w = t.clientWidth, h = t.clientHeight; verS = Math.min(6, Math.max(1, verS));
+  verTx = Math.min(0, Math.max(w - w * verS, verTx)); verTy = Math.min(0, Math.max(h - h * verS, verTy));
+  $q("verZ").style.transform = "translate(" + verTx + "px," + verTy + "px) scale(" + verS + ")";
+}
+/* pinça no texto = tamanho da letra (um dedo rola, como sempre) */
+(function pincaTexto(){
+  const pre = $q("verTxt"); let d0 = 0, f0 = 11;
+  const dist = e => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY) || 1;
+  pre.addEventListener("touchstart", e => { if(e.touches.length === 2){ d0 = dist(e); f0 = verFonte; } }, { passive: true });
+  pre.addEventListener("touchmove", e => { if(e.touches.length === 2 && d0){ e.preventDefault(); verFonte = f0 * dist(e) / d0; verFonteAplica(); } }, { passive: false });
+  pre.addEventListener("touchend", e => { if(e.touches.length < 2 && d0){ d0 = 0; ARM.set("jv_ver_fonte", String(Math.round(verFonte * 10) / 10)); } }, { passive: true });
+  pre.addEventListener("wheel", e => { if(e.ctrlKey){ e.preventDefault(); verFonte *= e.deltaY < 0 ? 1.08 : 1 / 1.08; verFonteAplica(); } }, { passive: false });
+})();
+/* pinça + arrastar na imagem; um toque NÃO é enviado ao PC */
+(function gestoTela(){
+  const tela = $q("verTelaW");
+  tela.addEventListener("pointerdown", e => {
+    e.preventDefault(); try{ tela.setPointerCapture(e.pointerId); }catch(_){} verPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(verPtr), tr = tela.getBoundingClientRect();
+    if(ids.length >= 2){ const a = verPtr[ids[0]], b = verPtr[ids[1]]; verGest = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: verS, tx: verTx, ty: verTy, cx: (a.x + b.x) / 2 - tr.left, cy: (a.y + b.y) / 2 - tr.top }; }
+    else verGest = { um: true, x: e.clientX, y: e.clientY, tx: verTx, ty: verTy };
+  });
+  tela.addEventListener("pointermove", e => {
+    if(!verPtr[e.pointerId]) return; verPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(verPtr), tr = tela.getBoundingClientRect();
+    if(ids.length >= 2 && verGest && verGest.d){ const a = verPtr[ids[0]], b = verPtr[ids[1]], d = Math.hypot(a.x - b.x, a.y - b.y) || 1, cx = (a.x + b.x) / 2 - tr.left, cy = (a.y + b.y) / 2 - tr.top; verS = Math.min(6, Math.max(1, verGest.s * d / verGest.d)); const k = verS / verGest.s; verTx = cx - (verGest.cx - verGest.tx) * k; verTy = cy - (verGest.cy - verGest.ty) * k; verAplica(); }
+    else if(ids.length === 1 && verGest && verGest.um && verS > 1){ verTx = verGest.tx + (e.clientX - verGest.x); verTy = verGest.ty + (e.clientY - verGest.y); verAplica(); }
+  });
+  const fim = e => { delete verPtr[e.pointerId]; const ids = Object.keys(verPtr); verGest = ids.length ? { um: true, x: verPtr[ids[0]].x, y: verPtr[ids[0]].y, tx: verTx, ty: verTy } : null; };
+  tela.addEventListener("pointerup", fim); tela.addEventListener("pointercancel", fim);
+  let ult = 0; tela.addEventListener("pointerdown", e => { const t = Date.now(); if(t - ult < 300){ verS = verS > 1.05 ? 1 : 2.5; if(verS === 1){ verTx = verTy = 0; } verAplica(); ult = 0; } else ult = t; });
 })();
 
 /* ---------- Agendar ordem (v10.5) ---------- */
