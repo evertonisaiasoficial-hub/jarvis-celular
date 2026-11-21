@@ -285,6 +285,63 @@ button:active{transform:scale(.97)}
 .apv .ab button:disabled{opacity:.5}
 #nav button{font-size:10.5px}#nav button i{font-size:21px}
 
+/* v9.1: chave da IA (campos sem salvar senha, sem corretor) */
+.rot{display:block;font:600 12px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:12px 2px 6px}
+input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--mono);-webkit-text-security:disc;-webkit-user-select:text;user-select:text}
+#chaveRes.ok{color:var(--grn)}#chaveRes.erro{color:var(--red)}
+/* v6: conversa com a IA, menu Mais, memória, captcha ao vivo */
+#acoes,#teclado{display:none!important}
+#pararMini{display:flex!important;align-items:center;justify-content:center}
+#pLig{padding:0 12px;overflow:hidden}
+#chatTopo{display:flex;align-items:center;gap:10px;padding:6px 2px 6px;flex:0 0 auto}
+#chatTopo #orbBox{width:60px;height:60px;min-height:0;flex:0 0 60px}
+#chatTopo .ct{flex:1;min-width:0}#chatTopo .ct b{font:700 17px var(--f)}
+#chatTopo #versao{margin:0;text-align:left;font-size:10px;letter-spacing:.16em}
+#chatTopo #estadoLig{text-align:left;font-size:11.5px;min-height:0;letter-spacing:.08em}
+#legenda{display:none}
+#chat{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px;padding:6px 2px 10px}
+.bal{max-width:86%;padding:11px 14px;border-radius:18px;font-size:15.5px;line-height:1.45;white-space:pre-wrap;word-break:break-word;-webkit-user-select:text;user-select:text}
+.bal.dono{align-self:flex-end;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;border-bottom-right-radius:6px}
+.bal.jarvis{align-self:flex-start;background:var(--glass2);border:1px solid var(--line);border-bottom-left-radius:6px}
+.bal.nota{align-self:center;max-width:94%;background:transparent;color:var(--dim);font-size:12.5px;padding:2px 8px;text-align:center}
+.bal.digitando{opacity:.7;font-style:italic}
+.prop{align-self:stretch;padding:14px;border:1px solid color-mix(in srgb,var(--cy) 60%,transparent);border-radius:16px;background:#0b1230;box-shadow:0 0 18px color-mix(in srgb,var(--cy) 18%,transparent)}
+.prop .ph{font:600 11px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.prop .pn2{font:700 18px var(--f);color:var(--cy);margin:2px 0 8px}
+.prop .pt2{font:14.5px/1.5 var(--f);white-space:pre-wrap;word-break:break-word;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);margin-bottom:8px;-webkit-user-select:text;user-select:text}
+.prop textarea{width:100%;min-height:130px;padding:10px 12px;border-radius:12px;border:1px solid var(--cy);background:rgba(0,0,0,.35);color:#fff;font:14.5px/1.5 var(--f);margin-bottom:8px;-webkit-user-select:text;user-select:text}
+.prop .pc2{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.prop .pc2 button{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass2);font:600 12.5px var(--f)}
+.prop .pc2 button.sel{border-color:var(--cy);color:var(--cy);background:color-mix(in srgb,var(--cy) 18%,transparent)}
+.prop .pb2{display:flex;gap:8px}.prop .pb2 button{flex:1;padding:14px;border-radius:13px;font:700 15.5px var(--f)}
+.prop.feito{opacity:.55}.prop.feito .pb2,.prop.feito .pc2{display:none}
+#composer{flex:0 0 auto;display:flex;align-items:flex-end;gap:8px;padding:8px 0 10px}
+#composer #msg,body.bolha #composer #msg{display:block;position:static;left:auto;right:auto;bottom:auto;text-align:left;letter-spacing:0;color:var(--txt);flex:1;min-width:0;min-height:50px;max-height:30vh;padding:13px 15px;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px/1.35 var(--f);resize:none;-webkit-user-select:text;user-select:text}
+#composer #ligar{width:50px;height:50px;flex:0 0 50px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;box-shadow:none;animation:none}
+#composer #ligar svg{width:26px;height:26px}
+#composer #ligar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);animation:anel 1.6s ease-out infinite}
+#envMsg{width:50px;height:50px;flex:0 0 50px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;font:700 20px var(--f)}
+#capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
+#capBanner.on{display:block}
+#maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mg{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 6px;font:600 13.5px var(--f)}
+.mg i{font-style:normal;font-size:27px}
+.mg b{position:absolute;top:6px;right:8px;min-width:19px;height:19px;line-height:19px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;padding:0 5px}
+.mg b:empty{display:none}
+.mem{display:flex;gap:10px;align-items:flex-start;padding:12px;margin-bottom:8px}
+.mem .c{flex:1;min-width:0}.mem .t{font-size:14.5px;line-height:1.4;word-break:break-word}.mem .h{font:11px var(--mono);color:var(--dim);margin-top:4px}
+.mem .tg{display:inline-block;font:600 10.5px var(--f);letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--cy) 16%,transparent);color:var(--cy);margin-bottom:4px}
+.mem button{flex:0 0 auto;padding:9px 12px;border-radius:10px;background:rgba(255,77,94,.2);color:#ffd0d4;font:600 12.5px var(--f)}
+.conv{display:block;width:100%;text-align:left;padding:12px;margin-bottom:8px}
+.conv .h{font:11px var(--mono);color:var(--dim);margin-top:4px}
+#capTela{position:relative;border:2px solid var(--red);border-radius:12px;overflow:hidden;background:#000;touch-action:none}
+#capImg{display:block;width:100%;height:auto;min-height:160px;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;touch-action:none}
+#capTec{display:flex;gap:8px;margin-top:10px}#capTec input{flex:1;min-width:0;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f);-webkit-user-select:text;user-select:text}
+#capTit{font:700 15px var(--f);margin-bottom:8px;color:#ffb3ba}
+.capItem{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px;margin-bottom:10px;border:2px solid var(--red)}
+.capItem .c{flex:1;min-width:0;font:600 15px var(--f)}.capItem .c small{display:block;color:var(--dim);font:500 12px var(--mono);margin-top:3px}
+#nav button{font-size:11.5px}#nav button i{font-size:22px}
+
 /* v3.1: iPhone maior e esticado até embaixo */
 #app{inset:auto;left:0;top:0;right:0;height:100vh;height:100dvh}
 #pararMini{display:none;flex:0 0 auto;width:44px;height:44px;border-radius:13px;font:700 17px var(--f);background:linear-gradient(135deg,#ff4d5e,#b3122a);color:#fff;box-shadow:0 0 14px rgba(255,77,94,.35)}
@@ -334,14 +391,13 @@ button:active{transform:scale(.97)}
   <div id="instala" class="vidro"></div>
   <main id="corpo">
     <section id="pLig" class="painel on">
-      <div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
-      <div id="versao">VERSÃO v5</div>
-      <div id="estadoLig">Toque no microfone para ditar</div>
+      <div id="chatTopo"><div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
+        <div class="ct"><b>Jarvis</b><div id="versao">VERSÃO v9.1</div><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
+        <button class="btop bno" id="novaConversa">＋ Nova</button></div>
+      <div id="capBanner"></div>
+      <div id="chat"></div>
       <div id="legenda"></div>
-      <div class="tit">Terminais ao vivo</div>
-      <div id="vivo"></div>
-      <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
-      <div id="resumoLig"><button class="vidro" data-ir="pIdeias">💡 Ideias <b id="rIdeias">0</b></button><button class="vidro" data-ir="pAvisos">🔔 Avisos <b id="rAvisos">0</b></button><button class="vidro" data-ir="pPrint">📷 Print do PC</button></div>
+      <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -362,19 +418,55 @@ button:active{transform:scale(.97)}
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
       <div id="printInfo" class="vazio" style="padding:0 2px 10px;text-align:left">O PC só tira o print quando você toca no botão. Ficam guardados os últimos 10.</div>
       <div id="gradePrints"></div></section>
+    <section id="pMais" class="painel"><div class="tit">Mais</div>
+      <div id="maisGrade">
+        <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
+        <button class="mg vidro" data-ir="pAvisos"><i>🔔</i>Avisos<b id="rAvisos"></b></button>
+        <button class="mg vidro" data-ir="pCaptcha"><i>🧩</i>Captcha<b id="rCaptcha"></b></button>
+        <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
+        <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
+        <button class="mg vidro" id="maisChave"><i>🔑</i><span id="maisChaveTxt">Chave da IA</span></button>
+        <button class="mg vidro" id="maisAtualiza"><i>⟳</i>Atualizar</button>
+      </div>
+      <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
+      <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pMemoria" class="painel"><div class="tit">Memória do Jarvis <span id="memN"></span></div>
+      <div class="vazio" style="padding:0 2px 10px;text-align:left">O que a IA guardou sozinha nas conversas (decisões, regras da loja, preferências, ideias aprovadas). Ela lê isto antes de responder. Senhas, chaves e dados de cartão/banco nunca são guardados.</div>
+      <div id="listaMem"></div>
+      <div class="tit">Conversas anteriores</div><div id="listaConv"></div>
+    </section>
+    <section id="pChave" class="painel"><div class="tit">Chave da IA <span class="sp"></span><button class="btop bno" id="chaveVolta">Voltar</button></div>
+      <div id="chaveEstado" class="vidro" style="padding:14px;margin-bottom:10px;font:600 15px var(--f)">Verificando…</div>
+      <div id="chaveForm">
+        <div class="vazio" id="chaveInfo" style="padding:0 2px 8px;text-align:left"></div>
+        <label class="rot" id="rotPin" for="chavePin">PIN (4 números)</label>
+        <input id="chavePin" class="segredo" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="••••">
+        <label class="rot" for="chaveVal">Chave da Anthropic (sk-ant-…)</label>
+        <input id="chaveVal" class="segredo" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="sk-ant-…">
+        <button class="btop bok" id="chaveSalva" style="width:100%;padding:15px;margin-top:10px;font:700 16px var(--f)">Salvar</button>
+      </div>
+      <div id="chaveRes" class="vazio" style="padding:10px 2px;text-align:left"></div>
+    </section>
+    <section id="pCaptcha" class="painel"><div class="tit">Captcha<span class="sp"></span><button class="btop bno" id="capFecha">Voltar</button></div>
+      <div id="capInfo" class="vazio" style="padding:0 2px 10px;text-align:left">Quando aparecer captcha numa loja, ele chega como notificação e você resolve aqui, tocando e arrastando na página ao vivo. A automação nunca resolve sozinha.</div>
+      <div id="capLista"></div>
+      <div id="capVivo" style="display:none"><div id="capTit"></div><div id="capTela"><img id="capImg" alt="Página da loja ao vivo" draggable="false"></div>
+        <div id="capTec"><input id="capTxt" placeholder="Digitar na página…" autocomplete="off"><button class="btop bok" id="capTxtEnv">Digitar</button><button class="btop bno" data-tecla="Backspace">⌫</button><button class="btop bno" data-tecla="Enter">↵</button></div>
+        <div class="vazio" style="text-align:left;padding:8px 2px">Toque e arraste na imagem como se fosse a página. Ela atualiza sozinha; ao resolver, esta tela fecha e a automação continua.</div></div>
+    </section>
   </main>
   <section id="prev" class="vidro"></section>
   <div id="flutua" class="vidro"><span class="rec"></span><div class="ft"><b id="flT">● 0:00</b><small id="flX"></small></div><button id="flCancel" class="bno" title="Cancelar">✕</button><button id="flEnvia" class="bok">Enviar</button></div>
   <div id="teclado"><input id="txt" placeholder="Escreva para o Jarvis…" enterkeyhint="send" autocomplete="off"><button id="enviaTxt">Enviar</button></div>
-  <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="ligar" title="Ditar"></button><button id="tecBtn" title="Escrever">⌨</button></div>
+  <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="tecBtn" title="Escrever">⌨</button></div>
   <nav id="nav">
-    <button data-p="pLig" class="on"><i>🎙</i>Ditar</button>
+    <button data-p="pLig" class="on"><i>💬</i>Conversa</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
     <button data-p="pTar"><i>☰</i>Tarefas</button>
-    <button data-p="pIdeias"><i>💡</i>Ideias</button>
-    <button data-p="pAvisos"><i>🔔</i>Avisos</button>
     <button data-p="pAprovar"><i>🔐</i>Aprovar</button>
-    <button data-p="pPrint"><i>📷</i>Print</button>
+    <button data-p="pMais"><i>⋯</i>Mais</button>
   </nav>
 </div>
 <div id="cheia"><div id="cheiaTop"><div id="cheiaChips"></div><button class="btop bno" id="fonteMenos">A−</button><button class="btop bno" id="fonteMais">A+</button><button class="btop bok" id="fechaCheia">✕ Fechar</button></div><div id="cheiaCorpo"></div></div>
@@ -542,7 +634,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v5";
+const VERSAO = "v9.1";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -613,7 +705,7 @@ const atualDe = a => filaDe(a).find(x => x.e === "exec");
 let sync = null, ocupado = false, ultAviso = ARM.get("jv_ultaviso") || 0, avisoIni = false;
 function iniciaSync(){
   if(sync) return;
-  puxa(); puxaAvisos(); olhando(); salvaPushSilencioso();
+  puxa(); puxaAvisos(); olhando(); salvaPushSilencioso(); carregaConversa(); setTimeout(() => { try{ puxaChave(); }catch(e){} }, 1500);
   sync = setInterval(() => { if(!document.hidden) puxa(); }, 3000);
   setInterval(() => { if(!document.hidden) puxaAvisos(); }, 8000);
   setInterval(() => { if(!document.hidden) olhando(); }, 20000);
@@ -641,6 +733,7 @@ async function puxa(){
     desenhaTudo();
     const av = $q("aviso"); av.classList.toggle("on", semSinal); av.textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar." : "";
     if(cheiaOn) puxaCheia();
+    puxaCaptchas();
   }catch(e){ const av = $q("aviso"); av.classList.add("on"); av.textContent = "Sem conexão com o Supabase… tentando de novo."; }
   ocupado = false;
 }
@@ -828,10 +921,10 @@ function desenhaAvisos(){
 function desenhaBadges(){
   const vistos = ARM.get("jv_avisto") || 0, nAv = avisos.filter(x => x.id > vistos).length, urg = avisos.some(x => x.id > vistos && /pix|captcha|login/.test(x.tipo));
   const erros = abas.reduce((s, a) => s + filaDe(a).filter(x => x.e === "erro").length, 0), exec = abas.filter(a => atualDe(a)).length;
-  const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
+  const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); if(!b) return; let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
   bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv, urg); bd("pAprovar", perguntasAbertas().length, true);
   bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
-  $q("rIdeias").textContent = ideias.length; $q("rAvisos").textContent = nAv;
+  $q("rIdeias").textContent = ideias.length || ""; $q("rAvisos").textContent = nAv || ""; $q("rCaptcha").textContent = captchas.length || ""; bd("pMais", ideias.length + nAv + captchas.length, captchas.length > 0 || urg);
 }
 function desenhaParar(){
   const todas = abas.length && abas.every(a => a.pausada), b = $q("parar");
@@ -842,7 +935,9 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p;
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === p));
+  const NAV_DE = { pIdeias: "pMais", pAvisos: "pMais", pPrint: "pMais", pMemoria: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  if(p === "pMemoria") puxaMemoria();
+  if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
   if(p === "pPrint") puxaPrints();
@@ -1019,18 +1114,18 @@ const ICO_ENVIA = '<svg viewBox="0 0 24 24" width="38" height="38" fill="current
 function iniciaGravacao(){
   if(ligado) return;
   if(!SR){ toast("Este navegador não tem ditado", "Use o ⌨ e o microfone do teclado do iPhone."); $q("teclado").classList.add("on"); $q("txt").focus(); return; }
-  ligado = true; zeraFala(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 500); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
+  ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 500); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
 }
-function cancelaGravacao(){ ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav(); if(atualizarDepois) location.reload(); }
+function cancelaGravacao(){ ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
 function enviaGravacao(){
   const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
   if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
-  abreConfirma(t);
+  $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig"); enviaMensagem(t);
 }
 function desenhaGrav(){
   const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
   $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_ENVIA : ICO_MIC;
-  const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Toque no microfone para ditar";
+  const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Converse comigo: fale ou escreva"; if(ligado) $q("msg").value = acumFala;
   if(ligado){ $q("flT").textContent = "● " + tempoGrav(); $q("flX").textContent = acumFala ? acumFala.slice(-80) : "fale agora…"; }
 }
 
@@ -1255,6 +1350,147 @@ zel.addEventListener("wheel", e => { e.preventDefault(); zoomEm(e.clientX, e.cli
 $q("zoomX").onclick = fechaZoom;
 addEventListener("keydown", e => { if(e.key === "Escape"){ if(zel.classList.contains("on")) fechaZoom(); else if(cheiaOn) fechaCheia(); } });
 
+/* ---------- v6: CONVERSA com a IA (Sonnet), como no Claude ---------- */
+let conversaId = ARM.get("jv_conversa") || ("c" + Date.now()); ARM.set("jv_conversa", conversaId);
+let pendente = null, notaPendente = "", conversando = false;
+function bal(papel, texto, extra){ const c = $q("chat"), d = document.createElement("div"); d.className = "bal " + papel + (extra ? " " + extra : ""); d.textContent = texto; c.appendChild(d); c.scrollTop = c.scrollHeight; return d; }
+function rolaChat(){ const c = $q("chat"); c.scrollTop = c.scrollHeight; }
+async function carregaConversa(){
+  $q("chat").innerHTML = ""; pendente = null;
+  try{ const l = await rest("jarvis_chat?select=papel,texto&conversa=eq." + encodeURIComponent(conversaId) + "&order=id.asc&limit=80") || []; l.forEach(m => bal(m.papel === "dono" ? "dono" : "jarvis", String(m.texto).replace(/^\[[^\]]*\] /, ""))); }catch(e){}
+  if(!$q("chat").children.length) bal("nota", "Converse comigo como no Claude: conte o que você quer, eu dou ideias e digo o que acho. Quando a gente fechar, monto o pedido e pergunto para qual terminal envio. Você responde “manda” ou “corrige”.");
+  rolaChat();
+}
+function novaConversa(){ conversaId = "c" + Date.now(); ARM.set("jv_conversa", conversaId); notaPendente = ""; carregaConversa(); }
+const RX_MANDA = /^\s*(manda|pode mandar|envia|enviar|manda sim|sim,? manda|ok,? manda|pode enviar|confirma|confirmo)\b/i;
+const RX_CORRIGE = /^\s*corrig/i;
+async function enviaMensagem(texto){
+  texto = String(texto || "").trim(); if(!texto || conversando) return;
+  if(pendente && RX_MANDA.test(texto) && texto.length < 30){ bal("dono", texto); return mandaProposta(); }
+  if(pendente && RX_CORRIGE.test(texto) && texto.split(/\s+/).length <= 2){ bal("dono", texto); return editaProposta(); }
+  bal("dono", texto); conversando = true; $q("estadoLig").textContent = "● Pensando…"; const dig = bal("jarvis", "digitando…", "digitando");
+  const r = await chamaCerebro({ modo: "conversa", conversa: conversaId, fala: texto, aba: destino, nota: notaPendente });
+  dig.remove(); conversando = false; $q("estadoLig").textContent = "Converse comigo: fale ou escreva";
+  if(r && r.resposta){
+    notaPendente = "";
+    bal("jarvis", r.resposta); falar(r.resposta);
+    (r.memorias || []).forEach(m => bal("nota", "🧠 Guardei na memória: " + m));
+    if(r.proposta) mostraProposta(r.proposta);
+    return;
+  }
+  const sugere = rotaPorAssunto(sem(texto)) || (destino && nomesTerm().includes(destino) ? destino : nomesTerm()[0]);
+  bal("jarvis", (r && r.sem_ia ? "A IA está sem chave: toque em Mais > Configurar chave da IA." : "A IA não respondeu agora (" + String((r && r.erro) || "sem rede").slice(0, 80) + ").") + " Se quiser, envio o seu texto como está. Envio para o " + sugere + "?");
+  mostraProposta({ terminal: sugere, pedido: texto, bruto: true });
+}
+function mostraProposta(p){
+  if(pendente && pendente.el) pendente.el.classList.add("feito");
+  const el = document.createElement("div"); el.className = "prop"; $q("chat").appendChild(el);
+  pendente = { terminal: p.terminal, pedido: String(p.pedido || ""), el: el, editando: false, bruto: !!p.bruto };
+  desenhaProposta(); rolaChat();
+}
+function desenhaProposta(){
+  const p = pendente; if(!p) return; const el = p.el;
+  el.innerHTML = '<div class="ph"></div><div class="pn2"></div><div class="pc2"></div><div class="pt2"></div><textarea></textarea><div class="pb2"><button class="bno cor"></button><button class="bok man">Manda</button></div>';
+  el.querySelector(".ph").textContent = p.bruto ? "Pedido (sem a IA: o seu texto)" : "Pedido combinado";
+  el.querySelector(".pn2").textContent = "Envio para o " + p.terminal + "?";
+  nomesTerm().forEach(n => { const b = document.createElement("button"); b.textContent = n; if(n === p.terminal) b.className = "sel"; b.onclick = () => { p.terminal = n; usaTerminal(n); desenhaProposta(); }; el.querySelector(".pc2").appendChild(b); });
+  const pt = el.querySelector(".pt2"), ta = el.querySelector("textarea");
+  pt.textContent = p.pedido; ta.value = p.pedido; pt.style.display = p.editando ? "none" : ""; ta.style.display = p.editando ? "" : "none";
+  const cor = el.querySelector(".cor"), man = el.querySelector(".man");
+  cor.textContent = p.editando ? "Salvar" : "Corrige";
+  cor.onclick = () => { if(p.editando){ p.pedido = ta.value.trim() || p.pedido; p.editando = false; desenhaProposta(); } else editaProposta(); };
+  man.onclick = () => mandaProposta();
+}
+function editaProposta(){ if(!pendente) return; pendente.editando = true; desenhaProposta(); try{ pendente.el.querySelector("textarea").focus(); }catch(e){} bal("nota", "Corrija o texto do pedido e toque em Manda — ou escreva o que mudar e eu refaço."); }
+async function mandaProposta(){
+  const p = pendente; if(!p) return;
+  if(p.editando){ p.pedido = p.el.querySelector("textarea").value.trim() || p.pedido; p.editando = false; }
+  const ok = await mandaPedido(p.terminal, p.pedido.slice(0, 3900));
+  if(!ok){ bal("nota", "✗ Não consegui enviar. Verifique a internet e diga “manda” de novo."); return; }
+  desenhaProposta(); p.el.classList.add("feito");
+  pendente = null; usaTerminal(p.terminal); guardaEnviado(p.terminal, p.pedido, p.bruto ? "texto original" : "conversa");
+  notaPendente = "o pedido combinado foi ENVIADO para " + p.terminal;
+  bal("nota", "✓ Enviado para o " + p.terminal); toast("Enviado ✓ " + p.terminal, "");
+}
+
+/* ---------- Memória ---------- */
+async function puxaMemoria(){
+  const l = $q("listaMem"); let mem = [];
+  try{ mem = await rest("jarvis_memoria?select=id,fato,tipo,origem,criado_em&order=criado_em.desc&limit=200") || []; }catch(e){ l.innerHTML = '<div class="vazio vidro">Não consegui ler a memória.</div>'; return; }
+  $q("memN").textContent = mem.length ? "(" + mem.length + ")" : ""; l.innerHTML = "";
+  if(!mem.length) l.innerHTML = '<div class="vazio vidro">A memória está vazia. A IA guarda aqui o que for importante nas conversas.</div>';
+  mem.forEach(m => {
+    const d = document.createElement("div"); d.className = "mem vidro";
+    d.innerHTML = '<div class="c"><span class="tg"></span><div class="t"></div><div class="h"></div></div><button>🗑 Apagar</button>';
+    d.querySelector(".tg").textContent = m.tipo || "nota"; d.querySelector(".t").textContent = m.fato; d.querySelector(".h").textContent = hm(new Date(m.criado_em).getTime()) + (m.origem ? " · " + m.origem : "");
+    d.querySelector("button").onclick = () => apagaMemoria(m.id);
+    l.appendChild(d);
+  });
+  const lc = $q("listaConv"); lc.innerHTML = "";
+  try{
+    const h = await rest("jarvis_chat?select=conversa,papel,texto,criado_em&order=id.desc&limit=300") || [], por = {};
+    h.forEach(x => { const c = por[x.conversa] = por[x.conversa] || { n: 0, ult: x.criado_em, primeiro: "" }; c.n++; if(x.papel === "dono") c.primeiro = x.texto; });
+    Object.keys(por).slice(0, 15).forEach(k => {
+      const c = por[k], b = document.createElement("button"); b.className = "conv vidro" + (k === conversaId ? " sel" : "");
+      b.innerHTML = '<div></div><div class="h"></div>'; b.children[0].textContent = String(c.primeiro || "(conversa)").replace(/^\[[^\]]*\] /, "").slice(0, 90); b.children[1].textContent = hm(new Date(c.ult).getTime()) + " · " + c.n + " mensagens" + (k === conversaId ? " · atual" : "");
+      b.onclick = () => { conversaId = k; ARM.set("jv_conversa", k); carregaConversa(); vaiPara("pLig"); };
+      lc.appendChild(b);
+    });
+    if(!Object.keys(por).length) lc.innerHTML = '<div class="vazio vidro">Nenhuma conversa guardada ainda.</div>';
+  }catch(e){}
+}
+async function apagaMemoria(id){
+  if(!confirm("Apagar este item da memória do Jarvis?")) return;
+  try{ await rest("jarvis_memoria?id=eq." + encodeURIComponent(id), { method: "DELETE", headers: { Prefer: "return=minimal" } }); toast("Apagado da memória", ""); }catch(e){ toast("Não consegui apagar", String(e.message || e)); }
+  puxaMemoria();
+}
+
+/* ---------- Captcha pelo celular: a página da loja ao vivo; os toques do dono vão para a página ---------- */
+let captchas = [], capSel = null, capTimer = null, capVistos = null, capUrl = null, capOlhaT = 0, capEv = [], capT0 = 0, capDown = false;
+async function puxaCaptchas(){
+  try{ captchas = await rest("jarvis_captcha?select=id,loja,url,tipo,quadro,w,h,atualizado_em&estado=eq.aberto&order=atualizado_em.desc") || []; }catch(e){ return; }
+  if(capVistos === null){ capVistos = {}; captchas.forEach(c => capVistos[c.id] = 1); }
+  else captchas.forEach(c => { if(!capVistos[c.id]){ capVistos[c.id] = 1; toast("🧩 Captcha em " + c.loja, "Toque no aviso vermelho para resolver pelo celular."); } });
+  if(capSel && !captchas.some(c => c.id === capSel)) fechaCaptcha("Captcha resolvido ✓");
+  desenhaCaptchas(); desenhaBadges();
+}
+function desenhaCaptchas(){
+  const bn = $q("capBanner"); bn.classList.toggle("on", captchas.length > 0 && !capSel);
+  bn.textContent = captchas.length ? "🧩 Captcha em " + captchas[0].loja + (captchas.length > 1 ? " (+" + (captchas.length - 1) + ")" : "") + " — toque para resolver" : "";
+  const l = $q("capLista"); l.innerHTML = ""; $q("capLista").style.display = capSel ? "none" : "";
+  if(!captchas.length && !capSel){ l.innerHTML = '<div class="vazio vidro">Nenhum captcha esperando agora ✓</div>'; return; }
+  captchas.forEach(c => { const b = document.createElement("button"); b.className = "capItem vidro"; b.innerHTML = '<span style="font-size:24px">🧩</span><div class="c"><span></span><small></small></div><span class="btop bok">Resolver</span>'; b.querySelector(".c span").textContent = c.loja; b.querySelector("small").textContent = (c.url || "") + " · " + hm(new Date(c.atualizado_em).getTime()); b.onclick = () => abreCaptcha(c.id); l.appendChild(b); });
+}
+function abreCaptcha(id){ capSel = id; vaiPara("pCaptcha"); $q("capVivo").style.display = ""; $q("capTit").textContent = "Abrindo a página da loja…"; capOlhaT = 0; clearInterval(capTimer); capTimer = setInterval(atualizaQuadro, 800); atualizaQuadro(); desenhaCaptchas(); }
+async function olhaCaptcha(){ if(!capSel) return; try{ await rest("jarvis_captcha?id=eq." + encodeURIComponent(capSel), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString() }) }); }catch(e){} }
+async function atualizaQuadro(){
+  if(!capSel || document.hidden) return;
+  if(Date.now() - capOlhaT > 15000){ capOlhaT = Date.now(); olhaCaptcha(); }
+  const c = captchas.find(x => x.id === capSel);
+  if(!c || !c.quadro){ $q("capTit").textContent = "Esperando a imagem da loja (o PC começa a mandar em alguns segundos)…"; return; }
+  try{
+    const t = await token();
+    const r = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-captcha/" + encodeURIComponent(c.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
+    if(!r.ok) return;
+    const u = URL.createObjectURL(await r.blob()), velho = capUrl; capUrl = u; $q("capImg").src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000);
+    $q("capTit").textContent = "🧩 " + c.loja + " — ao vivo";
+  }catch(e){}
+}
+function fechaCaptcha(msg){ capSel = null; clearInterval(capTimer); $q("capVivo").style.display = "none"; if(msg) toast(msg, "A automação continua sozinha."); desenhaCaptchas(); }
+const capPos = e => { const r = $q("capImg").getBoundingClientRect(); return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) }; };
+async function mandaCapEventos(evs){
+  if(!capSel || !evs.length) return;
+  try{ await rest("jarvis_captcha_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ captcha: capSel, eventos: evs }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e)); }
+}
+(function toquesCaptcha(){
+  const img = $q("capImg");
+  img.addEventListener("pointerdown", e => { if(!capSel) return; e.preventDefault(); try{ img.setPointerCapture(e.pointerId); }catch(_){} capDown = true; capT0 = Date.now(); capEv = [Object.assign({ t: "baixo", dt: 0 }, capPos(e))]; });
+  img.addEventListener("pointermove", e => { if(!capDown) return; const dt = Date.now() - capT0, u = capEv[capEv.length - 1]; if(dt - u.dt < 25) return; capEv.push(Object.assign({ t: "move", dt: dt }, capPos(e))); });
+  const fim = e => { if(!capDown) return; capDown = false; capEv.push(Object.assign({ t: "cima", dt: Date.now() - capT0 }, capPos(e))); mandaCapEventos(capEv.slice(0, 400)); capEv = []; };
+  img.addEventListener("pointerup", fim); img.addEventListener("pointercancel", fim);
+  img.addEventListener("dragstart", e => e.preventDefault());
+})();
+
 /* ---------- botões ---------- */
 $q("cfgBtn").onclick = () => { $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
 $q("fechaCfg").onclick = () => { $q("cfg").classList.remove("on"); try{ speechSynthesis.cancel(); }catch(e){} };
@@ -1268,7 +1504,15 @@ $q("tiraPrint").onclick = tiraPrint;
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
 $q("ligar").onclick = () => ligado ? enviaGravacao() : iniciaGravacao();
-$q("flEnvia").onclick = enviaGravacao; $q("flCancel").onclick = cancelaGravacao;
+$q("flEnvia").onclick = enviaGravacao;
+$q("envMsg").onclick = () => { if(ligado){ enviaGravacao(); return; } const v = $q("msg").value; $q("msg").value = ""; enviaMensagem(v); };
+$q("msg").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); $q("envMsg").click(); } });
+$q("novaConversa").onclick = novaConversa;
+$q("maisCfg").onclick = () => $q("cfgBtn").click();
+$q("capBanner").onclick = () => { if(captchas[0]) abreCaptcha(captchas[0].id); };
+$q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pMais"); };
+$q("capTxtEnv").onclick = () => { const v = $q("capTxt").value.slice(0, 64); if(!v) return; $q("capTxt").value = ""; mandaCapEventos([{ t: "texto", texto: v, dt: 0 }]); };
+document.querySelectorAll("#capTec [data-tecla]").forEach(b => b.onclick = () => mandaCapEventos([{ t: "tecla", tecla: b.dataset.tecla, dt: 0 }])); $q("flCancel").onclick = cancelaGravacao;
 desenhaGrav(); desenhaEnviados();
 $q("parar").onclick = pararTudo; $q("pararMini").onclick = pararTudo;
 $q("aprovaTodas").onclick = aprovaTodas;
@@ -1307,6 +1551,50 @@ async function confereVersao(){
   }catch(e){}
 }
 setInterval(() => { if(!document.hidden) confereVersao(); }, 10 * 60 * 1000);
+async function atualizaAgora(){          // botão Atualizar: limpa o cache do app e recarrega a versão mais nova
+  toast("Atualizando…", "Buscando a versão mais nova.");
+  try{ if(swReg) await swReg.update(); }catch(e){}
+  try{ if(window.caches){ const ks = await caches.keys(); await Promise.all(ks.map(k => caches.delete(k))); } }catch(e){}
+  try{ const rs = await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r => r.unregister())); }catch(e){}
+  location.reload();
+}
+$q("maisAtualiza").onclick = atualizaAgora;
+
+/* ---------- v9.1: chave da IA. Vai direto, por HTTPS, para a função jarvis-config (Supabase Vault). NUNCA fica no app, no localStorage, em log ou no git. ---------- */
+let chaveEst = null;
+async function chamaConfig(corpo){
+  try{
+    const t = await token();
+    const r = await fetch(CFG.url + "/functions/v1/jarvis-config", { method: "POST", headers: { apikey: CFG.anon, Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
+    return (await r.json().catch(() => null)) || { erro: "erro " + r.status };
+  }catch(e){ return { erro: String(e.message || e) }; }
+}
+function desenhaChave(){
+  const e = chaveEst || {};
+  $q("maisChaveTxt").textContent = e.ia ? "Trocar chave" : "Configurar chave da IA";
+  $q("chaveEstado").textContent = !chaveEst ? "Verificando…" : e.bloqueado ? "🔒 Bloqueado (3 PINs errados). Libere pelo PC." : e.ia ? "Chave OK (sk-ant-…" + (e.final4 || "????") + ")" : "A IA está sem chave";
+  $q("chaveInfo").textContent = e.ia ? "Para trocar a chave, digite o PIN e cole a nova." : (e.pin_criado ? "Digite o PIN e cole a chave." : "Crie um PIN de 4 números (guarde-o) e cole a chave da Anthropic.");
+  $q("rotPin").textContent = e.pin_criado ? "PIN (4 números)" : "Crie um PIN (4 números)";
+  $q("chaveForm").style.display = e.bloqueado ? "none" : "";
+}
+async function puxaChave(){
+  const j = await chamaConfig({ acao: "estado" });
+  if(j && !j.erro){ chaveEst = j; desenhaChave(); if(!j.ia && !ARM.get("jv_avisoChave")){ ARM.set("jv_avisoChave", 1); toast("A IA está sem chave", "Mais > Configurar chave da IA"); } }
+}
+$q("maisChave").onclick = () => { $q("chaveRes").textContent = ""; $q("chaveRes").className = "vazio"; vaiPara("pChave"); desenhaChave(); puxaChave(); };
+$q("chaveVolta").onclick = () => vaiPara("pMais");
+$q("chaveSalva").onclick = async () => {
+  const pin = $q("chavePin").value.trim(), chave = $q("chaveVal").value.trim(), res = $q("chaveRes");
+  $q("chavePin").value = ""; $q("chaveVal").value = "";            // a chave some da tela na hora; fica só nesta variável local até o envio
+  if(!/^\d{4}$/.test(pin)){ res.className = "vazio erro"; res.textContent = "O PIN tem 4 números."; return; }
+  if(!/^sk-ant-/.test(chave)){ res.className = "vazio erro"; res.textContent = "Cole a chave que começa com sk-ant-."; return; }
+  $q("chaveSalva").disabled = true; res.className = "vazio"; res.textContent = "Salvando e testando a IA de verdade (uma conversa e uma reescrita)…";
+  const j = await chamaConfig({ acao: "salvar", pin: pin, chave: chave, trocar: true });
+  $q("chaveSalva").disabled = false;
+  if(j && j.final4 !== undefined) chaveEst = Object.assign({}, j, { teste: undefined });
+  if(j && j.salvo){ res.className = "vazio ok"; res.textContent = "IA funcionando ✓ — conversa e reescrita testadas."; toast("IA funcionando ✓", "Chave salva no cofre do Supabase."); desenhaChave(); setTimeout(() => vaiPara("pMais"), 2500); }
+  else { res.className = "vazio erro"; res.textContent = (j && j.erro) || "Não consegui salvar."; desenhaChave(); }
+};
 (function avisaVersao(){
   const ant = ARM.get("jv_versao");
   if(ant && ant !== VERSAO) setTimeout(() => toast("Atualizado para " + VERSAO + " ✓", "O app do Jarvis se atualizou sozinho."), 600);
