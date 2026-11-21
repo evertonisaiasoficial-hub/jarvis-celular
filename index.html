@@ -340,6 +340,11 @@ body.capPisca{animation:capPisca .5s linear 6}
 .sLin{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:11px 12px;margin-bottom:7px;min-height:44px;font:500 13.5px var(--f)}
 .sLin .p{flex:0 0 12px;height:12px;border-radius:50%;background:var(--dim)}.sLin.v .p{background:var(--grn)}.sLin.a .p{background:var(--yel)}.sLin.r .p{background:var(--red)}
 .sLin .c{flex:1;min-width:0}.sLin .c small{display:block;color:var(--dim);font:500 12px var(--f);margin-top:2px}.sLin b{font:700 14px var(--mono)}
+.lj{padding:12px;margin-bottom:9px}.lj .h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font:700 14.5px var(--f)}.lj .h small{font:500 12px var(--mono);color:var(--dim)}
+.lj .q{margin:6px 0;font:500 13px var(--f);color:var(--dim)}.lj .r{margin:6px 0;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.06);font:500 13.5px var(--f);white-space:pre-wrap;-webkit-user-select:text;user-select:text}
+.lj textarea{width:100%;min-height:84px;margin:6px 0;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f)}
+.lj .bt{display:flex;gap:8px;margin-top:6px}.lj .bt button{flex:1}.lj .ok{color:var(--grn);font:600 13px var(--f);margin-top:6px}
+.ljVend{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:6px;font:500 13.5px var(--f)}.ljVend b{font:700 14px var(--mono);color:var(--cy)}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -499,7 +504,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.1</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.2</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -526,6 +531,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
         <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
         <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
         <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
@@ -535,6 +541,13 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
       <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pLojas" class="painel"><div class="tit">Lojas no bolso <span id="ljN"></span></div>
+      <div id="ljResumo" class="vidro" style="padding:12px;margin-bottom:8px;text-align:center;font:700 16px var(--f)"></div>
+      <div class="tit">Vendas de hoje</div><div id="ljVendas"></div>
+      <div class="tit">Esperando você (resposta sugerida)</div><div id="ljPend"></div>
+      <div class="tit">Pix para pagar</div><div id="ljPix"></div>
+      <div class="vazio" style="text-align:left;padding:4px 2px">Nada sai para cliente por aqui: Enviar e Corrigir só avisam o app Cuida Aí Lojas, que confere e responde pelo Chrome dele. Pix: o app nunca paga; "Marcar como pago" só registra que você pagou. O código copia-e-cola não vem para o celular (fica no PC).</div>
     </section>
     <section id="pSaude" class="painel"><div class="tit">Falta você <span id="faltaN"></span></div>
       <div id="faltaLista"></div>
@@ -765,7 +778,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.1";
+const VERSAO = "v10.2";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -1149,7 +1162,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
@@ -1165,10 +1178,11 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
+  if(p === "pLojas") puxaLojas();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -1704,6 +1718,56 @@ async function puxaSaude(){
   l.appendChild(linhaSaude(nt === "granted" ? "v" : "a", "Notificações no iPhone", nt === "granted" ? "Ligadas" : "Desligadas (ligue em Configurações)", nt === "granted" ? "OK" : "OFF"));
 }
 setInterval(() => { if(!document.hidden && painelAtual === "pSaude") puxaSaude(); }, 8000);
+
+/* ---------- Lojas no bolso + Pix para pagar (v10.2) ---------- */
+let ljMarcas = ARM.get("jv_ljmarcas") || {};
+const brl2 = v => v == null ? "—" : "R$ " + Number(v).toFixed(2).replace(".", ",");
+async function marcaLoja(id, marca, texto){
+  try{ await rest("iphone_retorno", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ id: id, marca: marca, texto: texto || "" }) }); }
+  catch(e){ toast("Não consegui registrar", String(e.message || e)); return false; }
+  ljMarcas[id] = { marca: marca, em: Date.now() }; ARM.set("jv_ljmarcas", ljMarcas); return true;
+}
+async function puxaLojas(){
+  const hoje = new Date(), dia = hoje.getFullYear() + "-" + String(hoje.getMonth() + 1).padStart(2, "0") + "-" + String(hoje.getDate()).padStart(2, "0");
+  let vend = [], pend = [], pix = [];
+  try{
+    [vend, pend, pix] = await Promise.all([rest("iphone_vendas?select=loja,plataforma,vendas,chats_respondidos,avaliacoes_respondidas,atualizado_em&dia=eq." + dia + "&order=loja.asc"),
+      rest("iphone_pendentes?select=id,loja,plataforma,motivo,pergunta,resposta_sugerida,quando&order=quando.desc.nullslast&limit=50"),
+      rest("iphone_pix?select=id,loja,plataforma,motivo,valor,quando&order=quando.desc.nullslast&limit=30")]);
+  }catch(e){ $q("ljResumo").textContent = "Sem conexão com os dados das lojas"; return; }
+  vend = vend || []; pend = (pend || []).filter(x => !ljMarcas[x.id]); pix = (pix || []).filter(x => !(ljMarcas[x.id] && ljMarcas[x.id].marca === "pix_pago"));
+  const total = vend.reduce((n, x) => n + (Number(x.vendas) || 0), 0), r = $q("rLojas"); if(r) r.textContent = (pend.length + pix.length) ? String(pend.length + pix.length) : "";
+  $q("ljN").textContent = (pend.length + pix.length) ? "(" + (pend.length + pix.length) + ")" : "";
+  $q("ljResumo").textContent = vend.length ? "Hoje: " + brl2(total) + " em " + vend.length + (vend.length > 1 ? " lojas" : " loja") : "Sem vendas publicadas hoje";
+  const lv = $q("ljVendas"); lv.innerHTML = "";
+  if(!vend.length) lv.innerHTML = '<div class="vazio vidro">O app Cuida Aí Lojas ainda não publicou as vendas de hoje (ligue "App do iPhone" nele).</div>';
+  vend.forEach(x => { const d = document.createElement("div"); d.className = "ljVend vidro"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = x.loja + (x.plataforma ? " · " + x.plataforma : "") + " — " + (x.chats_respondidos || 0) + " chats, " + (x.avaliacoes_respondidas || 0) + " avaliações respondidos"; d.children[1].textContent = brl2(x.vendas); lv.appendChild(d); });
+  const lp = $q("ljPend"); lp.innerHTML = "";
+  if(!pend.length) lp.innerHTML = '<div class="vazio vidro">Nenhuma resposta esperando você ✓</div>';
+  pend.forEach(x => {
+    const d = document.createElement("div"); d.className = "lj vidro";
+    d.innerHTML = '<div class="h"><span></span><small></small></div><div class="q"></div><div class="r"></div><div class="bt"><button class="btop bno bco">✎ Corrigir</button><button class="btop bok ben">Enviar</button></div>';
+    d.querySelector(".h span").textContent = x.loja + (x.plataforma ? " · " + x.plataforma : ""); d.querySelector(".h small").textContent = x.quando ? hm(Number(x.quando)) : "";
+    d.querySelector(".q").textContent = (x.motivo ? x.motivo + " — " : "") + (x.pergunta || ""); d.querySelector(".r").textContent = x.resposta_sugerida || "(sem resposta sugerida)";
+    d.querySelector(".ben").onclick = async () => { if(!(await confirmaCartao("Enviar esta resposta?", "O app Cuida Aí Lojas vai conferir e enviar ao cliente: " + (x.resposta_sugerida || "").slice(0, 160), "Enviar"))) return; if(await marcaLoja(x.id, "enviar")){ toast("Aprovado ✓", "O app Cuida Aí Lojas envia no próximo ciclo.", false); puxaLojas(); } };
+    d.querySelector(".bco").onclick = () => {
+      if(d.querySelector("textarea")) return; const ta = document.createElement("textarea"); ta.value = x.resposta_sugerida || ""; ta.maxLength = 500; d.querySelector(".r").replaceWith(ta);
+      const b = d.querySelector(".bt"); b.innerHTML = '<button class="btop bno bca">Cancelar</button><button class="btop bok bsa">Mandar correção</button>';
+      b.querySelector(".bca").onclick = () => puxaLojas(); b.querySelector(".bsa").onclick = async () => { const t = ta.value.trim(); if(!t) return; if(await marcaLoja(x.id, "corrigir", t)){ toast("Correção enviada ✓", "O app Cuida Aí Lojas refaz a resposta.", false); puxaLojas(); } };
+    };
+    lp.appendChild(d);
+  });
+  const lx = $q("ljPix"); lx.innerHTML = "";
+  if(!pix.length) lx.innerHTML = '<div class="vazio vidro">Nenhum Pix para pagar ✓</div>';
+  pix.forEach(x => {
+    const d = document.createElement("div"); d.className = "lj vidro";
+    d.innerHTML = '<div class="h"><span></span><b></b></div><div class="q"></div><div class="bt"><button class="btop bok bpg">Marcar como pago</button></div>';
+    d.querySelector(".h span").textContent = "💸 " + x.loja + (x.plataforma ? " · " + x.plataforma : ""); d.querySelector(".h b").textContent = brl2(x.valor); d.querySelector(".q").textContent = (x.motivo || "Pix de reposição") + (x.quando ? " · " + hm(Number(x.quando)) : "");
+    d.querySelector(".bpg").onclick = async () => { if(!(await confirmaCartao("Marcar como pago?", "Só registra que VOCÊ já pagou " + brl2(x.valor) + " (" + x.loja + "). O app não paga nada.", "Já paguei"))) return; if(await marcaLoja(x.id, "pix_pago")){ toast("Pix marcado como pago ✓", "", false); puxaLojas(); } };
+    lx.appendChild(d);
+  });
+}
+setInterval(() => { if(!document.hidden && painelAtual === "pLojas") puxaLojas(); }, 20000);
 
 /* ---------- Uso (v10) ---------- */
 const COT_REAL = 5.5;
