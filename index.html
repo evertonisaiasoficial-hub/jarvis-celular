@@ -440,6 +440,18 @@ body.capPisca{animation:capPisca .5s linear 6}
 .mg{min-height:92px}
 /* botões com pelo menos 44px */
 .btop{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 16px}
+@media (max-width:520px){
+  body{font-size:14.5px}
+  #topoTit{font-size:16px}
+  .est b{font-size:15px}.est small{font-size:12.5px}.est i{font-size:32px}
+  #resumo .rc b{font-size:21px}#resumo .rc span{font-size:12px}
+  .avi{padding:10px 12px}.avi .t{font-size:14px}.avi .x{font-size:13px}
+  .caixa h2{font-size:16px}#chatTopo .ct b{font-size:16px}
+  .btop{padding:0 12px;font-size:12.5px}
+  #atalhos button i{font-size:21px}
+  .painel{padding-left:10px;padding-right:10px}
+  .vazio{font-size:13px}
+}
 #nav button{min-height:56px}
 .bpm,.bcor{min-height:44px}
 .btn-pr{min-height:56px}
@@ -473,7 +485,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v9.4</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v9.5</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -723,7 +735,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v9.4";
+const VERSAO = "v9.5";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
