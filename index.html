@@ -565,7 +565,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.7</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.8</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -861,7 +861,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.7";
+const VERSAO = "v10.8";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -2443,10 +2443,10 @@ function capAlerta(){
 }
 let captchas = [], capSel = null, capTimer = null, capVistos = null, capUrl = null, capOlhaT = 0, capEv = [], capT0 = 0, capDown = false;
 async function puxaCaptchas(){
-  try{ captchas = await rest("jarvis_captcha?select=id,loja,url,tipo,quadro,w,h,atualizado_em&estado=eq.aberto&order=atualizado_em.desc") || []; }catch(e){ return; }
+  try{ captchas = await rest("jarvis_captcha?select=id,loja,url,tipo,quadro,w,h,area,atualizado_em&estado=eq.aberto&order=atualizado_em.desc") || []; }catch(e){ return; }
   if(capVistos === null){ capVistos = {}; captchas.forEach(c => capVistos[c.id] = 1); }
   else captchas.forEach(c => { if(!capVistos[c.id]){ capVistos[c.id] = 1; toast("🧩 Captcha em " + c.loja, "Resolva pelo celular."); capAlerta(); if(!capSel && !document.hidden) abreCaptcha(c.id); } });
-  if(capDireto && captchas.length && !capSel){ capDireto = false; abreCaptcha(captchas[0].id); }
+  if(capDireto && captchas.length && !capSel){ capDireto = false; const lj = new URLSearchParams(location.search).get("l"), alvo = (lj && captchas.find(x => x.loja === lj || (lj && x.loja && lj.indexOf(x.loja) >= 0))) || captchas[0]; abreCaptcha(alvo.id); }
   if(capSel && !captchas.some(c => c.id === capSel)) fechaCaptcha("Captcha resolvido ✓");
   desenhaCaptchas(); desenhaBadges();
 }
@@ -2480,7 +2480,14 @@ async function atualizaQuadro(){
     const r = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-captcha/" + encodeURIComponent(c.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
     if(!r.ok) return;
     const u = URL.createObjectURL(await r.blob()), velho = capUrl; capUrl = u; const im = $q("capImg");
-    im.onload = () => { if(capPrimeira){ capPrimeira = false; capS = 2; const t2 = $q("capTela"); capTx = -(t2.clientWidth * (capS - 1)) / 2; capTy = -(t2.clientHeight * (capS - 1)) / 2; capAplica(); } };
+    im.onload = () => {
+      if(!capPrimeira) return; capPrimeira = false; const t2 = $q("capTela"), a = c.area;
+      if(a && a.w > 0 && a.h > 0){                                   // abre ampliado exatamente no captcha (largura inteira, centralizado nele)
+        capS = Math.min(4, Math.max(1.2, 0.94 / Math.max(a.w, a.h)));
+        capTx = t2.clientWidth / 2 - (a.x + a.w / 2) * t2.clientWidth * capS; capTy = t2.clientHeight / 2 - (a.y + a.h / 2) * t2.clientHeight * capS;
+      }else{ capS = 2; capTx = -(t2.clientWidth * (capS - 1)) / 2; capTy = -(t2.clientHeight * (capS - 1)) / 2; }
+      capAplica();
+    };
     im.src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000);
     $q("capTit").textContent = "🧩 " + c.loja + " — ao vivo" + (captchas.length > 1 ? " (" + (captchas.findIndex(x => x.id === capSel) + 1) + " de " + captchas.length + ")" : "");
   }catch(e){} finally{ capBusyF = false; }
