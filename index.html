@@ -486,6 +486,12 @@ body.capPisca{animation:capPisca .5s linear 6}
 #faixa{flex:0 0 auto;padding:0 12px 6px;display:none}
 #app[data-p="pLig"] #faixa,#app[data-p="pTerm"] #faixa{display:block}
 #app[data-p="pLig"] #topo,#app[data-p="pInicio"] #topo{display:none}
+#avChips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:0 0 8px}
+#avCtl{min-height:44px}#avCtl.on{background:#ff9f1a;color:#1a1200;border-color:#ff9f1a;font-weight:700}
+#avTela.ctl{outline:4px solid #ff9f1a;outline-offset:-4px}
+.fixAcoes{display:flex;flex-direction:column;gap:8px;margin:2px 0 10px}.fixAcoes .l{display:flex;gap:8px}.fixAcoes input{flex:1;min-width:0;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:inherit;font:inherit}
+.fixAcoes .btop{min-height:44px}
+#app[data-p="pLig"] #faixa{display:none!important}
 #cfgGrade{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 #cfgGrade .mg{min-height:56px}
 @media (min-width:760px){#faixa{display:block}}
@@ -593,12 +599,13 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v47</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v48</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
       <button class="parar2" id="pararTerm"></button>
       <div id="termAbas"></div>
+      <button class="btop bok" id="abreJanelas" style="width:100%;min-height:44px;margin:2px 0 8px">🪟 Janelas do PC ao vivo</button>
       <div id="termCab" class="vidro"><div class="l1"><i class="d"></i><span id="tcNome"></span><span id="tcPz"></span><span class="tm" id="tcTempo"></span></div><div class="at" id="tcAtual"></div></div>
       <pre id="termSaida">Carregando a saída do terminal…</pre>
       <button id="voltaFim">↓ ao vivo</button>
@@ -625,7 +632,8 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     </section>
     <section id="pAoVivo" class="painel"><div class="tit">Ao vivo do PC <span class="sp"></span><button class="btop bno" id="avParar">■ Parar</button></div>
       <div id="avAviso">● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.</div>
-      <div id="avBar"><select id="avAlvo" aria-label="Tela ou janela"><option value="tela">Tela inteira</option></select><button class="btop bno" id="avMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="avMais" aria-label="Mais zoom">+</button><button class="btop bno" id="avAjusta">Ajustar</button><button class="btop bno" id="avSobe" aria-label="Rolar para cima">⇧</button><button class="btop bno" id="avDesce" aria-label="Rolar para baixo">⇩</button></div>
+      <div id="avChips"></div>
+      <div id="avBar"><button class="btop bno" id="avCtl" aria-pressed="false">🔒 Controlar: desligado</button><select id="avAlvo" aria-label="Tela ou janela"><option value="tela">Tela inteira</option></select><button class="btop bno" id="avMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="avMais" aria-label="Mais zoom">+</button><button class="btop bno" id="avAjusta">Ajustar</button><button class="btop bno" id="avSobe" aria-label="Rolar para cima">⇧</button><button class="btop bno" id="avDesce" aria-label="Rolar para baixo">⇩</button></div>
       <div id="avTela"><div id="avZ"><img id="avImg" alt="Tela do PC ao vivo" draggable="false"></div><div id="avDot"></div></div>
       <div class="vazio" style="text-align:left;padding:6px 2px">Um toque = um clique no PC. Dois dedos: zoom e mover. Se o toque cair em pagar, excluir, enviar dinheiro ou desligar, o PC pergunta aqui antes de clicar. A imagem não fica guardada.</div>
     </section>
@@ -898,7 +906,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v47";
+const VERSAO = "v48";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1445,7 +1453,7 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pVer: "pTerm", pTar: "pInicio", pAvisos: "pMais", pChave: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTerm", pVer: "pTerm", pTar: "pInicio", pAvisos: "pMais", pChave: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
@@ -1641,6 +1649,7 @@ function enviaGravacao(){
   $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig");
   /* (21/11, dono, prioridade A) a fala segue DIRETO e na hora para o terminal selecionado: sem tela de revisão, sem esperar confirmação e sem reescrever antes
      (assim a resposta do Claude não chega antes da fala corrigida). O texto fica na conversa logo depois. Sem terminal escolhido, cai no fluxo de antes. */
+  if(fixAtivo){ mandaClaude(t).then(ok => { if(!ok) enviaMensagem(t); }); return; }
   if(destino && !RX_MANDA.test(t) && !tentaAgendar(t)){
     const t0 = performance.now(); bal("dono", t);
     mandaPedido(destino, t.slice(0, 3900)).then(ok => {
@@ -1943,8 +1952,36 @@ async function carregaConversa(){
 function novaConversa(){ conversaId = "c" + Date.now(); ARM.set("jv_conversa", conversaId); notaPendente = ""; carregaConversa(); }
 const RX_MANDA = /^\s*(manda|pode mandar|envia|enviar|manda sim|sim,? manda|ok,? manda|pode enviar|confirma|confirmo)\b/i;
 const RX_CORRIGE = /^\s*corrig/i;
+/* ---------- v48: chat único com o Claude fixado do PC (lado do app). O PC liga publicando jarvis_uso id=claude_fixado {ativo:true} (renovado a cada <3 min);
+   texto do dono -> jarvis_claude_chat (papel dono); resposta do Claude -> papel claude. Sem o lado do PC, tudo segue como antes e o app avisa. ---------- */
+let fixAtivo = false, fixUltId = ARM.get("jv_fixid"), fixAvisou = false, fixBusy = false;
+async function puxaFixado(){
+  try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0]; fixAtivo = !!(x && x.dados && x.dados.ativo && Date.now() - new Date(x.atualizado_em).getTime() < 180000); }catch(e){ fixAtivo = false; }
+  if(!fixAtivo && !fixAvisou && painelAtual === "pLig" && carregouAbas){ fixAvisou = true; bal("nota", "O chat do Claude fixado ainda não está ligado no PC. Por enquanto seus pedidos seguem pelo caminho de antes; nada trava."); }
+}
+async function mandaClaude(texto){
+  bal("dono", texto);
+  try{ await rest("jarvis_claude_chat", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ papel: "dono", texto: texto.slice(0, 3900) }) }); toast("Enviado ao Claude", texto.slice(0, 100)); return true; }
+  catch(e){ toast("Não consegui falar com o Claude do PC", String(e.message || e).slice(0, 80), false); return false; }
+}
+function fixAcoes(){
+  const w = document.createElement("div"); w.className = "fixAcoes"; w.innerHTML = '<button class="btop bok" data-a="ok">✓ Pode enviar</button><div class="l"><input maxlength="900" placeholder="Corrigir… (escreva o que mudar)" autocomplete="off"><button class="btop bno" data-a="cor">Corrigir</button></div>';
+  w.querySelector('[data-a="ok"]').onclick = () => { w.remove(); mandaClaude("pode enviar"); };
+  const i = w.querySelector("input"), c = () => { const v = i.value.trim(); if(!v) return; w.remove(); mandaClaude(v); }; w.querySelector('[data-a="cor"]').onclick = c; i.addEventListener("keydown", e => { if(e.key === "Enter") c(); });
+  return w;
+}
+async function puxaRespostaClaude(){
+  if(!fixAtivo || fixBusy || document.hidden || painelAtual !== "pLig") return; fixBusy = true;
+  try{
+    if(fixUltId == null){ const u = ((await rest("jarvis_claude_chat?select=id&order=id.desc&limit=1")) || [])[0]; fixUltId = u ? u.id : 0; ARM.set("jv_fixid", fixUltId); }
+    else { const l = (await rest("jarvis_claude_chat?select=id,papel,texto&papel=eq.claude&id=gt." + fixUltId + "&order=id.asc&limit=10")) || [];
+      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal("jarvis", String(m.texto).slice(0, 700)); $q("chat").appendChild(fixAcoes()); rolaChat(); }); if(l.length) ARM.set("jv_fixid", fixUltId); }
+  }catch(e){} fixBusy = false;
+}
+setInterval(puxaRespostaClaude, 2000); setInterval(() => { if(!document.hidden && sess) puxaFixado(); }, 20000); setTimeout(() => { if(sess) puxaFixado(); }, 2500);
 async function enviaMensagem(texto){
   texto = String(texto || "").trim(); if(!texto || conversando) return;
+  if(fixAtivo){ if(await mandaClaude(texto)) return; }
   const ag = tentaAgendar(texto);
   if(ag){
     if(!destino){ toast("Escolha o terminal", "Toque num terminal lá em cima antes de agendar.", false); return; }
@@ -2046,7 +2083,7 @@ function rtMuda(tab){
     else if(tab === "jarvis_avisos") puxaAvisos();
     else if(tab === "jarvis_captcha") puxaCaptchas();
     else if(tab === "jarvis_pedidos") acompanhaOrdens();
-    else if(tab === "jarvis_uso"){ puxaUsoInicio(); puxaManha(); puxaSilencio(); if(painelAtual === "pUso") puxaUso(); }
+    else if(tab === "jarvis_uso"){ puxaFixado(); puxaUsoInicio(); puxaManha(); puxaSilencio(); if(painelAtual === "pUso") puxaUso(); }
     else if(tab === "jarvis_agenda" && painelAtual === "pAgenda") puxaAgenda();
   }, 250);
 }
@@ -2279,15 +2316,14 @@ const avRow = () => rest("jarvis_aovivo?id=eq.pc&select=ver_ate,alvo,quadro,w,h,
 async function avLiga(){ try{ await rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString(), alvo: $q("avAlvo").value || "tela" }) }); }catch(e){} }
 async function abreAoVivo(){
   if(avAtivo) return;
-  if(!(await exigeFace("Ver e tocar na tela do PC"))){ vaiPara("pMais"); return; }
-  avAtivo = true; avS = 1; avTx = avTy = 0; avVisto = ""; avConf = ""; avAvisouFim = false; $q("avImg").removeAttribute("src"); avAplica();
-  $q("avAviso").textContent = "● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.";
+  if(!(await exigeFace("Ver e tocar na tela do PC"))){ vaiPara("pTerm"); return; }
+  avAtivo = true; avS = 1; avTx = avTy = 0; avVisto = ""; avConf = ""; avAvisouFim = false; $q("avImg").removeAttribute("src"); avAplica(); avCtlSet(false);
   await avLiga();
   avTimers.push(setInterval(avLiga, 15000), setInterval(avPoll, 900));
   avPoll();
 }
 function paraAoVivo(motivo){
-  if(!avAtivo) return; avAtivo = false; avTimers.forEach(clearInterval); avTimers = [];
+  if(!avAtivo) return; avAtivo = false; avCtlSet(false); avTimers.forEach(clearInterval); avTimers = [];
   rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: null }) }).catch(() => {});
   const im = $q("avImg"); im.removeAttribute("src"); if(avUrl){ try{ URL.revokeObjectURL(avUrl); }catch(_){} avUrl = null; }
 }
@@ -2298,7 +2334,7 @@ async function avPoll(){
     const r = ((await avRow()) || [])[0]; if(!r) return;
     if(r.aviso && /^Desligou/.test(r.aviso) && !avAvisouFim){ avAvisouFim = true; $q("avAviso").textContent = "⏹ " + r.aviso + ". Toque em Mais e abra Ao vivo de novo para ligar."; toast("Ao vivo desligou", r.aviso, false); paraAoVivo(r.aviso); return; }
     const sel = $q("avAlvo"), tem = Array.from(sel.options).map(o => o.value).join("|"), jn = (r.janelas || []).map(j => j.id).join("|");
-    if(("tela|" + jn) !== tem){ const v = sel.value; sel.innerHTML = '<option value="tela">Tela inteira</option>'; (r.janelas || []).forEach(j => { const o = document.createElement("option"); o.value = "janela:" + j.id; o.textContent = "Janela: " + j.titulo; sel.appendChild(o); }); sel.value = Array.from(sel.options).some(o => o.value === v) ? v : "tela"; }
+    if(("tela|" + jn) !== tem){ const v = sel.value; sel.innerHTML = '<option value="tela">Tela inteira</option>'; (r.janelas || []).forEach(j => { const o = document.createElement("option"); o.value = "janela:" + j.id; o.textContent = "Janela: " + j.titulo; sel.appendChild(o); }); sel.value = Array.from(sel.options).some(o => o.value === v) ? v : "tela"; avChipsDesenha(r.janelas); }
     if(r.confirmar && r.confirmar.id && r.confirmar.id !== avConf){
       avConf = r.confirmar.id; const sim = await confirmaCartao("Confirmar clique no PC?", r.confirmar.texto || "Esse ponto parece sensível.", "Clicar");
       try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [{ t: "confirma", id: r.confirmar.id, sim: !!sim }] }) }); }catch(e){}
@@ -2311,7 +2347,16 @@ async function avPoll(){
   }catch(e){} finally{ avBusy = false; }
 }
 document.addEventListener("visibilitychange", () => { if(document.hidden && avAtivo) paraAoVivo("O app foi para o fundo"); });
-$q("avParar").onclick = () => { paraAoVivo("Parei"); vaiPara("pMais"); };
+$q("avParar").onclick = () => { paraAoVivo("Parei"); vaiPara("pTerm"); };
+$q("abreJanelas").onclick = () => vaiPara("pAoVivo");
+/* v48: Controlar (desligado por padrão): ligado, toque vira clique e arrastar vira rolagem; borda laranja; desliga sozinho ao sair */
+let avCtl = false;
+function avCtlSet(v){ avCtl = !!v; const b = $q("avCtl"); b.classList.toggle("on", avCtl); b.setAttribute("aria-pressed", avCtl ? "true" : "false"); b.textContent = avCtl ? "🔓 Controlar: LIGADO" : "🔒 Controlar: desligado"; $q("avTela").classList.toggle("ctl", avCtl); $q("avAviso").textContent = avCtl ? "🟠 CONTROLANDO o PC: toque = clique, arrastar = rolar." : "👁 Só assistindo: o toque não faz nada no PC. Ligue Controlar para clicar."; }
+$q("avCtl").onclick = () => avCtlSet(!avCtl);
+function avChipsDesenha(janelas){
+  const c = $q("avChips"), sel = $q("avAlvo").value; c.innerHTML = "";
+  [{ v: "tela", t: "🖥 Tela inteira" }].concat((janelas || []).map(j => ({ v: "janela:" + j.id, t: j.titulo }))).forEach(x => { const b = document.createElement("button"); b.className = "chip" + (x.v === sel ? " sel" : ""); b.textContent = x.t; b.onclick = () => { $q("avAlvo").value = x.v; avCtlSet(false); $q("avAlvo").onchange(); avChipsDesenha(janelas); }; c.appendChild(b); });
+}
 $q("avAlvo").onchange = () => { avLiga(); avS = 1; avTx = avTy = 0; avAplica(); };
 function avAplica(){
   const t = $q("avTela"), w = t.clientWidth, h = t.clientHeight; avS = Math.min(5, Math.max(1, avS));
@@ -2321,7 +2366,7 @@ function avAplica(){
 function avZoom(f){ const t = $q("avTela"), cx = t.clientWidth / 2, cy = t.clientHeight / 2, s0 = avS; avS = Math.min(5, Math.max(1, avS * f)); const k = avS / s0; avTx = cx - (cx - avTx) * k; avTy = cy - (cy - avTy) * k; avAplica(); }
 $q("avMenos").onclick = () => avZoom(1 / 1.4); $q("avMais").onclick = () => avZoom(1.4); $q("avAjusta").onclick = () => { avS = 1; avTx = avTy = 0; avAplica(); };
 async function avEnvia(ev){ try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [ev] }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e), false); } }
-$q("avSobe").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $q("avDesce").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: -360 });
+$q("avSobe").onclick = () => !avCtl ? toast("Só assistindo", "Ligue Controlar para rolar.", false) : avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $q("avDesce").onclick = () => !avCtl ? toast("Só assistindo", "Ligue Controlar para rolar.", false) : avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: -360 });
 (function toquesAoVivo(){
   const tela = $q("avTela"); let ini = null;
   tela.addEventListener("pointerdown", e => {
@@ -2333,11 +2378,14 @@ $q("avSobe").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $
     if(!avPtr[e.pointerId]) return; avPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(avPtr);
     if(avGest && ids.length >= 2){ const a = avPtr[ids[0]], b = avPtr[ids[1]], tr = tela.getBoundingClientRect(), d = Math.hypot(a.x - b.x, a.y - b.y) || 1, cx = (a.x + b.x) / 2 - tr.left, cy = (a.y + b.y) / 2 - tr.top; avS = Math.min(5, Math.max(1, avGest.s * d / avGest.d)); const k = avS / avGest.s; avTx = cx - (avGest.cx - avGest.tx) * k; avTy = cy - (avGest.cy - avGest.ty) * k; avAplica(); return; }
     if(ini && Math.hypot(e.clientX - ini.x, e.clientY - ini.y) > 10) ini.mov = true;
+    if(avCtl && ini && ini.mov){ const agora = Date.now(); if(ini.ly == null){ ini.ly = ini.y; ini.lt = 0; }
+      if(agora - ini.lt > 140){ const r = $q("avImg").getBoundingClientRect(), dy = (e.clientY - ini.ly) * 3; if(r.width && Math.abs(dy) >= 3){ avEnvia({ t: "rolar", x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)), dy: Math.round(dy) }); } ini.ly = e.clientY; ini.lt = agora; } }
   });
   const fim = e => {
     if(!avPtr[e.pointerId]) return; delete avPtr[e.pointerId]; const n = Object.keys(avPtr).length;
     if(avGest){ if(n < 2) avGest = null; ini = null; return; }
-    if(ini && !ini.mov && e.type === "pointerup" && Date.now() - ini.t < 600){
+    if(ini && !ini.mov && !avCtl && e.type === "pointerup" && Date.now() - ini.t < 600){ toast("Só assistindo", "Ligue o botão Controlar para clicar no PC.", false); }
+    if(ini && !ini.mov && avCtl && e.type === "pointerup" && Date.now() - ini.t < 600){
       const r = $q("avImg").getBoundingClientRect(), tr = tela.getBoundingClientRect(); if(!r.width) { ini = null; return; }
       const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
       if(x >= 0 && x <= 1 && y >= 0 && y <= 1){ const d = $q("avDot"); d.style.left = (e.clientX - tr.left) + "px"; d.style.top = (e.clientY - tr.top) + "px"; d.style.display = "block"; setTimeout(() => { d.style.display = "none"; }, 700); avEnvia({ t: "toque", x: x, y: y }); }
@@ -2470,7 +2518,7 @@ $q("agSalva").onclick = async () => {
 setInterval(() => { if(!document.hidden && painelAtual === "pAgenda") puxaAgenda(); }, 15000);
 
 /* ---------- Favoritos, abrir já ouvindo, cartão de concluída (v10.3) ---------- */
-const FAV_PADRAO = [["📷 Print do PC", "__print"], ["Como estão os terminais?", "Como estão os terminais?"], ["Zerar chats", "Zerar chats das lojas"], ["Oferta relâmpago amanhã", "Programar oferta relâmpago para amanhã"]];
+const FAV_PADRAO = [["Como estão os terminais", "Como estão os terminais?"], ["📷 Print do PC", "__print"]];   // v48: só 2 botões rápidos
 let favMeus = ARM.get("jv_fav") || [];
 function desenhaFavs(){
   const f = $q("favs"); f.innerHTML = "";
@@ -2484,8 +2532,6 @@ function desenhaFavs(){
     f.appendChild(b);
   };
   FAV_PADRAO.forEach(x => mk(x[0], () => x[1] === "__print" ? tiraPrint() : enviaMensagem(x[1])));
-  favMeus.forEach(x => mk(x, () => enviaMensagem(x), "meu", true));
-  mk("＋ Criar", () => { $q("favNovo").classList.add("on"); $q("favTxt").focus(); }, "mais");
 }
 $q("favSalva").onclick = () => { const v = $q("favTxt").value.trim().slice(0, 80); if(!v) return; if(!favMeus.includes(v)) favMeus.push(v); favMeus = favMeus.slice(0, 12); ARM.set("jv_fav", favMeus); $q("favTxt").value = ""; $q("favNovo").classList.remove("on"); desenhaFavs(); };
 $q("favCancela").onclick = () => { $q("favTxt").value = ""; $q("favNovo").classList.remove("on"); };
