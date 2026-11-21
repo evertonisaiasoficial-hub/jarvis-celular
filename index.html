@@ -345,6 +345,11 @@ body.capPisca{animation:capPisca .5s linear 6}
 .lj textarea{width:100%;min-height:84px;margin:6px 0;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f)}
 .lj .bt{display:flex;gap:8px;margin-top:6px}.lj .bt button{flex:1}.lj .ok{color:var(--grn);font:600 13px var(--f);margin-top:6px}
 .ljVend{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:6px;font:500 13.5px var(--f)}.ljVend b{font:700 14px var(--mono);color:var(--cy)}
+#favs{flex:0 0 auto;display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 12px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}#favs::-webkit-scrollbar{display:none}
+.fv{flex:0 0 auto;min-height:44px;padding:0 14px;border-radius:20px;border:1px solid var(--edge);background:var(--glass2);color:var(--txt);font:600 13px var(--f);white-space:nowrap}.fv.meu{border-color:color-mix(in srgb,var(--cy) 50%,transparent)}.fv.mais{color:var(--cy)}.fv:active{transform:scale(.96)}
+#favNovo{display:none;flex:0 0 auto;gap:8px;padding:0 12px 6px}#favNovo.on{display:flex}#favNovo input{flex:1;min-width:0;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f)}
+#cartao{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.62);padding:18px}#cartao.on{display:flex}
+#cartao .cx{width:100%;max-width:420px;max-height:84vh;overflow:auto;padding:16px}#cartao .cx h3{font:700 16px var(--f);margin-bottom:10px}#cartao .cx h4{font:600 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:12px 0 4px}#cartao .cx p{font:500 14px var(--f);white-space:pre-wrap;-webkit-user-select:text;user-select:text}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -503,8 +508,9 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div id="chat"></div>
       <div id="legenda"></div>
+      <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.2</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.3</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -617,6 +623,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
   <p class="s l1" style="margin:10px 0 0">Face ID: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
 </div></div>
+<div id="cartao"><div class="cx vidro"><h3 id="cartT"></h3><h4>O que pedi</h4><p id="cartPed"></p><h4>O que foi feito</h4><p id="cartFeito"></p><h4>Terminal · quando</h4><p id="cartQuando"></p><div style="display:flex;gap:8px;margin-top:14px"><button class="btop bno" id="cartPrint" style="flex:1">📷 Ver print do PC</button><button class="btop bok" id="cartFecha" style="flex:1">Fechar</button></div></div></div>
 <div class="cartao" id="conf"><div class="caixa vidro"><h2 id="confT"></h2><p class="s" id="confX"></p><div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="confNao">Cancelar</button><button class="bok" id="confSim">Sim</button></div></div></div></div>
 <div class="cartao" id="login"><div class="caixa vidro">
   <h2>Jarvis</h2>
@@ -778,7 +785,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.2";
+const VERSAO = "v10.3";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -1143,6 +1150,7 @@ function desenhaAvisos(){
     const d = document.createElement("div"); d.className = "avi vidro"; d.dataset.t = x.tipo;
     d.innerHTML = '<div class="ic"></div><div class="c"><div class="t"></div><div class="x"></div><div class="h"></div></div>';
     d.querySelector(".ic").textContent = ICONE[x.tipo] || "🔔"; d.querySelector(".t").textContent = x.titulo; d.querySelector(".x").textContent = x.texto || ""; d.querySelector(".h").textContent = hm(new Date(x.criado_em).getTime());
+    if(x.tipo === "concluida"){ d.style.cursor = "pointer"; d.onclick = () => abreCartao(x); }
     l.appendChild(d);
   });
   desenhaBadges();
@@ -1718,6 +1726,44 @@ async function puxaSaude(){
   l.appendChild(linhaSaude(nt === "granted" ? "v" : "a", "Notificações no iPhone", nt === "granted" ? "Ligadas" : "Desligadas (ligue em Configurações)", nt === "granted" ? "OK" : "OFF"));
 }
 setInterval(() => { if(!document.hidden && painelAtual === "pSaude") puxaSaude(); }, 8000);
+
+/* ---------- Favoritos, abrir já ouvindo, cartão de concluída (v10.3) ---------- */
+const FAV_PADRAO = [["📷 Print do PC", "__print"], ["Como estão os terminais?", "Como estão os terminais?"], ["Zerar chats", "Zerar chats das lojas"], ["Oferta relâmpago amanhã", "Programar oferta relâmpago para amanhã"]];
+let favMeus = ARM.get("jv_fav") || [];
+function desenhaFavs(){
+  const f = $q("favs"); f.innerHTML = "";
+  const mk = (rot, fn, cls, apaga) => {
+    const b = document.createElement("button"); b.className = "fv " + (cls || ""); b.textContent = rot; let t = null, longo = false;
+    b.addEventListener("click", () => { if(longo){ longo = false; return; } fn(); });
+    if(apaga){
+      b.addEventListener("pointerdown", () => { longo = false; t = setTimeout(async () => { longo = true; if(await confirmaCartao("Apagar favorito?", rot, "Apagar")){ favMeus = favMeus.filter(x => x !== rot); ARM.set("jv_fav", favMeus); desenhaFavs(); } }, 700); });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(e => b.addEventListener(e, () => clearTimeout(t)));
+    }
+    f.appendChild(b);
+  };
+  FAV_PADRAO.forEach(x => mk(x[0], () => x[1] === "__print" ? tiraPrint() : enviaMensagem(x[1])));
+  favMeus.forEach(x => mk(x, () => enviaMensagem(x), "meu", true));
+  mk("＋ Criar", () => { $q("favNovo").classList.add("on"); $q("favTxt").focus(); }, "mais");
+}
+$q("favSalva").onclick = () => { const v = $q("favTxt").value.trim().slice(0, 80); if(!v) return; if(!favMeus.includes(v)) favMeus.push(v); favMeus = favMeus.slice(0, 12); ARM.set("jv_fav", favMeus); $q("favTxt").value = ""; $q("favNovo").classList.remove("on"); desenhaFavs(); };
+$q("favCancela").onclick = () => { $q("favTxt").value = ""; $q("favNovo").classList.remove("on"); };
+$q("favTxt").addEventListener("keydown", e => { if(e.key === "Enter") $q("favSalva").click(); });
+desenhaFavs();
+/* ?ouvir=1: abre e já liga o ditado (o iOS pode exigir um toque; se barrar, avisa) */
+(function abreOuvindo(){
+  if(!/(^|[?&])ouvir=1/.test(location.search)) return;
+  setTimeout(() => { try{ vaiPara("pLig"); if(!ligado) iniciaGravacao(); }catch(e){} setTimeout(() => { if(!ligado) toast("Toque no microfone 🎙", "O iPhone pediu um toque para liberar o microfone.", false); }, 1500); }, 900);
+})();
+/* cartão de tarefa concluída: o que pedi, o que foi feito, terminal e quando */
+async function abreCartao(x){
+  $q("cartT").textContent = x.titulo || "Tarefa concluída"; $q("cartFeito").textContent = x.texto || "(sem detalhes)";
+  $q("cartQuando").textContent = (x.aba || "—") + " · " + hm(new Date(x.criado_em).getTime()); $q("cartPed").textContent = "Procurando o pedido…"; $q("cartao").classList.add("on");
+  let ped = "";
+  try{ if(x.aba){ const r = await rest("jarvis_pedidos?select=texto,criado_em&aba=eq." + encodeURIComponent(x.aba) + "&criado_em=lte." + encodeURIComponent(x.criado_em) + "&order=criado_em.desc&limit=1") || []; ped = r[0] ? r[0].texto : ""; } }catch(e){}
+  $q("cartPed").textContent = ped || "Não achei o pedido original (ele pode ter vindo direto do PC).";
+}
+$q("cartFecha").onclick = () => $q("cartao").classList.remove("on");
+$q("cartPrint").onclick = () => { $q("cartao").classList.remove("on"); vaiPara("pPrint"); };
 
 /* ---------- Lojas no bolso + Pix para pagar (v10.2) ---------- */
 let ljMarcas = ARM.get("jv_ljmarcas") || {};
