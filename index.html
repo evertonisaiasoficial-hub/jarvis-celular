@@ -119,7 +119,7 @@ button:active{transform:scale(.97)}
 #termCab .l1 .tm{margin-left:auto;font:500 12px var(--mono);color:var(--dim)}
 #termCab .at{margin-top:6px;padding:7px 10px;border-radius:10px;background:rgba(255,210,74,.12);border:1px solid rgba(255,210,74,.45);color:var(--yel);font-size:13px}
 #termCab .at:empty{display:none}
-#termSaida{flex:0 0 auto;height:max(220px,48vh);margin:8px 0;padding:10px 12px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre-wrap;word-break:break-word;
+#termSaida{touch-action:pan-x pan-y;font-size:var(--tfs,12px)!important;flex:0 0 auto;height:max(220px,48vh);margin:8px 0;padding:10px 12px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre-wrap;word-break:break-word;
   font:11.5px/1.45 var(--mono);color:#d7dcf5;background:rgba(0,0,0,.42);border:1px solid var(--line);border-radius:14px;-webkit-user-select:text;user-select:text}
 #termFila{flex:0 0 auto}
 #voltaFim{position:sticky;bottom:6px;align-self:center;display:none;padding:6px 14px;border-radius:99px;background:var(--cy);color:#1a1206;font:600 12px var(--f)}
@@ -455,7 +455,7 @@ body.capPisca{animation:capPisca .5s linear 6}
   .mini .n{font-size:16.5px}.mini .n .tm{font-size:12.5px}.mini .a{font-size:15px;margin-top:4px}.mini .l{font-size:13px;margin-top:4px}
   #resumoLig button{padding:16px 6px;font-size:14.5px}
   #termCab{padding:14px}#termCab .l1{font-size:17px}#termCab .at{font-size:14.5px;padding:10px 12px}
-  #termSaida{height:60vh;font-size:13px;line-height:1.5;padding:12px 14px}
+  #termSaida{height:60vh;line-height:1.5;padding:12px 14px}
   .tp pre{font-size:var(--fs,13px)}
   .tar{padding:13px 12px;font-size:15px;gap:10px}.tar .nn{font-size:13.5px;min-width:32px}
   .bpm,.bcor{padding:11px 13px;font-size:13.5px}
@@ -485,6 +485,9 @@ body.capPisca{animation:capPisca .5s linear 6}
 #cfgBtn{width:44px;height:44px;font-size:21px;border-radius:12px;flex:0 0 auto}
 #faixa{flex:0 0 auto;padding:0 12px 6px;display:none}
 #app[data-p="pLig"] #faixa,#app[data-p="pTerm"] #faixa{display:block}
+#app[data-p="pLig"] #topo,#app[data-p="pInicio"] #topo{display:none}
+#cfgGrade{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+#cfgGrade .mg{min-height:56px}
 @media (min-width:760px){#faixa{display:block}}
 #chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
 .chip{min-height:44px}
@@ -493,6 +496,20 @@ body.capPisca{animation:capPisca .5s linear 6}
 .est i{font-style:normal;font-size:38px;line-height:1}.est b{font:600 16px var(--f)}.est small{color:var(--dim);font-size:13.5px}
 .est .girando{animation:gira 1.2s linear infinite;display:inline-block}
 @keyframes gira{to{transform:rotate(360deg)}}
+/* v46: Início limpo */
+#inPc{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:10px}
+#inPc .c{flex:1;min-width:0}#inPc b{display:block;font:700 15px var(--f)}#inPc small{display:block;font:500 12px var(--mono);color:var(--dim)}
+#cfgBtn2{width:44px;height:44px;font-size:21px;border-radius:12px;background:var(--glass2);flex:0 0 auto}
+:root{--amar:#ffd23f}
+.inT.trab .p,.inT.perg .p{background:var(--amar);box-shadow:0 0 8px var(--amar)}.inT.trab .c b,.inT.perg .c b,.inT.trab em,.inT.perg em{color:var(--amar)}
+.inT.livre .c b{color:#fff}.inT.livre .p{background:#fff}
+.inT{flex-wrap:wrap}.inTL{flex:0 0 100%;width:100%;margin-top:6px}
+.itar{display:flex;align-items:flex-start;gap:8px;padding:9px 6px;border-top:1px solid var(--line);min-height:44px;color:#fff;font:500 13.5px var(--f)}
+.itar.atual{color:var(--amar);font-weight:700}.itar .n{flex:0 0 auto;font:600 12px var(--mono);opacity:.7;padding-top:1px}.itar .t{flex:1;min-width:0}
+.itar .ord{flex:0 0 100%;white-space:pre-wrap;word-break:break-word;font:500 12.5px var(--f);color:var(--dim);padding:6px 4px 2px}
+.itar{flex-wrap:wrap}
+#inConc .inT{margin-top:4px}#inConc .itar{color:var(--dim)}
+#cfg .caixa{max-height:90vh;overflow-y:auto}
 /* início: resumo + atalhos */
 #inicio{display:none;flex:0 0 auto}
 #inicio.on{display:block}
@@ -551,10 +568,12 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <main id="corpo">
     <section id="pInicio" class="painel">
       <div id="inCorpo">
+        <div id="inPc" class="vidro"><span id="inPcDot" class="pcd"></span><div class="c"><b id="inPcTxt">PC…</b><small id="inPcUlt"></small></div><button id="cfgBtn2" title="Configurações" aria-label="Configurações">⚙</button></div>
         <div class="tit">Gastos do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
         <div id="inManha"></div>
         <div id="inSil"></div>
         <div class="tit">Terminais</div><div id="inTerm"></div>
+        <div id="inConc"></div>
         <button id="inAut" class="vidro"><span>Autorizações esperando você</span><b>0</b></button>
         <div class="tit">Último aviso importante</div><div id="inAviso"></div>
       </div>
@@ -574,10 +593,10 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v45</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v47</span></div>
     </section>
     <section id="pTerm" class="painel">
-      <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
+      <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
       <button class="parar2" id="pararTerm"></button>
       <div id="termAbas"></div>
       <div id="termCab" class="vidro"><div class="l1"><i class="d"></i><span id="tcNome"></span><span id="tcPz"></span><span class="tm" id="tcTempo"></span></div><div class="at" id="tcAtual"></div></div>
@@ -600,20 +619,9 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <button class="parar2" id="pararMais"></button>
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
-        <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
-        <button class="mg vidro" data-ir="pVer"><i>👁</i>Ver terminais</button>
-        <button class="mg vidro" data-ir="pAoVivo"><i>🖥</i>Ao vivo</button>
-        <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
-        <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
-        <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
-        <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
-        <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
+        <button class="mg vidro" data-ir="pAvisos"><i>🔔</i>Avisos<b id="rAvisos"></b></button>
         <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
-        <button class="mg vidro" id="maisChave"><i>🔑</i><span id="maisChaveTxt">Chave da IA</span></button>
-        <button class="mg vidro" id="maisAtualiza"><i>⟳</i>Atualizar</button>
       </div>
-      <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
-      <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
     </section>
     <section id="pAoVivo" class="painel"><div class="tit">Ao vivo do PC <span class="sp"></span><button class="btop bno" id="avParar">■ Parar</button></div>
       <div id="avAviso">● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.</div>
@@ -697,8 +705,6 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <button data-p="pInicio" class="on"><i>🏠</i>Início</button>
     <button data-p="pLig"><i>💬</i>Conversa</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
-    <button data-p="pTar"><i>☰</i>Tarefas</button>
-    <button data-p="pAvisos"><i>🔔</i>Avisos</button>
     <button data-p="pMais"><i>⋯</i>Mais</button>
   </nav>
 </div>
@@ -712,6 +718,19 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0;display:none"></p>
+  <div class="tit" style="margin-top:14px">Ferramentas</div>
+  <div id="cfgGrade">
+    <button class="mg vidro" id="maisChave"><i>🔑</i><span id="maisChaveTxt">Chave da IA</span></button>
+    <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
+    <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
+    <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
+    <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+    <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
+    <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
+    <button class="mg vidro" data-ir="pAoVivo"><i>🖥</i>Ao vivo (tela do PC)</button>
+    <button class="mg vidro" id="maisAtualiza"><i>⟳</i>Atualizar</button>
+  </div>
+  <div style="display:none"><div id="vivo"></div><div id="enviados"></div></div>
   <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
   <p class="s l1" style="margin:10px 0 0">Face ID: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
 </div></div>
@@ -879,7 +898,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v45";
+const VERSAO = "v47";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -937,7 +956,7 @@ setTimeout(() => { if(!carregouAbas) desenhaTudo(); }, 8100);
 async function authPost(caminho, corpo){
   const r = await fetch(CFG.url + "/auth/v1/" + caminho, { method: "POST", headers: { apikey: CFG.anon, "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
   const j = await r.json().catch(() => ({}));
-  if(!r.ok) throw new Error(j.error_description || j.msg || j.message || "não consegui entrar");
+  if(!r.ok){ const e = new Error(j.error_description || j.msg || j.message || "não consegui entrar"); e.status = r.status; throw e; }
   return j;
 }
 function guardaSessao(j){ sess = { access_token: j.access_token, refresh_token: j.refresh_token, expira: Date.now() + (j.expires_in || 3600) * 1000 - 60000 }; ARM.set("jv_sess", sess); if(typeof rtEnviaToken === "function") rtEnviaToken(); }
@@ -946,7 +965,8 @@ async function token(){
   if(!sess) throw new Error("sem login");
   if(Date.now() > sess.expira){
     renovando = renovando || authPost("token?grant_type=refresh_token", { refresh_token: sess.refresh_token }).then(guardaSessao).finally(() => { renovando = null; });
-    await renovando;
+    try{ await renovando; }
+    catch(e){ if(e && (e.status === 400 || e.status === 401 || e.status === 403)){ sess = null; ARM.del("jv_sess"); mostraLogin(); } throw e; }   // só pede login se o servidor RECUSOU o refresh; falha de rede mantém a sessão
   }
   return sess.access_token;
 }
@@ -954,6 +974,7 @@ async function rest(caminho, opc){
   opc = opc || {};
   const t = await token();
   const r = await fetch(CFG.url + "/rest/v1/" + caminho, Object.assign({}, opc, { headers: Object.assign({ apikey: CFG.anon, Authorization: "Bearer " + t, "Content-Type": "application/json" }, opc.headers || {}) }));
+  if(r.status === 401 && !opc._tentou && sess){ sess.expira = 0; await token(); return rest(caminho, Object.assign({}, opc, { _tentou: true })); }   // 401 = token velho: renova uma vez antes de pedir login
   if(r.status === 401){ sess = null; ARM.del("jv_sess"); mostraLogin(); throw new Error("sessão expirou"); }
   const txt = await r.text();
   if(!r.ok) throw new Error(txt.slice(0, 160));
@@ -973,7 +994,7 @@ async function faceCria(){
     authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "preferred" } } });
   ARM.set("jv_passkey", fcB64(cred.rawId)); ARM.set("jv_faceok", Date.now());
 }
-const FACE_DIAS = 30, faceFresco = () => Date.now() - (ARM.get("jv_faceok") || 0) < FACE_DIAS * 86400000;
+const FACE_DIAS = 90, faceFresco = () => Date.now() - (ARM.get("jv_faceok") || 0) < FACE_DIAS * 86400000;
 let faceGraca = 0;
 /* ação sensível (captcha, gasto/risco, configuração, Pix): pede Face ID; vale por 2 min para não repetir no mesmo passo */
 async function exigeFace(motivo){
@@ -1222,6 +1243,19 @@ function desenhaVivo(){
   });
 }
 let saidaFim = true;
+/* v46: Terminais ao vivo de verdade: avisa o PC que está olhando e puxa só a saída do terminal escolhido a cada ~1,5 s; zoom A−/A+ e pinça */
+let tfs = Number(ARM.get("jv_tfs")) || 12, saidaBusy = false;
+const aplicaTfs = () => { document.documentElement.style.setProperty("--tfs", tfs + "px"); };
+aplicaTfs();
+function mudaTfs(d){ tfs = Math.max(8, Math.min(28, tfs + d)); ARM.set("jv_tfs", tfs); aplicaTfs(); }
+async function puxaSaidaTerm(){
+  if(saidaBusy || document.hidden || painelAtual !== "pTerm" || !termSel || !sess) return; saidaBusy = true;
+  try{ const r = await rest("jarvis_abas?select=nome,saida,saida_em&nome=eq." + encodeURIComponent(termSel)); const x = abas.find(y => y.nome === termSel);
+    if(r && r[0] && x && (x.saida !== r[0].saida)){ x.saida = r[0].saida; x.saida_em = r[0].saida_em; desenhaTerminal(); } }catch(e){}
+  saidaBusy = false;
+}
+setInterval(puxaSaidaTerm, 1500);
+setInterval(() => { if(!document.hidden && painelAtual === "pTerm") olhando(); }, 12000);
 function desenhaTerminal(){
   const ta = $q("termAbas"); ta.innerHTML = "";
   abas.forEach(a => {
@@ -1378,9 +1412,9 @@ function desenhaBadges(){
   const vistos = ARM.get("jv_avisto") || 0, nAv = avisos.filter(x => x.id > vistos).length, urg = avisos.some(x => x.id > vistos && /pix|captcha|login/.test(x.tipo));
   const erros = abas.reduce((s, a) => s + filaDe(a).filter(x => x.e === "erro").length, 0), exec = abas.filter(a => atualDe(a)).length;
   const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); if(!b) return; let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
-  bd("pTar", erros || exec, erros > 0); bd("pIdeias", ideias.length); bd("pAvisos", nAv + perguntasAbertas().length + captchas.length, urg || perguntasAbertas().length > 0 || captchas.length > 0);
+  const nAvT = nAv + perguntasAbertas().length + captchas.length, urgT = urg || perguntasAbertas().length > 0 || captchas.length > 0; $q("rAvisos").textContent = nAvT || "";
   bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
-  $q("rIdeias").textContent = ideias.length || ""; bd("pMais", ideias.length, false);
+  $q("rIdeias").textContent = ideias.length || ""; bd("pMais", ideias.length + nAvT, urgT);
   $q("rTrab").textContent = abas.filter(a => a.estado === "trab").length; $q("rFila").textContent = abas.reduce((n, a) => n + filaDe(a).filter(x => x.e === "fila").length, 0);
   $q("rPend").textContent = nAv + perguntasAbertas().length + captchas.length;
 }
@@ -1391,10 +1425,12 @@ function desenhaParar(){
 }
 const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pVer: "Ver terminais", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
-  if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; return; }
+  if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; $q("inPcDot").className = "pcd"; $q("inPcTxt").textContent = "Atualizando…"; $q("inPcUlt").textContent = ""; return; }
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
   const ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
+  $q("inPcDot").className = $q("pcDot").className; $q("inPcTxt").textContent = usandoCache ? "Estado guardado" : (ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…"));
+  $q("inPcUlt").textContent = usandoCache ? "de " + hhmm(cacheT) : (carregouAbas && ult ? "último contato " + hhmm(ult) + (semSinal ? " (há " + minAtras(ult) + ")" : "") : "");
   $q("pcTxt").textContent = usandoCache ? "Estado guardado de " + hhmm(cacheT) : (ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…")) + (carregouAbas && ult ? " · último contato " + hhmm(ult) + (semSinal ? " (há " + minAtras(ult) + ")" : "") : "");
 }
 function ajustaGrade(){          // última linha da grade do Mais nunca fica com buraco
@@ -1409,7 +1445,7 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pVer: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pVer: "pTerm", pTar: "pInicio", pAvisos: "pMais", pChave: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
@@ -1420,7 +1456,7 @@ function vaiPara(p){
   if(p === "pVer") abreVer();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
-  if(p === "pTerm"){ saidaFim = true; puxa(); }
+  if(p === "pTerm"){ saidaFim = true; olhando(); puxa(); }
   if(p === "pPrint") puxaPrints();
 }
 
@@ -2071,9 +2107,44 @@ async function puxaSaidaInicio(){
   const nomes = Array.from(inAbertos).filter(n => abas.some(a => a.nome === n)); if(!nomes.length || document.hidden) return;
   try{ const r = await rest("jarvis_abas?select=nome,saida,saida_em&nome=in.(" + nomes.map(n => '"' + n.replace(/"/g, "") + '"').map(encodeURIComponent).join(",") + ")") || []; r.forEach(x => { saidasIn[x.nome] = x.saida || ""; }); desenhaInicio(); }catch(e){}
 }
-setInterval(() => { if(painelAtual === "pInicio") puxaSaidaInicio(); }, 2500);
 const hhmm = ms => { const d = new Date(ms), p = x => String(x).padStart(2, "0"); return p(d.getHours()) + ":" + p(d.getMinutes()); };
 async function puxaUsoInicio(){ try{ usoIn = ((await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em")) || [])[0] || null; }catch(e){} desenhaInicio(); }
+const tarAbIn = new Set();
+function textoOrdem(a, q){ const det = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {}; return ((q.e === "exec" ? det.ordem : "") || q.ordem || q.f || q.t || "").trim(); }
+function listaTarefasIn(a, tar){
+  const w = document.createElement("div"); w.className = "inTL";
+  if(!tar.length){ const v = document.createElement("div"); v.className = "itar"; v.textContent = "Nenhuma tarefa."; w.appendChild(v); return w; }
+  tar.slice().sort((p, q) => (ORD[p.e] - ORD[q.e])).forEach(q => {
+    const k = chaveTar(a, q), d = document.createElement("div"); d.className = "itar" + (q.e === "exec" ? " atual" : "");
+    d.innerHTML = '<span class="n"></span><span class="t"></span>'; d.children[0].textContent = (q.e === "erro" ? "✗" : q.n ? q.n + "." : "•"); d.children[1].textContent = q.t;
+    if(tarAbIn.has(k)){ const o = document.createElement("div"); o.className = "ord"; o.textContent = textoOrdem(a, q) || "O PC ainda não enviou o texto desta ordem."; d.appendChild(o); }
+    d.onclick = ev => { ev.stopPropagation(); if(tarAbIn.has(k)) tarAbIn.delete(k); else tarAbIn.add(k); desenhaInicio(); };
+    w.appendChild(d);
+  });
+  return w;
+}
+/* concluídas hoje: o app vê a tarefa sair da fila (ou virar "feito") e guarda por dia; zera à meia-noite */
+const diaHoje = () => { const d = new Date(), p = x => String(x).padStart(2, "0"); return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); };
+let concAberta = false;
+function registraConcluidas(){
+  if(!carregouAbas || usandoCache) return;
+  const hoje = diaHoje(); let c = ARM.get("jv_conc"); if(!c || c.dia !== hoje) c = { dia: hoje, l: [] };
+  const prev = ARM.get("jv_estprev") || {}, atual = {}; let mudou = false;
+  abas.forEach(a => filaDe(a).forEach(q => { atual[chaveTar(a, q)] = { e: q.e, nome: a.nome, t: q.t, o: textoOrdem(a, q) }; }));
+  const regis = (k, p) => { if(c.l.some(z => z.k === k)) return; c.l.push({ k: k, nome: p.nome, t: p.t, o: p.o, h: Date.now() }); mudou = true; };
+  Object.keys(prev).forEach(k => { const p = prev[k], n = atual[k]; if(p.e === "exec" && (!n || n.e === "feito")) regis(k, p); else if(p.e === "fila" && n && n.e === "feito") regis(k, p); });
+  ARM.set("jv_estprev", atual); if(mudou || c.dia !== (ARM.get("jv_conc") || {}).dia) ARM.set("jv_conc", c);
+}
+function desenhaConcluidas(){
+  const el = $q("inConc"), c = ARM.get("jv_conc"), l = (c && c.dia === diaHoje()) ? c.l : [];
+  el.innerHTML = ""; const x = document.createElement("div"); x.className = "inT vidro" + (concAberta ? " aberta" : "");
+  x.innerHTML = '<span class="p" style="background:var(--grn)"></span><div class="c"><b>Concluídas hoje</b></div><em></em><span class="seta">›</span>'; x.querySelector("em").textContent = l.length;
+  if(concAberta){ const w = document.createElement("div"); w.className = "inTL"; if(!l.length){ const v = document.createElement("div"); v.className = "itar"; v.textContent = "Nada concluído ainda hoje."; w.appendChild(v); }
+    l.slice().reverse().forEach(z => { const d = document.createElement("div"), k = "c|" + z.k; d.className = "itar"; d.innerHTML = '<span class="n"></span><span class="t"></span>'; d.children[0].textContent = hhmm(z.h); d.children[1].textContent = z.nome + " · " + z.t;
+      if(tarAbIn.has(k)){ const o = document.createElement("div"); o.className = "ord"; o.textContent = z.o || "Sem texto guardado."; d.appendChild(o); }
+      d.onclick = ev => { ev.stopPropagation(); if(tarAbIn.has(k)) tarAbIn.delete(k); else tarAbIn.add(k); desenhaInicio(); }; w.appendChild(d); }); x.appendChild(w); }
+  x.onclick = ev => { if(ev.target.closest(".inTL")) return; concAberta = !concAberta; desenhaInicio(); }; el.appendChild(x);
+}
 function desenhaInicio(){
   const off = !carregouAbas || (semSinal && !usandoCache);
   $q("inCorpo").classList.toggle("velho", off && carregouAbas);
@@ -2085,16 +2156,23 @@ function desenhaInicio(){
   $q("inBarras").classList.toggle("velho", !!velhoUso);
   const t = $q("inTerm"); t.innerHTML = "";
   if(!abas.length) t.innerHTML = '<div class="vazio vidro">Sem dados dos terminais.</div>';
-  const ORD_T = ["Jarvis", "Cuida Aí Lojas", "Jarvis Carro", "Jarvis iPhone", "Site Cuida Aí Lojas", "Jarvis Trade"], pos = n => { const i = ORD_T.indexOf(n); return i < 0 ? 99 : i; };
-  abas.slice().sort((x, y) => pos(x.nome) - pos(y.nome)).forEach(a => {
+  const ORD_T = ["Jarvis", "Cuida Aí Lojas", "Jarvis Carro", "Jarvis iPhone", "Site Cuida Aí Lojas", "Jarvis Trade", "Jarvis Verifica"], pos = n => { const i = ORD_T.indexOf(n); return i < 0 ? 99 : i; };
+  registraConcluidas();
+  const lista = abas.slice().sort((x, y) => pos(x.nome) - pos(y.nome));
+  ORD_T.forEach(nm => { if(abas.length && !lista.some(a => a.nome === nm)) lista.push({ nome: nm, estado: "livre", fila: [], _semDados: true }); });
+  lista.sort((x, y) => pos(x.nome) - pos(y.nome));
+  lista.forEach(a => {
     const e = a.estado === "perg" ? "perg" : a.estado === "trab" ? "trab" : "livre", x = document.createElement("div"); x.className = "inT vidro " + e;
+    const tar = filaDe(a).filter(q => q.e !== "feito");
     x.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small></div><em></em>'; x.querySelector("b").textContent = a.nome;
-    x.querySelector("small").textContent = a.pausada ? "pausado" : (a.texto || (e === "livre" ? "parado, sem tarefa" : "")); x.querySelector("em").textContent = e === "perg" ? "ESPERA VOCÊ" : e === "trab" ? "TRABALHANDO" : "PARADO";
+    x.querySelector("small").textContent = a._semDados ? "sem dados do PC" : a.pausada ? "pausado" : (e === "livre" ? (tar.length ? tar.length + " na fila" : "parado, sem tarefa") : (a.texto || ""));
+    x.querySelector("em").textContent = e === "perg" ? "ESPERA VOCÊ" : e === "trab" ? "TRABALHANDO" : "PARADO";
     const ab = inAbertos.has(a.nome); x.classList.toggle("aberta", ab); x.querySelector("em").insertAdjacentHTML("afterend", '<span class="seta">›</span>');
-    if(ab) x.appendChild(caixaSaida(a));
-    x.onclick = ev => { if(ev.target.closest(".inSaida")) return; if(inAbertos.has(a.nome)) inAbertos.delete(a.nome); else inAbertos.add(a.nome); ARM.set("jv_inabertos", Array.from(inAbertos)); desenhaInicio(); puxaSaidaInicio(); };
+    if(ab) x.appendChild(listaTarefasIn(a, tar));
+    x.onclick = ev => { if(ev.target.closest(".inTL")) return; if(inAbertos.has(a.nome)) inAbertos.delete(a.nome); else inAbertos.add(a.nome); ARM.set("jv_inabertos", Array.from(inAbertos)); desenhaInicio(); };
     t.appendChild(x);
   });
+  desenhaConcluidas();
   const n = perguntasAbertas().length, au = $q("inAut"); au.className = "vidro" + (n ? " tem" : ""); au.querySelector("b").textContent = n; au.querySelector("span").textContent = n === 1 ? "autorização esperando você" : "autorizações esperando você";
   const imp = avisos.filter(x => /captcha|login|pix|alerta|risco|permissao/.test(x.tipo))[0] || avisos[0], av = $q("inAviso"); av.innerHTML = "";
   if(!imp) av.innerHTML = '<div class="vazio vidro">Nenhum aviso ainda.</div>';
@@ -2727,6 +2805,7 @@ $q("capGira").onclick = () => { capCheio = !capCheio; $q("capGira").textContent 
 $q("capEsq").onclick = () => capFino(-1); $q("capDir").onclick = () => capFino(1); $q("capSolta").onclick = capSoltar; $q("capDesf").onclick = capDesfaz;
 
 /* ---------- botões ---------- */
+$q("cfgBtn2").onclick = () => $q("cfgBtn").click();
 $q("cfgBtn").onclick = async () => { if(!(await exigeFace("Abrir configurações"))) return; desenhaFace(); $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
 $q("fechaCfg").onclick = () => { $q("cfg").classList.remove("on"); try{ speechSynthesis.cancel(); }catch(e){} };
 $q("vozTeste").onclick = testaVoz; $q("falaTg").onclick = () => { ARM.set("jv_fala", !ARM.get("jv_fala")); desenhaFalaTg(); };
@@ -2767,7 +2846,12 @@ const enviaTexto = () => { const v = $q("txt").value.trim(); if(!v) return; $q("
 $q("enviaTxt").onclick = enviaTexto;
 $q("txt").addEventListener("keydown", e => { if(e.key === "Enter") enviaTexto(); });
 document.querySelectorAll("#nav button").forEach(b => b.onclick = () => { if(b.dataset.p === "pAvisos" && captchas.length) abreCaptcha(captchas[0].id); else vaiPara(b.dataset.p); });
-document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => vaiPara(b.dataset.ir));
+document.querySelectorAll("[data-ir]").forEach(b => b.onclick = () => { $q("cfg").classList.remove("on"); vaiPara(b.dataset.ir); });
+$q("termMenos").onclick = () => mudaTfs(-1); $q("termMais").onclick = () => mudaTfs(1);
+(function(){ const el = $q("termSaida"); let d0 = 0, f0 = 12; const dist = e => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  el.addEventListener("touchstart", e => { if(e.touches.length === 2){ d0 = dist(e); f0 = tfs; } }, { passive: true });
+  el.addEventListener("touchmove", e => { if(e.touches.length === 2 && d0){ e.preventDefault(); tfs = Math.max(8, Math.min(28, Math.round(f0 * dist(e) / d0))); aplicaTfs(); } }, { passive: false });
+  el.addEventListener("touchend", e => { if(d0 && e.touches.length < 2){ d0 = 0; ARM.set("jv_tfs", tfs); } }, { passive: true }); })();
 const ts = $q("termSaida"), vf = $q("voltaFim");
 ts.addEventListener("scroll", () => { saidaFim = ts.scrollHeight - ts.scrollTop - ts.clientHeight < 30; vf.style.display = saidaFim ? "none" : "block"; });
 vf.onclick = () => { saidaFim = true; ts.scrollTop = ts.scrollHeight; vf.style.display = "none"; };
