@@ -331,6 +331,11 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 #envMsg{width:50px;height:50px;flex:0 0 50px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;font:700 20px var(--f)}
 body.capPisca{animation:capPisca .5s linear 6}
 @keyframes capPisca{50%{box-shadow:inset 0 0 0 100vmax rgba(255,77,94,.35)}}
+.uBar{margin:10px 2px}.uBar .l{display:flex;justify-content:space-between;align-items:baseline;font:600 13.5px var(--f);margin-bottom:5px}.uBar .l small{color:var(--dim);font:500 12px var(--mono)}
+.uBar .b{height:12px;border-radius:7px;background:rgba(255,255,255,.1);overflow:hidden}.uBar .b i{display:block;height:100%;border-radius:7px;transition:width .4s}
+.uBar.v .b i{background:var(--grn)}.uBar.a .b i{background:var(--yel)}.uBar.r .b i{background:var(--red)}.uBar.v .l b{color:var(--grn)}.uBar.a .l b{color:var(--yel)}.uBar.r .l b{color:var(--red)}
+#usoFrase{padding:14px;margin:4px 0 6px;font:700 18px var(--f);text-align:center}#usoFrase.v{color:var(--grn)}#usoFrase.a{color:var(--yel)}#usoFrase.r{color:var(--red)}#usoFrase small{display:block;font:500 12px var(--f);color:var(--dim);margin-top:3px}
+.uLin{display:flex;justify-content:space-between;gap:8px;padding:9px 12px;margin-bottom:6px;font:500 13.5px var(--f)}.uLin b{font:600 13.5px var(--mono)}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -490,7 +495,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v9.6</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -517,6 +522,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
         <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
         <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
         <button class="mg vidro" id="maisChave"><i>🔑</i><span id="maisChaveTxt">Chave da IA</span></button>
@@ -524,6 +530,14 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
       <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pUso" class="painel"><div class="tit">Uso do Claude <span id="usoQuando"></span></div>
+      <div id="usoFrase" class="vidro">Carregando…</div>
+      <div id="usoBarras"></div>
+      <div class="tit">Terminais (contexto usado)</div><div id="usoTerm"></div>
+      <div class="tit">Gasto da API (chave do app)</div><div id="usoApi"></div>
+      <button class="parar2" id="pararUso"></button>
+      <div class="vazio" style="text-align:left;padding:4px 2px">A chave da API nunca aparece aqui: só somas. Valores em US$/R$ são estimados (R$ a 5,50). Este uso só avisa; nada é pausado sozinho.</div>
     </section>
     <section id="pMemoria" class="painel"><div class="tit">Memória do Jarvis <span id="memN"></span></div>
       <div class="vazio" style="padding:0 2px 10px;text-align:left">O que a IA guardou sozinha nas conversas (decisões, regras da loja, preferências, ideias aprovadas). Ela lê isto antes de responder. Senhas, chaves e dados de cartão/banco nunca são guardados.</div>
@@ -740,7 +754,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v9.6";
+const VERSAO = "v10";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -1123,7 +1137,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
@@ -1139,8 +1153,9 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pMemoria") puxaMemoria();
+  if(p === "pUso") puxaUso();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -1615,6 +1630,56 @@ async function mandaProposta(){
   notaPendente = "o pedido combinado foi ENVIADO para " + p.terminal;
   bal("nota", "✓ Enviado para o " + p.terminal); toast("Enviado ✓ " + p.terminal, "");
 }
+
+/* ---------- Uso (v10) ---------- */
+const COT_REAL = 5.5;
+const corUso = n => n == null ? "" : n <= 60 ? "v" : n <= 85 ? "a" : "r";
+function barraUso(nome, pct, resto, extra){
+  const d = document.createElement("div"), c = corUso(pct); d.className = "uBar " + c;
+  d.innerHTML = '<div class="l"><span></span><b></b></div><div class="b"><i></i></div>';
+  d.querySelector(".l span").textContent = nome + (resto ? " · renova em " + resto : "") + (extra ? " · " + extra : "");
+  d.querySelector("b").textContent = pct == null ? "sem dados" : pct + "%"; d.querySelector("i").style.width = (pct == null ? 0 : Math.min(100, pct)) + "%";
+  return d;
+}
+function linhaUso(a, b){ const d = document.createElement("div"); d.className = "uLin vidro"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = a; d.children[1].textContent = b; return d; }
+const usd = v => "US$ " + v.toFixed(2).replace(".", ","), brl = v => "R$ " + (v * COT_REAL).toFixed(2).replace(".", ",");
+let usoTimer = null;
+async function puxaUso(silencioso){
+  let linha = null, gasto = [];
+  try{ linha = (await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em") || [])[0] || null; }catch(e){ if(!silencioso){ $q("usoFrase").className = "vidro"; $q("usoFrase").textContent = "Sem conexão"; } return; }
+  const ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
+  try{ gasto = await rest("jarvis_gasto_api?select=modelo,usd,criado_em&criado_em=gte." + ini.toISOString() + "&limit=2000") || []; }catch(e){}
+  const dd = linha && linha.dados || {}, h5 = dd.h5, d7 = dd.d7, fb = dd.fable && dd.fable.pct != null ? dd.fable.pct : null;
+  const maior = Math.max(h5 == null ? -1 : h5, d7 == null ? -1 : d7, fb == null ? -1 : fb);
+  usoAlerta({ "5 horas": h5, "semanal": d7, "Fable": fb });
+  if(silencioso) return;
+  const fr = $q("usoFrase"), c = maior < 0 ? "" : corUso(maior);
+  fr.className = "vidro " + c; fr.innerHTML = "<span></span><small></small>";
+  fr.children[0].textContent = maior < 0 ? "Sem dados do plano agora" : c === "v" ? "Pode continuar" : c === "a" ? "Vai com calma" : "Pause agora";
+  fr.children[1].textContent = linha ? "atualizado " + hm(new Date(linha.atualizado_em).getTime()) : "o PC ainda não enviou o uso";
+  $q("usoQuando").textContent = "";
+  const bs = $q("usoBarras"); bs.innerHTML = "";
+  bs.appendChild(barraUso("Plano — 5 horas", h5, dd.h5r)); bs.appendChild(barraUso("Plano — semanal (7 dias)", d7, dd.d7r)); bs.appendChild(barraUso("Fable (máx. 50%)", fb, "", fb != null && fb > 50 ? "acima do combinado" : ""));
+  const ct = $q("usoTerm"); ct.innerHTML = ""; const abasC = dd.ctx_abas || {}, nomes = Object.keys(abasC);
+  if(!nomes.length) ct.innerHTML = '<div class="vazio vidro">Sem dados dos terminais agora.</div>';
+  nomes.sort().forEach(n => ct.appendChild(barraUso(n, abasC[n])));
+  const api = $q("usoApi"); api.innerHTML = ""; const hoje = new Date().toDateString(), soma = { hoje: {}, mes: {} };
+  gasto.forEach(g => { const k = new Date(g.criado_em).toDateString() === hoje ? "hoje" : null; if(k) soma.hoje[g.modelo] = (soma.hoje[g.modelo] || 0) + Number(g.usd); soma.mes[g.modelo] = (soma.mes[g.modelo] || 0) + Number(g.usd); });
+  ["haiku", "sonnet", "opus"].forEach(m => { if(soma.mes[m] == null) return; const h = soma.hoje[m] || 0, ms = soma.mes[m]; api.appendChild(linhaUso(m[0].toUpperCase() + m.slice(1) + " · hoje ~" + usd(h) + " (" + brl(h) + ")", "mês ~" + usd(ms) + " (" + brl(ms) + ")")); });
+  if(!api.children.length) api.innerHTML = '<div class="vazio vidro">Nenhum gasto da API registrado ainda.</div>';
+  else { const th = Object.values(soma.hoje).reduce((a, b) => a + b, 0), tm = Object.values(soma.mes).reduce((a, b) => a + b, 0); api.appendChild(linhaUso("Total · hoje ~" + usd(th) + " (" + brl(th) + ")", "mês ~" + usd(tm) + " (" + brl(tm) + ")")); }
+}
+/* aviso uma vez só quando passa de 85%; volta a valer quando cai abaixo de 80% */
+function usoAlerta(v){
+  const marc = ARM.get("jv_usoalerta") || {};
+  Object.keys(v).forEach(k => {
+    const n = v[k]; if(n == null) return;
+    if(n > 85 && !marc[k]){ marc[k] = 1; toast("⚠️ Uso do Claude em " + n + "%", "Limite " + k + " perto do fim. Vai com calma.", true); }
+    else if(n < 80 && marc[k]) delete marc[k];
+  });
+  ARM.set("jv_usoalerta", marc);
+}
+setInterval(() => { if(!document.hidden){ if(painelAtual === "pUso") puxaUso(); else puxaUso(true); } }, 45000);
 
 /* ---------- Memória ---------- */
 async function puxaMemoria(){
