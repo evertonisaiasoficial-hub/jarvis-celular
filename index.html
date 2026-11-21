@@ -543,6 +543,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <section id="pInicio" class="painel"><div class="tit">Agora no PC</div>
       <div id="inPc" class="vidro"></div>
       <div id="inManha"></div>
+      <div id="inSil"></div>
       <div id="inCorpo">
         <div class="tit">Gasto do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
         <div class="tit">Terminais</div><div id="inTerm"></div>
@@ -565,7 +566,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.8</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v37</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -711,10 +712,10 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
 </div></div>
 <div class="cartao" id="trava"><div class="caixa vidro">
   <h2>Jarvis 🔒</h2>
-  <p class="s">App trancado. Abra com o Face ID.</p>
+  <p class="s">App trancado.</p>
   <div class="err" id="travaErr"></div>
-  <button class="ok bok" id="travaAbre">Abrir com Face ID</button>
-  <button class="btop bno" id="travaSai" style="margin-top:10px;width:100%">Entrar com e-mail e senha</button>
+  <button class="ok bok" id="travaAbre" style="width:100%;font-size:22px;padding:18px 0">Entrar</button>
+  <button class="btop bno" id="travaSai" style="margin-top:10px;width:100%;display:none">Entrar com e-mail e senha</button>
 </div></div>
 
 <script src="config.js"></script>
@@ -861,7 +862,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.8";
+const VERSAO = "v37";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -969,11 +970,11 @@ async function faceVerifica(){
   const a = await navigator.credentials.get({ publicKey: { challenge: crypto.getRandomValues(new Uint8Array(32)), rpId: location.hostname, timeout: 60000, userVerification: "required", allowCredentials: [{ type: "public-key", id: fcDeb64(id), transports: ["internal"] }] } });
   return !!a;
 }
-function travaApp(){ document.body.classList.add("travado"); $q("login").classList.remove("on"); $q("trava").classList.add("on"); $q("travaErr").textContent = ""; }
+function travaApp(){ $q("travaSai").style.display = "none"; document.body.classList.add("travado"); $q("login").classList.remove("on"); $q("trava").classList.add("on"); $q("travaErr").textContent = ""; }
 async function destrava(){
   $q("travaErr").textContent = "";
   let ok = false; try{ ok = await faceVerifica(); }catch(e){ ok = false; }
-  if(!ok){ $q("travaErr").textContent = "Não reconheci. Toque para tentar de novo."; return; }
+  if(!ok){ $q("travaErr").textContent = "Não reconheci. Toque em Entrar para tentar de novo."; $q("travaSai").style.display = ""; return; }
   ARM.set("jv_faceok", Date.now()); faceGraca = Date.now();
   document.body.classList.remove("travado"); $q("trava").classList.remove("on"); iniciaSessao();
 }
@@ -1390,7 +1391,7 @@ function vaiPara(p){
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
   const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
-  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); }
+  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
@@ -1977,7 +1978,7 @@ function rtMuda(tab){
     else if(tab === "jarvis_avisos") puxaAvisos();
     else if(tab === "jarvis_captcha") puxaCaptchas();
     else if(tab === "jarvis_pedidos") acompanhaOrdens();
-    else if(tab === "jarvis_uso"){ puxaUsoInicio(); puxaManha(); if(painelAtual === "pUso") puxaUso(); }
+    else if(tab === "jarvis_uso"){ puxaUsoInicio(); puxaManha(); puxaSilencio(); if(painelAtual === "pUso") puxaUso(); }
     else if(tab === "jarvis_agenda" && painelAtual === "pAgenda") puxaAgenda();
   }, 250);
 }
@@ -2002,6 +2003,20 @@ function desenhaManha(){
   el.appendChild(c);
 }
 setInterval(() => { if(!document.hidden && painelAtual === "pInicio") puxaManha(); }, 60000);
+/* item 6: silêncio sincronizado. O PC publica o estado em jarvis_uso id=silencio; o Atalhos (automação de Foco) abre o app com ?silencio=1 / ?silencio=0 */
+let silIn = null;
+async function puxaSilencio(){ try{ silIn = ((await rest("jarvis_uso?id=eq.silencio&select=dados")) || [])[0] || null; }catch(e){} desenhaSilencio(); }
+function desenhaSilencio(){
+  const el = $q("inSil"); if(!el) return; el.innerHTML = "";
+  const d = silIn && silIn.dados; if(!d || !d.mudo) return;
+  const c = document.createElement("div"); c.className = "vidro"; c.style.cssText = "margin:8px 0;padding:10px 12px";
+  c.textContent = "🔕 Jarvis em silêncio" + (d.origem ? " (" + d.origem + ")" : ""); el.appendChild(c);
+}
+setInterval(() => { if(!document.hidden) puxaSilencio(); }, 60000);
+(function silencioPelaUrl(){
+  const v = new URLSearchParams(location.search).get("silencio"); if(v !== "1" && v !== "0") return;
+  setTimeout(async () => { try{ await comando(v === "1" ? "silencio_on" : "silencio_off", null, null, v === "1" ? "Silêncio ligado" : "Silêncio desligado"); }catch(e){} puxaSilencio(); }, 1500);
+})();
 
 /* ---------- Início (v10.4): o que está acontecendo no PC agora; atualiza sozinha ---------- */
 let usoIn = null, inAbertos = new Set(ARM.get("jv_inabertos") || []), saidasIn = {}, inScroll = {};
@@ -2036,7 +2051,7 @@ function desenhaInicio(){
   $q("inCorpo").classList.toggle("velho", off && carregouAbas);
   // barras do plano (só valores que o PC publicou: nada de estimativa)
   const b = $q("inBarras"); b.innerHTML = ""; const d = (usoIn && usoIn.dados) || {};
-  b.appendChild(barraUso("5 horas", d.h5 == null ? null : d.h5, d.h5r)); b.appendChild(barraUso("7 dias", d.d7 == null ? null : d.d7, d.d7r)); b.appendChild(barraUso("CTX (terminal ativo)", d.ctx == null ? null : d.ctx));
+  b.appendChild(barraUso("7 dias", d.d7 == null ? null : d.d7, d.d7r)); b.appendChild(barraUso("CTX (terminal ativo)", d.ctx == null ? null : d.ctx));
   const velhoUso = usoIn && Date.now() - new Date(usoIn.atualizado_em).getTime() > 180000;
   $q("inUsoNota").textContent = !usoIn ? "O PC ainda não enviou o gasto." : velhoUso ? "Dado de " + hhmm(new Date(usoIn.atualizado_em).getTime()) + " (o PC parou de enviar)." : "Atualizado às " + hhmm(new Date(usoIn.atualizado_em).getTime()) + ".";
   $q("inBarras").classList.toggle("velho", !!velhoUso);
@@ -2115,7 +2130,7 @@ async function puxaSaude(){
   l.appendChild(linhaSaude(cpu > 90 || ram > 90 ? "r" : cpu > 75 || ram > 80 ? "a" : "v", "CPU e memória do PC", "CPU " + cpu + "% · memória " + ram + "%", ""));
   const d = sa && sa.dados || {}, velho = sa ? Date.now() - new Date(sa.atualizado_em).getTime() > 180000 : true;
   l.appendChild(linhaSaude(velho ? "a" : d.chrome ? "v" : "r", "Chrome das automações (lojas)", velho ? "Sem informação recente do PC" : d.chrome ? "Aberto" : "Fechado ou sem porta 9222", velho ? "?" : d.chrome ? "OK" : "FECHADO"));
-  const u = uso && uso.dados || {}, m = Math.max(u.h5 == null ? -1 : u.h5, u.d7 == null ? -1 : u.d7);
+  const u = uso && uso.dados || {}, m = (u.d7 == null ? -1 : u.d7);
   l.appendChild(linhaSaude(m < 0 ? "a" : m > 85 ? "r" : m > 60 ? "a" : "v", "Uso do plano Claude", m < 0 ? "Sem dados agora" : "Maior uso: " + m + "% (veja Mais > Uso)", m < 0 ? "" : m + "%"));
   const nt = ("Notification" in window) ? Notification.permission : "indisponível";
   l.appendChild(linhaSaude(nt === "granted" ? "v" : "a", "Notificações no iPhone", nt === "granted" ? "Ligadas" : "Desligadas (ligue em Configurações)", nt === "granted" ? "OK" : "OFF"));
@@ -2370,9 +2385,9 @@ async function puxaUso(silencioso){
   try{ linha = (await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em") || [])[0] || null; }catch(e){ if(!silencioso){ $q("usoFrase").className = "vidro"; $q("usoFrase").textContent = "Sem conexão"; } return; }
   const ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
   try{ gasto = await rest("jarvis_gasto_api?select=modelo,usd,criado_em&criado_em=gte." + ini.toISOString() + "&limit=2000") || []; }catch(e){}
-  const dd = linha && linha.dados || {}, h5 = dd.h5, d7 = dd.d7, fb = dd.fable && dd.fable.pct != null ? dd.fable.pct : null;
-  const maior = Math.max(h5 == null ? -1 : h5, d7 == null ? -1 : d7, fb == null ? -1 : fb);
-  usoAlerta({ "5 horas": h5, "semanal": d7, "Fable": fb });
+  const dd = linha && linha.dados || {}, d7 = dd.d7, fb = dd.fable && dd.fable.pct != null ? dd.fable.pct : null;
+  const maior = Math.max(d7 == null ? -1 : d7, fb == null ? -1 : fb);
+  usoAlerta({ "semanal": d7, "Fable": fb });
   if(silencioso) return;
   const fr = $q("usoFrase"), c = maior < 0 ? "" : corUso(maior);
   fr.className = "vidro " + c; fr.innerHTML = "<span></span><small></small>";
@@ -2380,7 +2395,7 @@ async function puxaUso(silencioso){
   fr.children[1].textContent = linha ? "atualizado " + hm(new Date(linha.atualizado_em).getTime()) : "o PC ainda não enviou o uso";
   $q("usoQuando").textContent = "";
   const bs = $q("usoBarras"); bs.innerHTML = "";
-  bs.appendChild(barraUso("Plano — 5 horas", h5, dd.h5r)); bs.appendChild(barraUso("Plano — semanal (7 dias)", d7, dd.d7r)); bs.appendChild(barraUso("Fable (máx. 50%)", fb, "", fb != null && fb > 50 ? "acima do combinado" : ""));
+  bs.appendChild(barraUso("Plano — semanal (7 dias)", d7, dd.d7r)); bs.appendChild(barraUso("Fable (máx. 50%)", fb, "", fb != null && fb > 50 ? "acima do combinado" : ""));
   const ct = $q("usoTerm"); ct.innerHTML = ""; const abasC = dd.ctx_abas || {}, nomes = Object.keys(abasC);
   if(!nomes.length) ct.innerHTML = '<div class="vazio vidro">Sem dados dos terminais agora.</div>';
   nomes.sort().forEach(n => ct.appendChild(barraUso(n, abasC[n])));
