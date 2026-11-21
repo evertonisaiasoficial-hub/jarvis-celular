@@ -377,6 +377,17 @@ body.capPisca{animation:capPisca .5s linear 6}
 .inSaida{flex-basis:100%;width:100%;max-height:260px;overflow:auto;margin-top:6px;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.35);font:500 12px/1.45 var(--mono);cursor:default;-webkit-user-select:text;user-select:text}
 .inSaida div{white-space:pre-wrap;word-break:break-word;border-bottom:1px solid rgba(255,255,255,.04);padding:1px 0}.inSaida .vz{color:var(--dim);font-style:italic;border:0}
 .inSaida .ab2{margin-top:6px;border:0}.inSaida .ab2 button{min-height:40px;width:100%}
+.ag{padding:12px;margin-bottom:9px}.ag .h{display:flex;justify-content:space-between;gap:8px;font:700 14px var(--f)}.ag .h small{font:600 11.5px var(--mono);color:var(--dim)}
+.ag .x{margin:6px 0;font:500 13.5px var(--f);white-space:pre-wrap}.ag .bt{display:flex;gap:8px}.ag .bt button{flex:1}.ag.env{opacity:.75}.ag.can{opacity:.5}
+#agForm{padding:12px;margin-bottom:10px}#agForm select,#agForm input,#agForm textarea{width:100%;margin:5px 0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--f)}
+#agForm textarea{min-height:90px}#agForm label{display:block;margin-top:6px;font:600 11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.alca{flex:0 0 auto;width:34px;height:44px;margin:-6px 0 -6px -8px;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:18px;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.tar.arrasta{position:relative;z-index:6;box-shadow:0 8px 26px rgba(0,0,0,.5);opacity:.92;border-color:var(--cy)}
+.rep{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:8px;background:rgba(255,210,74,.18);color:var(--yel);font:700 10.5px var(--mono)}
+.tdet .acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tdet .acoes button{flex:1;min-width:84px;min-height:44px;font-size:12.5px}
+#anexar{flex:0 0 46px;width:46px;height:50px;border-radius:16px;background:var(--glass2);border:1px solid var(--edge);font-size:20px}
+#anexoChip{display:none;flex:0 0 auto;align-items:center;gap:10px;margin:0 12px 6px;padding:6px 10px;border-radius:14px}#anexoChip.on{display:flex}
+#anexoChip img{width:40px;height:40px;object-fit:cover;border-radius:8px}#anexoChip span{flex:1;font:600 13px var(--f)}#anexoChip button{min-width:44px;min-height:44px}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -546,8 +557,9 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
-      <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.4</span></div>
+      <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
+      <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.5</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -574,6 +586,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
         <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
         <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
         <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
@@ -584,6 +597,16 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
       <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pAgenda" class="painel"><div class="tit">Agendar ordem</div>
+      <div id="agForm" class="vidro">
+        <label for="agAba">Terminal</label><select id="agAba"></select>
+        <label for="agQuando">Dia e hora (horário de Brasília)</label><input id="agQuando" type="datetime-local">
+        <label for="agTxt">O que fazer</label><textarea id="agTxt" maxlength="3900" placeholder="Ex.: Zerar os chats das lojas"></textarea>
+        <button class="btop bok" id="agSalva" style="width:100%;margin-top:6px">⏰ Agendar</button>
+      </div>
+      <div class="tit">Agendadas</div><div id="agLista"></div>
+      <div class="vazio" style="text-align:left;padding:4px 2px">Dica: na Conversa escreva "amanhã às 8h faça X" que eu agendo. O PC envia na hora certa; se estiver desligado, envia assim que voltar, na ordem em que foram agendadas.</div>
     </section>
     <section id="pLojas" class="painel"><div class="tit">Lojas no bolso <span id="ljN"></span></div>
       <div id="ljResumo" class="vidro" style="padding:12px;margin-bottom:8px;text-align:center;font:700 16px var(--f)"></div>
@@ -825,7 +848,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.4";
+const VERSAO = "v10.5";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1205,14 +1228,48 @@ function detalheTarefa(a, x){
     par("4 · Modelo", det.modelo || "", "o PC ainda não enviou");
     const u = par("5 · Última linha de saída", limpaLinha(det.ultima), "ainda sem saída para mostrar"); const v = document.createElement("span"); v.className = "vivo"; u.prepend(v);
   }
+  if(x.e === "fila" && x.n && x.o === "p") d.appendChild(acoesFila(a, x));
   return d;
+}
+const normTit = t => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+const esperando = a => (a.fila || []).filter(i => i.e === "fila" && i.n).map(i => String(i.n));
+const ehRepetida = (a, x) => { const k = normTit(x.t); if(!k) return false; const l = a.fila || [], i = l.indexOf(x); return l.some((y, j) => j < i && normTit(y.t) === k); };
+function acoesFila(a, x){
+  const d = document.createElement("div"), w = esperando(a), i = w.indexOf(String(x.n)); d.className = "acoes";
+  const bt = (rot, cls, fn, off) => { const b = document.createElement("button"); b.className = "btop " + cls; b.textContent = rot; b.disabled = !!off; b.onclick = ev => { ev.stopPropagation(); fn(); }; d.appendChild(b); };
+  bt("⬆ Na frente", "bok", () => comando("frente", a.nome, x.n, "Colocando a tarefa " + x.n + " na frente…"), i <= 0);
+  bt("↑ Subir", "bno", () => { const v = w.slice(); [v[i - 1], v[i]] = [v[i], v[i - 1]]; comando("ordem", a.nome, v.join(","), "Subindo a tarefa " + x.n + "…"); }, i <= 0);
+  bt("↓ Descer", "bno", () => { const v = w.slice(); [v[i + 1], v[i]] = [v[i], v[i + 1]]; comando("ordem", a.nome, v.join(","), "Descendo a tarefa " + x.n + "…"); }, i < 0 || i >= w.length - 1);
+  bt(ehRepetida(a, x) ? "🗑 Apagar repetida" : "✕ Cancelar", "bno", async () => { if(!(await confirmaCartao(ehRepetida(a, x) ? "Apagar a tarefa repetida?" : "Cancelar esta tarefa?", x.n + ". " + x.t, ehRepetida(a, x) ? "Apagar" : "Cancelar tarefa"))) return; comando("cancelar", a.nome, x.n, "Cancelando a tarefa " + x.n + "…"); });
+  return d;
+}
+let arrastando = false;
+function alcaArrasto(a, x, d){
+  const h = document.createElement("span"); h.className = "alca"; h.textContent = "⠿"; h.title = "Arraste para mudar a ordem";
+  h.addEventListener("pointerdown", e => {
+    e.preventDefault(); e.stopPropagation(); try{ h.setPointerCapture(e.pointerId); }catch(_){}
+    const pai = d.parentElement, irmas = Array.from(pai.children).filter(r => r.classList.contains("tar") && r.dataset.e === "fila" && r.dataset.aba === a.nome && r.dataset.n);
+    arrastando = true; d.classList.add("arrasta"); const y0 = e.clientY;
+    const mv = ev => { d.style.transform = "translateY(" + (ev.clientY - y0) + "px)"; };
+    const fim = ev => {
+      h.removeEventListener("pointermove", mv); h.removeEventListener("pointerup", fim); h.removeEventListener("pointercancel", fim);
+      const cy = d.getBoundingClientRect().top + d.getBoundingClientRect().height / 2; d.classList.remove("arrasta"); d.style.transform = ""; arrastando = false;
+      const outras = irmas.filter(r => r !== d), antes = outras.filter(r => r.getBoundingClientRect().top + r.getBoundingClientRect().height / 2 < cy), nova = antes.map(r => r.dataset.n).concat([String(x.n)], outras.filter(r => antes.indexOf(r) < 0).map(r => r.dataset.n));
+      if(nova.join(",") !== irmas.map(r => r.dataset.n).join(",") && ev.type === "pointerup") comando("ordem", a.nome, nova.join(","), "Mudando a ordem da fila…"); else desenhaTudo();
+    };
+    h.addEventListener("pointermove", mv); h.addEventListener("pointerup", fim); h.addEventListener("pointercancel", fim);
+  });
+  return h;
 }
 function linhaTarefa(a, x){
   const d = document.createElement("div"), ch = chaveTar(a, x), aberta = tarAbertas.has(ch); d.className = "tar" + (x.pm ? " pm" : "") + (aberta ? " aberta" : ""); d.dataset.e = x.e; d.style.flexWrap = "wrap";
+  d.dataset.aba = a.nome; if(x.n) d.dataset.n = String(x.n);
   d.innerHTML = '<span class="nn"></span><span class="tt"></span><span class="seta">›</span>';
   d.children[0].textContent = (x.e === "erro" ? "✗ " : x.e === "exec" ? "▶ " : "") + (x.n ? x.n + "." : "");
   d.children[1].textContent = x.t;
   if(x.e === "erro" && x.m){ const m = document.createElement("small"); m.textContent = x.m; d.children[1].appendChild(m); }
+  if(ehRepetida(a, x)){ const r = document.createElement("span"); r.className = "rep"; r.textContent = "REPETIDA"; d.children[1].appendChild(r); }
+  if(x.o === "p" && x.n && x.e === "fila") d.insertBefore(alcaArrasto(a, x, d), d.firstChild);
   if(x.o === "p" && x.n && x.e === "fila"){
     const b = document.createElement("button"); b.className = "bpm" + (x.pm ? " on" : ""); b.textContent = x.pm ? "★ Máxima" : "☆ Prioridade";
     b.onclick = ev => { ev.stopPropagation(); comando(x.pm ? "pmax_off" : "pmax", a.nome, x.n, x.pm ? "Tirando a prioridade máxima…" : "Marcando prioridade máxima…"); };
@@ -1229,6 +1286,7 @@ function linhaTarefa(a, x){
 }
 const ORD = { exec: 0, erro: 1, fila: 2 };
 function desenhaFila(el, a, comTitulo){
+  if(arrastando) return 0;
   const l = filaDe(a).slice().sort((p, q) => (ORD[p.e] - ORD[q.e]) || (q.pm - p.pm));
   if(comTitulo && l.length){ const h = document.createElement("div"); h.className = "tit"; h.textContent = a.nome + (a.pausada ? " · pausado" : ""); el.appendChild(h); }
   if(!comTitulo) el.innerHTML = "";
@@ -1237,6 +1295,7 @@ function desenhaFila(el, a, comTitulo){
   return l.length;
 }
 function desenhaTarefas(){
+  if(arrastando) return;
   const el = $q("listaTar"); el.innerHTML = "";
   let n = 0; abas.forEach(a => { n += desenhaFila(el, a, true); });
   if(!n) pintaEstado(el, carregouAbas, "✅", "Nenhuma tarefa agora", "Tudo feito por aqui.");
@@ -1298,7 +1357,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
@@ -1314,12 +1373,13 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
   if(p === "pLojas") puxaLojas();
+  if(p === "pAgenda") puxaAgenda();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -1365,9 +1425,10 @@ async function pararTudo(){
   if(ligado) falar("Parando todos os terminais.");
   comando("parar_tudo", null, null, "Pausando todos os terminais…");
 }
-let ultPedidoId = null, ultPedidoOff = false;
+let ultPedidoId = null, ultPedidoOff = false, ultPedidoTexto = null;
 async function mandaPedido(aba, texto){
-  try{ const r = await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ aba: aba, texto: texto }) }); ultPedidoId = (r && r[0] && r[0].id) || null; ultPedidoOff = !!semSinal; return true; }catch(e){ return false; }
+  if(anexoPend) texto = texto + String.fromCharCode(10, 10) + "[anexo: " + anexoPend.name + "]";
+  try{ const r = await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ aba: aba, texto: texto }) }); ultPedidoId = (r && r[0] && r[0].id) || null; ultPedidoOff = !!semSinal; ultPedidoTexto = texto; if(anexoPend) tiraAnexo(true); return true; }catch(e){ return false; }
 }
 
 /* ---------- notificações (Web Push) ---------- */
@@ -1575,8 +1636,8 @@ async function enviaConfirma(){
 }
 const norm = t => String(t || "").replace(/\s+/g, " ").trim();
 function guardaEnviado(aba, pedido, via){
-  const l = ARM.get("jv_enviados") || [], off = ultPedidoOff, x = { t: Date.now(), aba: aba, pedido: pedido, via: via, id: ultPedidoId, off: !!off };
-  ultPedidoId = null; ultPedidoOff = false; l.unshift(x); ARM.set("jv_enviados", l.slice(0, 8)); desenhaEnviados();
+  const l = ARM.get("jv_enviados") || [], off = ultPedidoOff, x = { t: Date.now(), aba: aba, pedido: ultPedidoTexto || pedido, via: via, id: ultPedidoId, off: !!off };
+  ultPedidoId = null; ultPedidoOff = false; ultPedidoTexto = null; l.unshift(x); ARM.set("jv_enviados", l.slice(0, 8)); desenhaEnviados();
   if(off) mostraRecibo(x);
 }
 /* recibo: o texto COMPLETO que ficou salvo no PC, lado a lado com o que você enviou; avisa na hora se não for igual */
@@ -1798,6 +1859,15 @@ const RX_MANDA = /^\s*(manda|pode mandar|envia|enviar|manda sim|sim,? manda|ok,?
 const RX_CORRIGE = /^\s*corrig/i;
 async function enviaMensagem(texto){
   texto = String(texto || "").trim(); if(!texto || conversando) return;
+  const ag = tentaAgendar(texto);
+  if(ag){
+    if(!destino){ toast("Escolha o terminal", "Toque num terminal lá em cima antes de agendar.", false); return; }
+    if(ag.quando.getTime() < Date.now() + 30000){ bal("dono", texto); bal("jarvis", "Esse horário já passou. Diga um horário daqui para frente."); return; }
+    bal("dono", texto);
+    if(!(await confirmaCartao("Agendar para " + fmtBR(ag.quando) + "?", "Terminal: " + destino + "\n" + ag.texto, "Agendar"))){ bal("jarvis", "Ok, não agendei."); return; }
+    try{ await agendaOrdem(destino, ag.quando, ag.texto); bal("jarvis", "⏰ Agendado para " + fmtBR(ag.quando) + " (Brasília) → " + destino + ". O PC envia na hora certa."); }catch(e){ bal("jarvis", "Não consegui agendar: " + String(e.message || e).slice(0, 100)); }
+    return;
+  }
   if(pendente && RX_MANDA.test(texto) && texto.length < 30){ bal("dono", texto); return mandaProposta(); }
   if(pendente && RX_CORRIGE.test(texto) && texto.split(/\s+/).length <= 2){ bal("dono", texto); return editaProposta(); }
   bal("dono", texto); conversando = true; $q("estadoLig").textContent = "● Pensando…"; const dig = bal("jarvis", "digitando…", "digitando");
@@ -1962,6 +2032,74 @@ async function puxaSaude(){
   l.appendChild(linhaSaude(nt === "granted" ? "v" : "a", "Notificações no iPhone", nt === "granted" ? "Ligadas" : "Desligadas (ligue em Configurações)", nt === "granted" ? "OK" : "OFF"));
 }
 setInterval(() => { if(!document.hidden && painelAtual === "pSaude") puxaSaude(); }, 8000);
+
+/* ---------- Foto vira tarefa (v10.5) ---------- */
+let anexoPend = null;
+function tiraAnexo(enviado){ if(anexoPend && anexoPend.url){ try{ URL.revokeObjectURL(anexoPend.url); }catch(_){} } anexoPend = null; $q("anexoChip").classList.remove("on"); $q("anexoIn").value = ""; if(enviado) toast("Foto enviada junto ✓", "O terminal recebe o caminho da imagem.", false); }
+async function reduzJpeg(arq, max){
+  const url = URL.createObjectURL(arq);
+  try{
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error("não consegui abrir a foto")); i.src = url; });
+    const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("não consegui reduzir a foto")), "image/jpeg", 0.82));
+  }finally{ URL.revokeObjectURL(url); }
+}
+async function sobeAnexo(blob){
+  const d = new Date(), p2 = x => String(x).padStart(2, "0"), nome = d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + p2(d.getHours()) + p2(d.getMinutes()) + p2(d.getSeconds()) + "-" + Math.random().toString(36).slice(2, 6) + ".jpg";
+  const t = await token(), r = await fetch(CFG.url + "/storage/v1/object/jarvis-anexos/" + nome, { method: "POST", headers: { apikey: CFG.anon, Authorization: "Bearer " + t, "Content-Type": "image/jpeg" }, body: blob });
+  if(!r.ok) throw new Error("não consegui enviar a foto (" + r.status + ")");
+  return nome;
+}
+$q("anexar").onclick = () => $q("anexoIn").click();
+$q("anexoIn").onchange = async () => {
+  const f = $q("anexoIn").files && $q("anexoIn").files[0]; if(!f) return;
+  $q("anexoTxt").textContent = "Enviando a foto…"; $q("anexoChip").classList.add("on");
+  try{
+    const blob = await reduzJpeg(f, 1600), nome = await sobeAnexo(blob), url = URL.createObjectURL(blob);
+    anexoPend = { name: nome, url: url }; $q("anexoImg").src = url; $q("anexoTxt").textContent = "Foto anexada: vai junto com o próximo pedido";
+  }catch(e){ $q("anexoChip").classList.remove("on"); toast("Não consegui anexar", String(e.message || e)); }
+};
+$q("anexoTira").onclick = () => tiraAnexo(false);
+
+/* ---------- Agendar ordem (v10.5) ---------- */
+const fmtBR = d => new Date(d).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+function quandoBR(diasMais, hh, mm){
+  const ymd = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-").map(Number);
+  const b = new Date(Date.UTC(ymd[0], ymd[1] - 1, ymd[2] + diasMais)), p2 = x => String(x).padStart(2, "0");
+  return new Date(b.getUTCFullYear() + "-" + p2(b.getUTCMonth() + 1) + "-" + p2(b.getUTCDate()) + "T" + p2(hh) + ":" + p2(mm) + ":00-03:00");
+}
+/* "amanhã às 8h faça X" / "hoje às 14:30 mande Y" / "depois de amanhã às 9h ..." */
+function tentaAgendar(t){
+  const m = /^\s*(amanh[ãa]|hoje|depois de amanh[ãa])\s*[,:]?\s*(?:[àa]s?|as)\s+(\d{1,2})(?:\s*[h:]\s*(\d{2})?)?\s*(?:h|horas?)?\s*[,:\-–]?\s*([\s\S]+)$/i.exec(t || "");
+  if(!m) return null; const hh = Number(m[2]), mm = Number(m[3] || 0); if(hh > 23 || mm > 59 || !m[4].trim()) return null;
+  const d = /^hoje/i.test(m[1]) ? 0 : /^depois/i.test(m[1]) ? 2 : 1;
+  return { quando: quandoBR(d, hh, mm), texto: m[4].trim() };
+}
+async function agendaOrdem(aba, quando, texto){
+  await rest("jarvis_agenda", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ aba: aba, quando: quando.toISOString(), texto: texto }) });
+}
+async function puxaAgenda(){
+  const sel = $q("agAba"), atual = sel.value; sel.innerHTML = ""; abas.forEach(a => { const o = document.createElement("option"); o.value = a.nome; o.textContent = a.nome; sel.appendChild(o); }); sel.value = atual || destino || (abas[0] || {}).nome || "";
+  let l = []; try{ l = await rest("jarvis_agenda?select=id,quando,aba,texto,estado,resultado&order=quando.desc&limit=30") || []; }catch(e){ $q("agLista").innerHTML = '<div class="vazio vidro">Sem conexão.</div>'; return; }
+  const el = $q("agLista"); el.innerHTML = ""; if(!l.length){ el.innerHTML = '<div class="vazio vidro">Nenhuma ordem agendada.</div>'; return; }
+  l.sort((a, b) => (a.estado === "agendada" ? 0 : 1) - (b.estado === "agendada" ? 0 : 1) || (a.estado === "agendada" ? new Date(a.quando) - new Date(b.quando) : new Date(b.quando) - new Date(a.quando)));
+  l.forEach(x => {
+    const d = document.createElement("div"); d.className = "ag vidro" + (x.estado === "enviada" ? " env" : x.estado === "cancelada" ? " can" : "");
+    d.innerHTML = '<div class="h"><span></span><small></small></div><div class="x"></div><div class="bt"></div>';
+    d.querySelector(".h span").textContent = "⏰ " + fmtBR(x.quando) + " · " + x.aba; d.querySelector(".h small").textContent = x.estado === "agendada" ? "AGENDADA" : x.estado === "enviada" ? "ENVIADA" : "CANCELADA";
+    d.querySelector(".x").textContent = x.texto + (x.estado === "enviada" && x.resultado ? "\n→ " + x.resultado : "");
+    if(x.estado === "agendada"){ const b = document.createElement("button"); b.className = "btop bno"; b.textContent = "Cancelar"; b.onclick = async () => { if(!(await confirmaCartao("Cancelar esta ordem?", fmtBR(x.quando) + " · " + x.aba + "\n" + x.texto.slice(0, 140), "Cancelar ordem"))) return; try{ await rest("jarvis_agenda?id=eq." + x.id + "&estado=eq.agendada", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ estado: "cancelada" }) }); }catch(e){ toast("Não consegui cancelar", String(e.message || e)); } puxaAgenda(); }; d.querySelector(".bt").appendChild(b); }
+    el.appendChild(d);
+  });
+}
+$q("agSalva").onclick = async () => {
+  const aba = $q("agAba").value, v = $q("agQuando").value, t = $q("agTxt").value.trim();
+  if(!aba || !v || !t){ toast("Faltou preencher", "Escolha o terminal, o dia/hora e o que fazer.", false); return; }
+  const q = new Date(v + ":00-03:00"); if(q.getTime() < Date.now() + 30000){ toast("Esse horário já passou", "Escolha um horário daqui para frente.", false); return; }
+  try{ await agendaOrdem(aba, q, t); $q("agTxt").value = ""; toast("Agendado ✓", fmtBR(q) + " · " + aba, false); puxaAgenda(); }catch(e){ toast("Não consegui agendar", String(e.message || e)); }
+};
+setInterval(() => { if(!document.hidden && painelAtual === "pAgenda") puxaAgenda(); }, 15000);
 
 /* ---------- Favoritos, abrir já ouvindo, cartão de concluída (v10.3) ---------- */
 const FAV_PADRAO = [["📷 Print do PC", "__print"], ["Como estão os terminais?", "Como estão os terminais?"], ["Zerar chats", "Zerar chats das lojas"], ["Oferta relâmpago amanhã", "Programar oferta relâmpago para amanhã"]];
