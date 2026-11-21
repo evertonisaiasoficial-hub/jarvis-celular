@@ -336,6 +336,10 @@ body.capPisca{animation:capPisca .5s linear 6}
 .uBar.v .b i{background:var(--grn)}.uBar.a .b i{background:var(--yel)}.uBar.r .b i{background:var(--red)}.uBar.v .l b{color:var(--grn)}.uBar.a .l b{color:var(--yel)}.uBar.r .l b{color:var(--red)}
 #usoFrase{padding:14px;margin:4px 0 6px;font:700 18px var(--f);text-align:center}#usoFrase.v{color:var(--grn)}#usoFrase.a{color:var(--yel)}#usoFrase.r{color:var(--red)}#usoFrase small{display:block;font:500 12px var(--f);color:var(--dim);margin-top:3px}
 .uLin{display:flex;justify-content:space-between;gap:8px;padding:9px 12px;margin-bottom:6px;font:500 13.5px var(--f)}.uLin b{font:600 13.5px var(--mono)}
+#aviso.alarme{background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font-weight:700}
+.sLin{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:11px 12px;margin-bottom:7px;min-height:44px;font:500 13.5px var(--f)}
+.sLin .p{flex:0 0 12px;height:12px;border-radius:50%;background:var(--dim)}.sLin.v .p{background:var(--grn)}.sLin.a .p{background:var(--yel)}.sLin.r .p{background:var(--red)}
+.sLin .c{flex:1;min-width:0}.sLin .c small{display:block;color:var(--dim);font:500 12px var(--f);margin-top:2px}.sLin b{font:700 14px var(--mono)}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -495,7 +499,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="chat"></div>
       <div id="legenda"></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.1</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -522,6 +526,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
         <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
         <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
         <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
@@ -530,6 +535,12 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
       <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pSaude" class="painel"><div class="tit">Falta você <span id="faltaN"></span></div>
+      <div id="faltaLista"></div>
+      <div class="tit">Saúde do Jarvis</div>
+      <div id="saudeLista"></div>
+      <div class="vazio" style="text-align:left;padding:4px 2px">Atualiza sozinha a cada poucos segundos. Vermelho = precisa de você ou o PC não responde.</div>
     </section>
     <section id="pUso" class="painel"><div class="tit">Uso do Claude <span id="usoQuando"></span></div>
       <div id="usoFrase" class="vidro">Carregando…</div>
@@ -754,7 +765,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10";
+const VERSAO = "v10.1";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -934,6 +945,7 @@ async function puxa(){
     terminou(antes, abas);
     desenhaTudo();
     const av = $q("aviso"); av.classList.toggle("on", semSinal); av.textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar." : "";
+    alarmePc(); desenhaFalta();
     if(cheiaOn) puxaCheia();
     puxaCaptchas();
   }catch(e){ falhaRede = true; if(!carregouAbas) desenhaTudo(); const av = $q("aviso"); av.classList.add("on"); av.textContent = "Sem conexão com o Supabase… tentando de novo."; desenhaPc(); }
@@ -1137,7 +1149,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
@@ -1153,9 +1165,10 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
+  if(p === "pSaude") puxaSaude();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -1630,6 +1643,67 @@ async function mandaProposta(){
   notaPendente = "o pedido combinado foi ENVIADO para " + p.terminal;
   bal("nota", "✓ Enviado para o " + p.terminal); toast("Enviado ✓ " + p.terminal, "");
 }
+
+/* ---------- Alarme "o PC caiu", Falta você, Saúde (v10.1) ---------- */
+let pcCaiu = false, pcVisto = false, ultSinal = 0;
+const minAtras = t => { const m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m >= 60 ? Math.floor(m / 60) + "h" + String(m % 60).padStart(2, "0") : m + " min"; };
+function alarmePc(){
+  ultSinal = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
+  const av = $q("aviso");
+  if(semSinal){
+    if(ultSinal) av.textContent = "O PC caiu: sem sinal há " + minAtras(ultSinal) + " (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar.";
+    av.classList.add("alarme");
+    if(!pcCaiu && (pcVisto || (ultSinal && Date.now() - ultSinal > 300000))){ pcCaiu = true; toast("🔴 O PC caiu", "Sem sinal há " + (ultSinal ? minAtras(ultSinal) : "um tempo") + ". Verifique se o PC está ligado.", true); capAlerta(); }
+    pcCaiu = true;
+  }else{
+    av.classList.remove("alarme");
+    if(pcCaiu){ pcCaiu = false; toast("🟢 O PC voltou", "O Jarvis está respondendo de novo.", true); }
+    pcVisto = true;
+  }
+}
+function itemFalta(ic, txt, sub, ir){
+  const b = document.createElement("button"); b.className = "sLin vidro r"; b.innerHTML = '<span class="p"></span><div class="c"><span></span><small></small></div><b>›</b>';
+  b.querySelector(".c span").textContent = ic + " " + txt; b.querySelector("small").textContent = sub || ""; b.onclick = ir; return b;
+}
+function faltaVoce(){
+  const f = [];
+  if(semSinal) f.push(["🔴", "O PC está sem sinal", ultSinal ? "há " + minAtras(ultSinal) : "", () => vaiPara("pSaude")]);
+  if(captchas.length) f.push(["🧩", captchas.length + (captchas.length > 1 ? " captchas esperando" : " captcha esperando"), captchas[0].loja, () => abreCaptcha(captchas[0].id)]);
+  const pg = perguntasAbertas(); if(pg.length) f.push(["❓", pg.length + (pg.length > 1 ? " pedidos de permissão/pergunta" : " pedido de permissão/pergunta"), pg.map(a => a.nome).join(", "), () => vaiPara("pAvisos")]);
+  const er = abas.reduce((n, a) => n + (a.fila || []).filter(x => x.e === "erro").length, 0); if(er) f.push(["⚠️", er + (er > 1 ? " tarefas com erro" : " tarefa com erro"), "toque para corrigir", () => vaiPara("pTar")]);
+  if(ideias.length) f.push(["💡", ideias.length + (ideias.length > 1 ? " ideias para você aprovar" : " ideia para você aprovar"), "", () => vaiPara("pIdeias")]);
+  return f;
+}
+function desenhaFalta(){
+  const f = faltaVoce(), r = $q("rSaude"); if(r) r.textContent = f.length ? String(f.length) : "";
+  const l = $q("faltaLista"); if(!l || painelAtual !== "pSaude") return;
+  $q("faltaN").textContent = f.length ? "(" + f.length + ")" : ""; l.innerHTML = "";
+  if(!f.length){ l.innerHTML = '<div class="vazio vidro">Nada esperando você ✓</div>'; return; }
+  f.forEach(x => l.appendChild(itemFalta(x[0], x[1], x[2], x[3])));
+}
+function linhaSaude(cor, txt, sub, val){
+  const d = document.createElement("div"); d.className = "sLin vidro " + cor; d.innerHTML = '<span class="p"></span><div class="c"><span></span><small></small></div><b></b>';
+  d.querySelector(".c span").textContent = txt; d.querySelector("small").textContent = sub || ""; d.querySelector("b").textContent = val || ""; return d;
+}
+async function puxaSaude(){
+  desenhaFalta(); const l = $q("saudeLista"); let sa = null, uso = null;
+  try{ sa = ((await rest("jarvis_uso?id=eq.saude&select=dados,atualizado_em")) || [])[0] || null; }catch(e){}
+  try{ uso = ((await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em")) || [])[0] || null; }catch(e){}
+  l.innerHTML = "";
+  l.appendChild(linhaSaude(semSinal ? "r" : "v", "PC e Jarvis", semSinal ? "Sem sinal há " + (ultSinal ? minAtras(ultSinal) : "?") : "Respondendo (último sinal há " + (ultSinal ? minAtras(ultSinal) : "?") + ")", semSinal ? "SEM SINAL" : "OK"));
+  l.appendChild(linhaSaude(falhaRede ? "r" : "v", "Conexão do celular com o Supabase", falhaRede ? "Não consegui falar com o servidor" : "Funcionando", falhaRede ? "FALHA" : "OK"));
+  const tr = abas.length, parados = abas.filter(a => a.pausada).length, perg = abas.filter(a => a.estado === "perg").length, trab = abas.filter(a => a.estado === "trab").length;
+  l.appendChild(linhaSaude(!tr ? "r" : parados ? "a" : "v", "Terminais", tr + " ligados · " + trab + " trabalhando · " + perg + " esperando você" + (parados ? " · " + parados + " pausados" : ""), tr ? "" : "NENHUM"));
+  const cpu = abas.reduce((m, a) => Math.max(m, a.cpu || 0), 0), ram = abas.reduce((m, a) => Math.max(m, a.ram || 0), 0);
+  l.appendChild(linhaSaude(cpu > 90 || ram > 90 ? "r" : cpu > 75 || ram > 80 ? "a" : "v", "CPU e memória do PC", "CPU " + cpu + "% · memória " + ram + "%", ""));
+  const d = sa && sa.dados || {}, velho = sa ? Date.now() - new Date(sa.atualizado_em).getTime() > 180000 : true;
+  l.appendChild(linhaSaude(velho ? "a" : d.chrome ? "v" : "r", "Chrome das automações (lojas)", velho ? "Sem informação recente do PC" : d.chrome ? "Aberto" : "Fechado ou sem porta 9222", velho ? "?" : d.chrome ? "OK" : "FECHADO"));
+  const u = uso && uso.dados || {}, m = Math.max(u.h5 == null ? -1 : u.h5, u.d7 == null ? -1 : u.d7);
+  l.appendChild(linhaSaude(m < 0 ? "a" : m > 85 ? "r" : m > 60 ? "a" : "v", "Uso do plano Claude", m < 0 ? "Sem dados agora" : "Maior uso: " + m + "% (veja Mais > Uso)", m < 0 ? "" : m + "%"));
+  const nt = ("Notification" in window) ? Notification.permission : "indisponível";
+  l.appendChild(linhaSaude(nt === "granted" ? "v" : "a", "Notificações no iPhone", nt === "granted" ? "Ligadas" : "Desligadas (ligue em Configurações)", nt === "granted" ? "OK" : "OFF"));
+}
+setInterval(() => { if(!document.hidden && painelAtual === "pSaude") puxaSaude(); }, 8000);
 
 /* ---------- Uso (v10) ---------- */
 const COT_REAL = 5.5;
