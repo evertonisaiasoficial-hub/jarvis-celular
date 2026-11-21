@@ -388,6 +388,11 @@ body.capPisca{animation:capPisca .5s linear 6}
 #anexar{flex:0 0 46px;width:46px;height:50px;border-radius:16px;background:var(--glass2);border:1px solid var(--edge);font-size:20px}
 #anexoChip{display:none;flex:0 0 auto;align-items:center;gap:10px;margin:0 12px 6px;padding:6px 10px;border-radius:14px}#anexoChip.on{display:flex}
 #anexoChip img{width:40px;height:40px;object-fit:cover;border-radius:8px}#anexoChip span{flex:1;font:600 13px var(--f)}#anexoChip button{min-width:44px;min-height:44px}
+#avTela{position:relative;border:2px solid var(--cy);border-radius:12px;overflow:hidden;background:#000;touch-action:none;-webkit-user-select:none;user-select:none;min-height:180px}
+#avZ{transform-origin:0 0;will-change:transform;width:100%}#avImg{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none;min-height:160px}
+#avDot{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border:3px solid #ffd54a;border-radius:50%;pointer-events:none;display:none;box-shadow:0 0 0 2px #000}
+#avBar{display:flex;gap:6px;margin:6px 0;flex-wrap:wrap}#avBar select{flex:2 1 160px;min-height:44px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:14px var(--f)}#avBar button{flex:1;min-width:56px;min-height:44px}
+#avAviso{margin:4px 0 6px;padding:8px 10px;border-radius:12px;background:rgba(255,77,94,.14);border:1px solid rgba(255,77,94,.5);color:#ffb3ba;font:600 13px var(--f)}
 #capBanner{display:none;margin:4px 2px 6px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff;font:700 14.5px var(--f);cursor:pointer;box-shadow:0 0 20px rgba(255,77,94,.4)}
 #capBanner.on{display:block}
 #maisGrade{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -560,7 +565,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.6</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.7</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -587,6 +592,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="maisGrade">
         <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
         <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
+        <button class="mg vidro" data-ir="pAoVivo"><i>🖥</i>Ao vivo</button>
         <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
         <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
         <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
@@ -598,6 +604,12 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       </div>
       <div class="tit">Terminais ao vivo</div><div id="vivo"></div>
       <div class="tit">Últimos pedidos enviados</div><div id="enviados"></div>
+    </section>
+    <section id="pAoVivo" class="painel"><div class="tit">Ao vivo do PC <span class="sp"></span><button class="btop bno" id="avParar">■ Parar</button></div>
+      <div id="avAviso">● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.</div>
+      <div id="avBar"><select id="avAlvo" aria-label="Tela ou janela"><option value="tela">Tela inteira</option></select><button class="btop bno" id="avMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="avMais" aria-label="Mais zoom">+</button><button class="btop bno" id="avAjusta">Ajustar</button><button class="btop bno" id="avSobe" aria-label="Rolar para cima">⇧</button><button class="btop bno" id="avDesce" aria-label="Rolar para baixo">⇩</button></div>
+      <div id="avTela"><div id="avZ"><img id="avImg" alt="Tela do PC ao vivo" draggable="false"></div><div id="avDot"></div></div>
+      <div class="vazio" style="text-align:left;padding:6px 2px">Um toque = um clique no PC. Dois dedos: zoom e mover. Se o toque cair em pagar, excluir, enviar dinheiro ou desligar, o PC pergunta aqui antes de clicar. A imagem não fica guardada.</div>
     </section>
     <section id="pAgenda" class="painel"><div class="tit">Agendar ordem</div>
       <div id="agForm" class="vidro">
@@ -849,7 +861,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.6";
+const VERSAO = "v10.7";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1359,7 +1371,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; return; }
   const ok = carregouAbas && !semSinal && !falhaRede;
@@ -1373,16 +1385,18 @@ function ajustaGrade(){          // última linha da grade do Mais nunca fica co
 }
 addEventListener("resize", ajustaGrade);
 function vaiPara(p){
+  if(typeof avAtivo !== "undefined" && avAtivo && p !== "pAoVivo") paraAoVivo("Saí da tela Ao vivo");
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
   if(p === "pLojas") puxaLojas();
   if(p === "pAgenda") puxaAgenda();
+  if(p === "pAoVivo") abreAoVivo();
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
   if(p === "pTerm"){ saidaFim = true; puxa(); }
@@ -2136,6 +2150,80 @@ $q("anexoIn").onchange = async () => {
   }catch(e){ $q("anexoChip").classList.remove("on"); toast("Não consegui anexar", String(e.message || e)); }
 };
 $q("anexoTira").onclick = () => tiraAnexo(false);
+
+/* ---------- Ao vivo do PC (v10.7) ---------- */
+let avAtivo = false, avTimers = [], avS = 1, avTx = 0, avTy = 0, avPtr = {}, avGest = null, avVisto = "", avConf = "", avBusy = false, avAvisouFim = false;
+const avRow = () => rest("jarvis_aovivo?id=eq.pc&select=ver_ate,alvo,quadro,w,h,janelas,confirmar,aviso,atualizado_em");
+async function avLiga(){ try{ await rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString(), alvo: $q("avAlvo").value || "tela" }) }); }catch(e){} }
+async function abreAoVivo(){
+  if(avAtivo) return;
+  if(!(await exigeFace("Ver e tocar na tela do PC"))){ vaiPara("pMais"); return; }
+  avAtivo = true; avS = 1; avTx = avTy = 0; avVisto = ""; avConf = ""; avAvisouFim = false; $q("avImg").removeAttribute("src"); avAplica();
+  $q("avAviso").textContent = "● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.";
+  await avLiga();
+  avTimers.push(setInterval(avLiga, 15000), setInterval(avPoll, 900));
+  avPoll();
+}
+function paraAoVivo(motivo){
+  if(!avAtivo) return; avAtivo = false; avTimers.forEach(clearInterval); avTimers = [];
+  rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: null }) }).catch(() => {});
+  const im = $q("avImg"); im.removeAttribute("src"); if(avUrl){ try{ URL.revokeObjectURL(avUrl); }catch(_){} avUrl = null; }
+}
+let avUrl = null;
+async function avPoll(){
+  if(!avAtivo || document.hidden || avBusy) return; avBusy = true;
+  try{
+    const r = ((await avRow()) || [])[0]; if(!r) return;
+    if(r.aviso && /^Desligou/.test(r.aviso) && !avAvisouFim){ avAvisouFim = true; $q("avAviso").textContent = "⏹ " + r.aviso + ". Toque em Mais e abra Ao vivo de novo para ligar."; toast("Ao vivo desligou", r.aviso, false); paraAoVivo(r.aviso); return; }
+    const sel = $q("avAlvo"), tem = Array.from(sel.options).map(o => o.value).join("|"), jn = (r.janelas || []).map(j => j.id).join("|");
+    if(("tela|" + jn) !== tem){ const v = sel.value; sel.innerHTML = '<option value="tela">Tela inteira</option>'; (r.janelas || []).forEach(j => { const o = document.createElement("option"); o.value = "janela:" + j.id; o.textContent = "Janela: " + j.titulo; sel.appendChild(o); }); sel.value = Array.from(sel.options).some(o => o.value === v) ? v : "tela"; }
+    if(r.confirmar && r.confirmar.id && r.confirmar.id !== avConf){
+      avConf = r.confirmar.id; const sim = await confirmaCartao("Confirmar clique no PC?", r.confirmar.texto || "Esse ponto parece sensível.", "Clicar");
+      try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [{ t: "confirma", id: r.confirmar.id, sim: !!sim }] }) }); }catch(e){}
+    }
+    if(r.quadro && r.atualizado_em !== avVisto){
+      avVisto = r.atualizado_em; const t = await token();
+      const f = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-aovivo/" + encodeURIComponent(r.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
+      if(f.ok){ const u = URL.createObjectURL(await f.blob()), velho = avUrl; avUrl = u; $q("avImg").src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000); }
+    }
+  }catch(e){} finally{ avBusy = false; }
+}
+document.addEventListener("visibilitychange", () => { if(document.hidden && avAtivo) paraAoVivo("O app foi para o fundo"); });
+$q("avParar").onclick = () => { paraAoVivo("Parei"); vaiPara("pMais"); };
+$q("avAlvo").onchange = () => { avLiga(); avS = 1; avTx = avTy = 0; avAplica(); };
+function avAplica(){
+  const t = $q("avTela"), w = t.clientWidth, h = t.clientHeight; avS = Math.min(5, Math.max(1, avS));
+  avTx = Math.min(0, Math.max(w - w * avS, avTx)); avTy = Math.min(0, Math.max(h - h * avS, avTy));
+  $q("avZ").style.transform = "translate(" + avTx + "px," + avTy + "px) scale(" + avS + ")";
+}
+function avZoom(f){ const t = $q("avTela"), cx = t.clientWidth / 2, cy = t.clientHeight / 2, s0 = avS; avS = Math.min(5, Math.max(1, avS * f)); const k = avS / s0; avTx = cx - (cx - avTx) * k; avTy = cy - (cy - avTy) * k; avAplica(); }
+$q("avMenos").onclick = () => avZoom(1 / 1.4); $q("avMais").onclick = () => avZoom(1.4); $q("avAjusta").onclick = () => { avS = 1; avTx = avTy = 0; avAplica(); };
+async function avEnvia(ev){ try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [ev] }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e), false); } }
+$q("avSobe").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $q("avDesce").onclick = () => avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: -360 });
+(function toquesAoVivo(){
+  const tela = $q("avTela"); let ini = null;
+  tela.addEventListener("pointerdown", e => {
+    e.preventDefault(); try{ tela.setPointerCapture(e.pointerId); }catch(_){} avPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(avPtr);
+    if(ids.length >= 2){ const a = avPtr[ids[0]], b = avPtr[ids[1]], tr = tela.getBoundingClientRect(); ini = null; avGest = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: avS, tx: avTx, ty: avTy, cx: (a.x + b.x) / 2 - tr.left, cy: (a.y + b.y) / 2 - tr.top }; return; }
+    ini = { x: e.clientX, y: e.clientY, t: Date.now(), mov: false };
+  });
+  tela.addEventListener("pointermove", e => {
+    if(!avPtr[e.pointerId]) return; avPtr[e.pointerId] = { x: e.clientX, y: e.clientY }; const ids = Object.keys(avPtr);
+    if(avGest && ids.length >= 2){ const a = avPtr[ids[0]], b = avPtr[ids[1]], tr = tela.getBoundingClientRect(), d = Math.hypot(a.x - b.x, a.y - b.y) || 1, cx = (a.x + b.x) / 2 - tr.left, cy = (a.y + b.y) / 2 - tr.top; avS = Math.min(5, Math.max(1, avGest.s * d / avGest.d)); const k = avS / avGest.s; avTx = cx - (avGest.cx - avGest.tx) * k; avTy = cy - (avGest.cy - avGest.ty) * k; avAplica(); return; }
+    if(ini && Math.hypot(e.clientX - ini.x, e.clientY - ini.y) > 10) ini.mov = true;
+  });
+  const fim = e => {
+    if(!avPtr[e.pointerId]) return; delete avPtr[e.pointerId]; const n = Object.keys(avPtr).length;
+    if(avGest){ if(n < 2) avGest = null; ini = null; return; }
+    if(ini && !ini.mov && e.type === "pointerup" && Date.now() - ini.t < 600){
+      const r = $q("avImg").getBoundingClientRect(), tr = tela.getBoundingClientRect(); if(!r.width) { ini = null; return; }
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      if(x >= 0 && x <= 1 && y >= 0 && y <= 1){ const d = $q("avDot"); d.style.left = (e.clientX - tr.left) + "px"; d.style.top = (e.clientY - tr.top) + "px"; d.style.display = "block"; setTimeout(() => { d.style.display = "none"; }, 700); avEnvia({ t: "toque", x: x, y: y }); }
+    }
+    ini = null;
+  };
+  tela.addEventListener("pointerup", fim); tela.addEventListener("pointercancel", fim);
+})();
 
 /* ---------- Agendar ordem (v10.5) ---------- */
 const fmtBR = d => new Date(d).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
