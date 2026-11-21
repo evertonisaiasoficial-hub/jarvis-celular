@@ -537,6 +537,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <main id="corpo">
     <section id="pInicio" class="painel"><div class="tit">Agora no PC</div>
       <div id="inPc" class="vidro"></div>
+      <div id="inManha"></div>
       <div id="inCorpo">
         <div class="tit">Gasto do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
         <div class="tit">Terminais</div><div id="inTerm"></div>
@@ -559,7 +560,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v10.5</span></div>
+      <div id="rodape"><span id="versao">VERSÃO v10.6</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -848,7 +849,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v10.5";
+const VERSAO = "v10.6";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -909,7 +910,7 @@ async function authPost(caminho, corpo){
   if(!r.ok) throw new Error(j.error_description || j.msg || j.message || "não consegui entrar");
   return j;
 }
-function guardaSessao(j){ sess = { access_token: j.access_token, refresh_token: j.refresh_token, expira: Date.now() + (j.expires_in || 3600) * 1000 - 60000 }; ARM.set("jv_sess", sess); }
+function guardaSessao(j){ sess = { access_token: j.access_token, refresh_token: j.refresh_token, expira: Date.now() + (j.expires_in || 3600) * 1000 - 60000 }; ARM.set("jv_sess", sess); if(typeof rtEnviaToken === "function") rtEnviaToken(); }
 let renovando = null;
 async function token(){
   if(!sess) throw new Error("sem login");
@@ -965,7 +966,7 @@ async function destrava(){
   document.body.classList.remove("travado"); $q("trava").classList.remove("on"); iniciaSessao();
 }
 $q("travaAbre").onclick = destrava;
-$q("travaSai").onclick = () => { sess = null; ARM.del("jv_sess"); ARM.del("jv_passkey"); location.reload(); };
+$q("travaSai").onclick = () => { sess = null; ARM.del("jv_sess"); ARM.del("jv_passkey"); ARM.del("jv_cache"); location.reload(); };
 function desenhaFace(){
   $q("faceTxt").textContent = !faceSuporte() ? "não disponível neste aparelho" : faceAtivo() ? "ligado ✓" : "desligado";
   $q("faceBtn").textContent = faceAtivo() ? "Desligar" : "Ligar"; $q("faceBtn").style.display = faceSuporte() ? "" : "none";
@@ -1036,7 +1037,8 @@ let sync = null, ocupado = false, ultAviso = ARM.get("jv_ultaviso") || 0, avisoI
 function iniciaSync(){
   if(sync) return;
   puxa(); puxaAvisos(); olhando(); salvaPushSilencioso(); carregaConversa(); setTimeout(() => { try{ puxaChave(); }catch(e){} }, 1500);
-  sync = setInterval(() => { if(!document.hidden) puxa(); }, 3000);
+  ligaRealtime(); let tk = 0;
+  sync = setInterval(() => { if(document.hidden) return; tk++; if(!rtOn() || tk % 5 === 0) puxa(); }, 3000);
   setInterval(() => { if(!document.hidden) puxaAvisos(); }, 8000);
   setInterval(() => { if(!document.hidden) olhando(); }, 20000);
 }
@@ -1055,7 +1057,7 @@ async function puxa(){
     const antes = abas;
     abas = a || []; ideias = i || [];
     if(s && s[0]){ const x = abas.find(y => y.nome === s[0].nome); if(x) x.saida = s[0].saida; }
-    carregouAbas = true; falhaRede = false; ultSync = Date.now();
+    carregouAbas = true; falhaRede = false; ultSync = Date.now(); usandoCache = false; salvaCache();
     const agora = Date.now();
     semSinal = !abas.length || abas.every(x => agora - new Date(x.atualizado_em).getTime() > 90000);
     if(!destino || !abas.find(x => x.nome === destino)) destino = (abas.find(x => x.nome === "Jarvis") || abas[0] || {}).nome || "";
@@ -1359,6 +1361,7 @@ function desenhaParar(){
 }
 const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
+  if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; return; }
   const ok = carregouAbas && !semSinal && !falhaRede;
   $q("pcDot").className = "pcd " + (ok ? "ok" : (carregouAbas || falhaRede ? "off" : ""));
   $q("pcTxt").textContent = ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…");
@@ -1374,7 +1377,7 @@ function vaiPara(p){
   painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
   const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
-  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); }
+  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
@@ -1915,6 +1918,77 @@ async function mandaProposta(){
   bal("nota", "✓ Enviado para o " + p.terminal); toast("Enviado ✓ " + p.terminal, "");
 }
 
+/* ---------- Abrir na hora (última tela guardada) ---------- */
+let usandoCache = false, cacheT = 0, cacheSalvo = 0;
+function salvaCache(){
+  if(Date.now() - cacheSalvo < 4000) return; cacheSalvo = Date.now();
+  try{ ARM.set("jv_cache", { t: Date.now(), abas: abas.map(a => { const c = Object.assign({}, a); delete c.saida; return c; }), ideias: ideias, avisos: avisos.slice(0, 30) }); }catch(e){}
+}
+function hidrataCache(){
+  const c = ARM.get("jv_cache"); if(!c || !Array.isArray(c.abas) || !c.abas.length || Date.now() - c.t > 7 * 86400000) return;
+  abas = c.abas; ideias = c.ideias || []; avisos = c.avisos || []; carregouAbas = true; carregouAvisos = true; usandoCache = true; cacheT = c.t;
+  if(!destino || !abas.find(x => x.nome === destino)) destino = (abas.find(x => x.nome === "Jarvis") || abas[0] || {}).nome || "";
+  if(!termSel || !abas.find(x => x.nome === termSel)) termSel = destino;
+  try{ desenhaTudo(); desenhaAvisos(); }catch(e){}
+}
+
+/* ---------- Tempo real: Supabase Realtime (WebSocket) — o app é avisado na hora quando algo muda ---------- */
+let rtWs = null, rtJoin = 0, rtRef = 0, rtHb = null, rtTent = 0, rtT = null, rtDeb = {};
+const RT_TABELAS = ["jarvis_abas", "jarvis_avisos", "jarvis_ideias", "jarvis_comandos", "jarvis_pedidos", "jarvis_captcha", "jarvis_uso", "jarvis_agenda"];
+const rtOn = () => !!(rtJoin && rtWs && rtWs.readyState === 1 && Date.now() - rtJoin < 90000);
+async function ligaRealtime(){
+  if((rtWs && rtWs.readyState <= 1) || !sess || !("WebSocket" in window)) return;
+  let t; try{ t = await token(); }catch(e){ return; }
+  let ws; try{ ws = new WebSocket(CFG.url.replace(/^http/, "ws") + "/realtime/v1/websocket?apikey=" + encodeURIComponent(CFG.anon) + "&vsn=1.0.0"); }catch(e){ return; }
+  rtWs = ws; rtJoin = 0;
+  const env = (topic, event, payload) => { try{ ws.send(JSON.stringify({ topic: topic, event: event, payload: payload, ref: String(++rtRef) })); }catch(e){} };
+  ws.onopen = () => {
+    env("realtime:jarvis", "phx_join", { config: { broadcast: { ack: false, self: false }, presence: { key: "" }, postgres_changes: RT_TABELAS.map(x => ({ event: "*", schema: "public", table: x })) }, access_token: t });
+    clearInterval(rtHb); rtHb = setInterval(() => env("phoenix", "heartbeat", {}), 25000);
+  };
+  ws.onmessage = ev => {
+    let m; try{ m = JSON.parse(ev.data); }catch(e){ return; }
+    if(m.event === "phx_reply" && m.topic === "realtime:jarvis" && m.payload && m.payload.status === "ok"){ rtJoin = Date.now(); rtTent = 0; }
+    else if(m.event === "phx_reply" && m.topic === "phoenix"){ if(rtJoin) rtJoin = Date.now(); }
+    else if(m.event === "postgres_changes" && m.payload && m.payload.data){ rtJoin = Date.now(); rtMuda(m.payload.data.table); }
+  };
+  ws.onclose = () => { clearInterval(rtHb); rtJoin = 0; rtWs = null; clearTimeout(rtT); rtT = setTimeout(ligaRealtime, Math.min(30000, 1500 * Math.pow(2, rtTent++))); };
+  ws.onerror = () => { try{ ws.close(); }catch(e){} };
+}
+function rtEnviaToken(){ if(rtWs && rtWs.readyState === 1 && sess){ try{ rtWs.send(JSON.stringify({ topic: "realtime:jarvis", event: "access_token", payload: { access_token: sess.access_token }, ref: String(++rtRef) })); }catch(e){} } }
+function rtMuda(tab){
+  clearTimeout(rtDeb[tab]);
+  rtDeb[tab] = setTimeout(() => {
+    if(tab === "jarvis_abas" || tab === "jarvis_ideias" || tab === "jarvis_comandos") puxa();
+    else if(tab === "jarvis_avisos") puxaAvisos();
+    else if(tab === "jarvis_captcha") puxaCaptchas();
+    else if(tab === "jarvis_pedidos") acompanhaOrdens();
+    else if(tab === "jarvis_uso"){ puxaUsoInicio(); puxaManha(); if(painelAtual === "pUso") puxaUso(); }
+    else if(tab === "jarvis_agenda" && painelAtual === "pAgenda") puxaAgenda();
+  }, 250);
+}
+document.addEventListener("visibilitychange", () => { if(!document.hidden && sess){ if(!rtOn()) ligaRealtime(); puxa(); puxaAvisos(); } });
+
+/* ---------- Resumo da manhã (publicado pelo painel do PC; aparece uma vez por dia no Início) ---------- */
+let manhaIn = null;
+const hojeISO = () => { const d = new Date(), p = x => String(x).padStart(2, "0"); return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); };
+async function puxaManha(){ try{ manhaIn = ((await rest("jarvis_uso?id=eq.manha&select=dados")) || [])[0] || null; }catch(e){} desenhaManha(); }
+function desenhaManha(){
+  const el = $q("inManha"); if(!el) return; el.innerHTML = ""; const d = manhaIn && manhaIn.dados;
+  if(!d || d.dia !== hojeISO() || ARM.get("jv_manhavisto") === d.dia) return;
+  const c = document.createElement("div"); c.className = "vidro"; c.style.cssText = "padding:12px 14px;margin:0 0 8px;border-color:rgba(255,210,74,.5)";
+  const linha = (txt, forte) => { const p = document.createElement("div"); p.style.cssText = "font:" + (forte ? "700 15px" : "500 13.5px") + " var(--f);margin:3px 0"; p.textContent = txt; c.appendChild(p); };
+  linha("☀ Resumo da manhã", true);
+  const f = d.feitas || {}, nomes = Object.keys(f); let n = 0;
+  nomes.forEach(k => { n += f[k].length; linha("✓ " + k + ": " + f[k].length + (f[k].length === 1 ? " tarefa" : " tarefas") + " — " + f[k].slice(0, 3).join("; ")); });
+  if(!nomes.length) linha("Nenhuma tarefa concluída desde ontem.");
+  if(d.ideias) linha("💡 " + d.ideias + (d.ideias === 1 ? " ideia esperando você" : " ideias esperando você"));
+  if((d.aprovar || []).length) linha("🔐 Esperando sua autorização: " + d.aprovar.join(", "));
+  const b = document.createElement("button"); b.className = "btop bok"; b.style.cssText = "width:100%;margin-top:8px"; b.textContent = "Entendi"; b.onclick = () => { ARM.set("jv_manhavisto", d.dia); desenhaManha(); }; c.appendChild(b);
+  el.appendChild(c);
+}
+setInterval(() => { if(!document.hidden && painelAtual === "pInicio") puxaManha(); }, 60000);
+
 /* ---------- Início (v10.4): o que está acontecendo no PC agora; atualiza sozinha ---------- */
 let usoIn = null, inAbertos = new Set(ARM.get("jv_inabertos") || []), saidasIn = {}, inScroll = {};
 /* saída do terminal, linha por linha, sem lixo de tela (spinner, thinking, Vibing, Baked for…, Tip:, tokens) e sem códigos de cor */
@@ -1941,10 +2015,10 @@ const hhmm = ms => { const d = new Date(ms), p = x => String(x).padStart(2, "0")
 async function puxaUsoInicio(){ try{ usoIn = ((await rest("jarvis_uso?id=eq.conta&select=dados,atualizado_em")) || [])[0] || null; }catch(e){} desenhaInicio(); }
 function desenhaInicio(){
   const pc = $q("inPc"); if(!pc) return;
-  const off = !carregouAbas || semSinal, ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
+  const off = !carregouAbas || (semSinal && !usandoCache), ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
   pc.className = "vidro " + (off && carregouAbas ? "off" : off ? "" : "ok"); pc.innerHTML = "<span></span><small></small>";
-  pc.children[0].textContent = !carregouAbas ? (falhaRede ? "Sem conexão com o Jarvis" : "Conectando…") : semSinal ? "PC offline" : "PC ligado";
-  pc.children[1].textContent = carregouAbas && ult ? "último contato " + hhmm(ult) + (semSinal ? " · há " + minAtras(ult) : "") : "";
+  pc.children[0].textContent = !carregouAbas ? (falhaRede ? "Sem conexão com o Jarvis" : "Conectando…") : usandoCache ? (falhaRede ? "Sem conexão" : "Atualizando…") : semSinal ? "PC offline" : "PC ligado";
+  pc.children[1].textContent = usandoCache ? "mostrando o estado de " + hhmm(cacheT) : carregouAbas && ult ? "último contato " + hhmm(ult) + (semSinal ? " · há " + minAtras(ult) : "") : "";
   $q("inCorpo").classList.toggle("velho", off && carregouAbas);
   // barras do plano (só valores que o PC publicou: nada de estimativa)
   const b = $q("inBarras"); b.innerHTML = ""; const d = (usoIn && usoIn.dados) || {};
@@ -1976,6 +2050,7 @@ setInterval(() => { if(!document.hidden && painelAtual === "pInicio") puxaUsoIni
 let pcCaiu = false, pcVisto = false, ultSinal = 0;
 const minAtras = t => { const m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m >= 60 ? Math.floor(m / 60) + "h" + String(m % 60).padStart(2, "0") : m + " min"; };
 function alarmePc(){
+  if(usandoCache) return;
   ultSinal = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
   const av = $q("aviso");
   if(semSinal){
@@ -2557,6 +2632,7 @@ $q("chaveSalva").onclick = async () => {
     $q("dicaOk").onclick = () => { d.classList.remove("on"); ARM.set("jv_dica2", 1); };
   }
 })();
+if(ARM.get("jv_sess")) hidrataCache();     // abre NA HORA com a última tela guardada; a rede atualiza por trás
 (function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : (CFG.semInicio ? "pLig" : "pInicio"))); })();
 async function iniciaSessao(){
   if(sess){ try{ await garanteDono(); document.body.classList.remove("semlogin"); iniciaSync(); return; }catch(e){ /* cai no login */ } }
