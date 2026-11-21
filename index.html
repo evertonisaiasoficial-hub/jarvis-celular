@@ -285,6 +285,8 @@ button:active{transform:scale(.97)}
 .apv .ab button:disabled{opacity:.5}
 #nav button{font-size:10.5px}#nav button i{font-size:21px}
 
+/* v9.2: trava (sem login ou trancado: o app não mostra nada) */
+body.semlogin #app,body.travado #app{visibility:hidden}
 /* v9.1: chave da IA (campos sem salvar senha, sem corretor) */
 .rot{display:block;font:600 12px var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:12px 2px 6px}
 input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px var(--mono);-webkit-text-security:disc;-webkit-user-select:text;user-select:text}
@@ -392,7 +394,7 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
   <main id="corpo">
     <section id="pLig" class="painel on">
       <div id="chatTopo"><div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
-        <div class="ct"><b>Jarvis</b><div id="versao">VERSÃO v9.1</div><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
+        <div class="ct"><b>Jarvis</b><div id="versao">VERSÃO v9.2</div><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
         <button class="btop bno" id="novaConversa">＋ Nova</button></div>
       <div id="capBanner"></div>
       <div id="chat"></div>
@@ -479,6 +481,7 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0"></p>
   <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
+  <p class="s" style="margin:10px 0 0">Face ID para abrir o app: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
 </div></div>
 <div id="toast" class="vidro"></div>
 <div class="cartao" id="login"><div class="caixa vidro">
@@ -488,6 +491,13 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
   <input id="sn" type="password" placeholder="Senha" autocomplete="current-password">
   <div class="err" id="loginErr"></div>
   <button class="ok bok" id="entrar">Entrar</button>
+</div></div>
+<div class="cartao" id="trava"><div class="caixa vidro">
+  <h2>Jarvis 🔒</h2>
+  <p class="s">App trancado. Abra com o Face ID.</p>
+  <div class="err" id="travaErr"></div>
+  <button class="ok bok" id="travaAbre">Abrir com Face ID</button>
+  <button class="btop bno" id="travaSai" style="margin-top:10px;width:100%">Entrar com e-mail e senha</button>
 </div></div>
 
 <script src="config.js"></script>
@@ -634,7 +644,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v9.1";
+const VERSAO = "v9.2";
 const CFG = window.JARVIS_CFG;
 const ARM = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
 const $q = id => document.getElementById(id);
@@ -670,15 +680,57 @@ async function rest(caminho, opc){
 }
 
 /* ---------- login (só o dono) ---------- */
-function mostraLogin(){ $q("login").classList.add("on"); }
+function mostraLogin(){ document.body.classList.add("semlogin"); $q("trava").classList.remove("on"); $q("login").classList.add("on"); }
+/* ---------- v9.2: Face ID por passkey (a chave do Face ID fica no aparelho; o app só abre depois do reconhecimento) ---------- */
+const fcB64 = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const fcDeb64 = t => Uint8Array.from(atob(t.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+const faceSuporte = () => !!(window.PublicKeyCredential && navigator.credentials && navigator.credentials.create);
+const faceAtivo = () => !!ARM.get("jv_passkey");
+async function faceCria(){
+  const cred = await navigator.credentials.create({ publicKey: { rp: { name: "Jarvis", id: location.hostname }, user: { id: crypto.getRandomValues(new Uint8Array(16)), name: "dono", displayName: "Dono do Jarvis" },
+    challenge: crypto.getRandomValues(new Uint8Array(32)), pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }], timeout: 60000, attestation: "none",
+    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "preferred" } } });
+  ARM.set("jv_passkey", fcB64(cred.rawId));
+}
+async function faceVerifica(){
+  const id = ARM.get("jv_passkey"); if(!id) return true;
+  const a = await navigator.credentials.get({ publicKey: { challenge: crypto.getRandomValues(new Uint8Array(32)), rpId: location.hostname, timeout: 60000, userVerification: "required", allowCredentials: [{ type: "public-key", id: fcDeb64(id), transports: ["internal"] }] } });
+  return !!a;
+}
+function travaApp(){ document.body.classList.add("travado"); $q("login").classList.remove("on"); $q("trava").classList.add("on"); $q("travaErr").textContent = ""; }
+async function destrava(){
+  $q("travaErr").textContent = "";
+  let ok = false; try{ ok = await faceVerifica(); }catch(e){ ok = false; }
+  if(!ok){ $q("travaErr").textContent = "Não reconheci. Toque para tentar de novo."; return; }
+  document.body.classList.remove("travado"); $q("trava").classList.remove("on"); iniciaSessao();
+}
+$q("travaAbre").onclick = destrava;
+$q("travaSai").onclick = () => { sess = null; ARM.del("jv_sess"); ARM.del("jv_passkey"); location.reload(); };
+function desenhaFace(){
+  $q("faceTxt").textContent = !faceSuporte() ? "não disponível neste aparelho" : faceAtivo() ? "ligado ✓" : "desligado";
+  $q("faceBtn").textContent = faceAtivo() ? "Desligar" : "Ligar"; $q("faceBtn").style.display = faceSuporte() ? "" : "none";
+}
+$q("faceBtn").onclick = async () => {
+  try{
+    if(faceAtivo()){ if(!(await faceVerifica())) return; ARM.del("jv_passkey"); toast("Face ID desligado", ""); }
+    else { await faceCria(); toast("Face ID ligado ✓", "O app pede Face ID ao abrir."); }
+  }catch(e){ toast("Face ID não foi alterado", String(e.message || e).slice(0, 80)); }
+  desenhaFace();
+};
+let ocultoEm = 0;
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden){ ocultoEm = Date.now(); return; }
+  if(faceAtivo() && sess && ocultoEm && Date.now() - ocultoEm > 60000 && !(typeof ligado !== "undefined" && ligado)) travaApp();   // volta depois de 1 min: pede Face ID de novo
+});
 async function entrar(){
   $q("loginErr").textContent = ""; $q("entrar").disabled = true;
   try{
     guardaSessao(await authPost("token?grant_type=password", { email: $q("em").value.trim(), password: $q("sn").value }));
     $q("sn").value = "";
     await garanteDono();
-    $q("login").classList.remove("on");
+    $q("login").classList.remove("on"); document.body.classList.remove("semlogin");
     iniciaSync();
+    if(faceSuporte() && !faceAtivo() && !ARM.get("jv_faceoferta")){ ARM.set("jv_faceoferta", 1); setTimeout(() => toast("Proteja com Face ID", "Ligue em ⚙ > Face ID para abrir o app."), 1500); }
   }catch(e){ $q("loginErr").textContent = String(e.message || e); sess = null; ARM.del("jv_sess"); }
   $q("entrar").disabled = false;
 }
@@ -1492,7 +1544,7 @@ async function mandaCapEventos(evs){
 })();
 
 /* ---------- botões ---------- */
-$q("cfgBtn").onclick = () => { $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
+$q("cfgBtn").onclick = () => { desenhaFace(); $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
 $q("fechaCfg").onclick = () => { $q("cfg").classList.remove("on"); try{ speechSynthesis.cancel(); }catch(e){} };
 $q("vozTeste").onclick = testaVoz; $q("falaTg").onclick = () => { ARM.set("jv_fala", !ARM.get("jv_fala")); desenhaFalaTg(); };
 $q("abreCheia").onclick = () => abreCheia(termSel && cheiaModo !== "todos" ? termSel : "todos");
@@ -1610,9 +1662,14 @@ $q("chaveSalva").onclick = async () => {
   }
 })();
 (function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : "pLig")); })();
-(async function arranque(){
-  if(sess){ try{ await garanteDono(); iniciaSync(); return; }catch(e){ /* cai no login */ } }
+async function iniciaSessao(){
+  if(sess){ try{ await garanteDono(); document.body.classList.remove("semlogin"); iniciaSync(); return; }catch(e){ /* cai no login */ } }
   mostraLogin();
+}
+(function arranque(){
+  if(!sess){ mostraLogin(); return; }
+  if(faceAtivo() && faceSuporte()){ travaApp(); setTimeout(() => { try{ destrava(); }catch(e){} }, 300); return; }   // tenta o Face ID sozinho; se o iOS exigir toque, o botão está na tela
+  iniciaSessao();
 })();
 
 </script></body></html>
