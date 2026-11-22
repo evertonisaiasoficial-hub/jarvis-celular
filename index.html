@@ -734,7 +734,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="legenda"></div>
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
-      <div id="composer"><button id="xGrav" title="Cancelar" aria-label="Cancelar">✕</button><textarea id="msg" rows="1" placeholder="Mensagem" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Falar ou enviar" aria-label="Falar ou enviar"></button></div>
+      <div id="composer"><button id="xGrav" title="Cancelar" aria-label="Cancelar">✕</button><textarea id="msg" rows="1" placeholder="Mensagem" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" multiple hidden><button id="ligar" title="Falar ou enviar" aria-label="Falar ou enviar"></button></div>
     </section>
     <section id="pTerm" class="painel">
       <div id="termTopo"><button class="btop bno" id="termVolta">← Tarefas</button></div>
@@ -1044,7 +1044,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v75";
+const VERSAO = "v76";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1655,7 +1655,7 @@ async function pararTudo(){
 }
 let ultPedidoId = null, ultPedidoOff = false, ultPedidoTexto = null;
 async function mandaPedido(aba, texto){
-  if(anexoPend) texto = texto + String.fromCharCode(10, 10) + "[anexo: " + anexoPend.name + "]";
+  texto = texto + marcaAnexos();
   try{ const r = await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ aba: aba, texto: texto }) }); ultPedidoId = (r && r[0] && r[0].id) || null; ultPedidoOff = !!semSinal; ultPedidoTexto = texto; if(anexoPend) tiraAnexo(true); return true; }
   catch(e){
     /* melhorias-iphone-001 #2: sem sinal → guarda no app e manda sozinho quando a internet voltar */
@@ -2198,7 +2198,10 @@ async function gravaClaude(texto){
   try{ const r = await rest("jarvis_claude_chat", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ papel: "dono", texto: texto.slice(0, 3900) }) }); return (r && r[0] && r[0].id) || 0; }catch(e){ return 0; }
 }
 async function mandaClaude(texto){
-  const b = bal("dono", texto), st = document.createElement("small"); b.appendChild(st); entregaTxt(st, "env", 0, texto);
+  /* iphone-020: as fotos anexadas seguem junto (marca [anexo: x.jpg]); o PC baixa para ola-claude/anexos e entrega o caminho ao chat fixado */
+  const fotos = anexoPend, marca = marcaAnexos(); if(fotos) tiraAnexo(true, true);
+  const b = bal("dono", texto), st = document.createElement("small"); if(fotos) fotos.forEach(f => { const im = document.createElement("img"); im.src = f.url; im.className = "tpFoto"; im.style.maxHeight = "18vh"; b.appendChild(im); });
+  b.appendChild(st); texto = texto + marca; entregaTxt(st, "env", 0, texto);
   const id = await gravaClaude(texto);
   if(!id){ entregaTxt(st, "erro", 0, texto); return true; }       /* mostra "não entregue" + botão; nunca some calado */
   entregaTxt(st, "fila", id, texto); acompanhaEntrega(st, id, texto); return true;
@@ -2532,8 +2535,9 @@ async function puxaSaude(){
 setInterval(() => { if(!document.hidden && painelAtual === "pSaude") puxaSaude(); }, 8000);
 
 /* ---------- Foto vira tarefa (v10.5) ---------- */
-let anexoPend = null;
-function tiraAnexo(enviado){ if(anexoPend && anexoPend.url){ try{ URL.revokeObjectURL(anexoPend.url); }catch(_){} } anexoPend = null; $q("anexoChip").classList.remove("on"); $q("anexoIn").value = ""; if(enviado) toast("Foto enviada junto ✓", "O terminal recebe o caminho da imagem.", false); }
+let anexoPend = null;   /* iphone-020: lista de até 4 fotos {name,url}, ou null */
+function marcaAnexos(){ return anexoPend ? anexoPend.map(f => String.fromCharCode(10) + "[anexo: " + f.name + "]").join("").replace(/^/, String.fromCharCode(10)) : ""; }
+function tiraAnexo(enviado, manterUrl){ if(anexoPend && !manterUrl){ anexoPend.forEach(f => { try{ URL.revokeObjectURL(f.url); }catch(_){} }); } anexoPend = null; $q("anexoChip").classList.remove("on"); $q("anexoIn").value = ""; if(enviado && !manterUrl) toast("Foto enviada junto ✓", "O terminal recebe o caminho da imagem.", false); }
 async function reduzJpeg(arq, max){
   const url = URL.createObjectURL(arq);
   try{
@@ -2551,12 +2555,14 @@ async function sobeAnexo(blob){
 }
 $q("anexar").onclick = () => $q("anexoIn").click();
 $q("anexoIn").onchange = async () => {
-  const f = $q("anexoIn").files && $q("anexoIn").files[0]; if(!f) return;
-  $q("anexoTxt").textContent = "Enviando a foto…"; $q("anexoChip").classList.add("on");
+  const fs = Array.from($q("anexoIn").files || []).slice(0, 4); if(!fs.length) return;
+  $q("anexoTxt").textContent = "Enviando " + (fs.length > 1 ? fs.length + " fotos" : "a foto") + "…"; $q("anexoChip").classList.add("on");
+  const novas = [];
   try{
-    const blob = await reduzJpeg(f, 1600), nome = await sobeAnexo(blob), url = URL.createObjectURL(blob);
-    anexoPend = { name: nome, url: url }; $q("anexoImg").src = url; $q("anexoTxt").textContent = "Foto anexada: vai junto com o próximo pedido";
-  }catch(e){ $q("anexoChip").classList.remove("on"); toast("Não consegui anexar", String(e.message || e)); }
+    for(const f of fs){ const blob = await reduzJpeg(f, 1600), nome = await sobeAnexo(blob); novas.push({ name: nome, url: URL.createObjectURL(blob) }); }
+    const todas = ((anexoPend || []).concat(novas)).slice(0, 4); anexoPend = todas;
+    $q("anexoImg").src = todas[0].url; $q("anexoTxt").textContent = (todas.length > 1 ? todas.length + " fotos anexadas" : "Foto anexada") + ": vai junto com a próxima mensagem";
+  }catch(e){ novas.forEach(f => { try{ URL.revokeObjectURL(f.url); }catch(_){} }); if(!anexoPend) $q("anexoChip").classList.remove("on"); $q("anexoIn").value = ""; toast("Foto não entregue — tentar de novo", String(e.message || e)); }
 };
 $q("anexoTira").onclick = () => tiraAnexo(false);
 
