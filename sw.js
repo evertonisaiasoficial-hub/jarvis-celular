@@ -1,7 +1,7 @@
-// Jarvis iPhone v57: guarda a "casca" do app (abre rápido) e mostra as notificações. Os dados sempre vêm da rede (Supabase).
+// Jarvis iPhone v62: guarda a "casca" do app (abre rápido) e mostra as notificações. Os dados sempre vêm da rede (Supabase).
 // Cada versão nova tem um nome de cache novo: o iPhone baixa a versão nova ao abrir, troca sozinho e o app avisa "Atualizado para vX".
-const V = "jarvis-v57";
-const CASCA = ["./", "index.html", "config.js", "manifest.webmanifest", "icon-v2-180.png", "icon-v2-192.png", "icon-v2-512.png"];
+const V = "jarvis-v62";
+const CASCA = ["./", "index.html", "config.js", "manifest.webmanifest", "icone-v3-180.png", "icone-v3-192.png", "icone-v3-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(CASCA.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", e => {
@@ -13,7 +13,7 @@ self.addEventListener("fetch", e => {
 });
 self.addEventListener("push", e => {
   let d = {}; try{ d = e.data ? e.data.json() : {}; }catch(_){ d = { titulo: "Jarvis", texto: e.data ? e.data.text() : "" }; }
-  e.waitUntil(self.registration.showNotification(d.titulo || "Jarvis", { body: d.texto || "", icon: "icon-v2-192.png", badge: "icon-v2-192.png", tag: (d.tipo || "aviso") + "-" + Date.now(), data: { url: d.tipo === "captcha" ? "./?p=pCaptcha&l=" + encodeURIComponent(d.aba || "") : (d.tipo === "permissao" || d.tipo === "risco" || d.tipo === "decisao") ? "./?p=pAvisos&d=1" : "./?p=pAvisos" } }));
+  e.waitUntil(self.registration.showNotification(d.titulo || "Jarvis", { body: d.texto || "", icon: "icone-v3-192.png", badge: "icone-v3-192.png", tag: (d.tipo || "aviso") + "-" + Date.now(), data: { url: d.tipo === "captcha" ? "./?p=pCaptcha&l=" + encodeURIComponent(d.aba || "") : (d.tipo === "permissao" || d.tipo === "risco" || d.tipo === "decisao") ? "./?p=pAvisos&d=1" : "./?p=pAvisos" } }));
 });
 self.addEventListener("notificationclick", e => {
   e.notification.close();

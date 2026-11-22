@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="Jarvis">
 <title>Jarvis</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-v2-180.png">
-<link rel="icon" href="icon-v2-192.png">
+<link rel="apple-touch-icon" href="icone-v3-180.png">
+<link rel="icon" href="icone-v3-192.png">
 <link rel="apple-touch-startup-image" href="splash-1170x2532.png" media="(device-width:390px) and (device-height:844px) and (-webkit-device-pixel-ratio:3)">
 <link rel="apple-touch-startup-image" href="splash-1179x2556.png" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3)">
 <link rel="apple-touch-startup-image" href="splash-1290x2796.png" media="(device-width:430px) and (device-height:932px) and (-webkit-device-pixel-ratio:3)">
@@ -187,7 +187,7 @@ button:active{transform:scale(.97)}
 #toast .tx{flex:1;min-width:0}#toast .tt{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #toast small{display:block;color:var(--dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #toast .cnt{flex:0 0 auto;font:600 12px var(--mono);color:var(--cy)}
-#instala{display:none;margin:0 12px 6px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+#instala{display:none;position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 8px);z-index:9999;padding:10px 12px;font-size:12.5px;line-height:1.5}
 #instala.on{display:block}
 /* iPad / tela larga: Ligação fixa à esquerda + painel escolhido à direita (funciona dividido ao lado de outro app) */
 @media (min-width:760px){
@@ -614,7 +614,6 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <div id="toast" class="vidro" role="status" aria-live="polite"></div>
   <div id="faixa"><div id="chips"></div></div>
   <div id="aviso"></div><div id="aviso2"></div>
-  <div id="instala" class="vidro"></div>
   <main id="corpo">
     <section id="pInicio" class="painel">
       <div id="inCorpo">
@@ -642,7 +641,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="legenda"></div>
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
-      <button id="seguraFalar" aria-label="Segure para falar">🎙 Segure para falar</button>
+      <button id="seguraFalar" aria-label="Toque para falar">🎙 Toque para falar</button>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
     </section>
     <section id="pTerm" class="painel">
@@ -758,7 +757,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <p class="s l1">Escolha a voz do Jarvis. <a href="#" id="saibaMais">Saiba mais</a></p>
   <p class="s" id="cfgMais" style="display:none">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
   <div id="listaVozes"></div>
-  <button class="vz" id="autoTg" style="margin-top:12px"><span class="gen">🎙</span><span><span class="vn"></span><small>Ligado: envia sozinho ~1,5 s depois que você para de falar. Desligado: toque em Enviar.</small></span></button>
+  <button class="vz" id="autoTg" style="margin-top:12px"><span class="gen">🎙</span><span><span class="vn"></span><small>Desligado (padrão): toque no botão para falar e toque de novo para enviar. Ligado: envia sozinho ~1,5 s depois que você para de falar.</small></span></button>
   <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0;display:none"></p>
@@ -784,6 +783,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
 <div id="recibo"><div class="cx vidro"><h3 id="recT"></h3><div id="recCorpo"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btop bok" id="recFecha" style="flex:1">Entendi</button></div></div></div>
 <div id="cartao"><div class="cx vidro"><h3 id="cartT"></h3><h4>O que pedi</h4><p id="cartPed"></p><h4>O que foi feito</h4><p id="cartFeito"></p><h4>Terminal · quando</h4><p id="cartQuando"></p><div style="display:flex;gap:8px;margin-top:14px"><button class="btop bno" id="cartPrint" style="flex:1">📷 Ver print do PC</button><button class="btop bok" id="cartFecha" style="flex:1">Fechar</button></div></div></div>
 <div class="cartao" id="conf"><div class="caixa vidro"><h2 id="confT"></h2><p class="s" id="confX"></p><div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="confNao">Cancelar</button><button class="bok" id="confSim">Sim</button></div></div></div></div>
+<div id="instala" class="vidro"></div>
 <div class="cartao" id="login"><div class="caixa vidro">
   <h2>Jarvis</h2>
   <p class="s">Entre com a conta do dono (a mesma do Cuida Aí). Só o dono vê e controla o Jarvis.</p>
@@ -944,7 +944,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v57";
+const VERSAO = "v62";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1677,10 +1677,10 @@ function falar(texto){
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, ligado = false, pensando = false, hist = [], gravT0 = 0, gravTimer = null;   // "ligado" = está gravando
 function paraRec(){ if(rec){ try{ rec.onend = null; rec.abort(); }catch(e){} rec = null; } ouvindoAgora = false; }
-let acumFala = "";
+let acumFala = "", ultAtiv = 0;
 const zeraFala = () => { acumFala = ""; };
 /* (22/11, iphone-007) ENVIO AUTOMÁTICO: ~1,5 s sem novas palavras envia sozinho; a barra mostra a contagem e o ✕ cancela. Fala vazia/ruído (<2 letras) não envia. Ajuste "Enviar ao parar de falar" (padrão ligado). */
-const autoEnvia = () => ARM.get("jv_auto") !== false;
+const autoEnvia = () => ARM.get("jv_auto") === true;   /* (iphone-009) padrão DESLIGADO: corta a fala quando ele pensa */
 let autoT = null, autoFim = 0, autoUlt = "";
 function limpaAuto(){ clearTimeout(autoT); autoT = null; autoFim = 0; }
 function armaAuto(){
@@ -1700,9 +1700,9 @@ function escuta(){
   r.onstart = () => { ouvindoAgora = true; };
   r.onresult = e => {
     let todo = ""; for(let i = 0; i < e.results.length; i++) todo += e.results[i][0].transcript + " ";
-    acumFala = (base + " " + todo.trim()).trim();
+    acumFala = (base + " " + todo.trim()).trim(); ultAtiv = Date.now();
     nivel = Math.min(1, .35 + Math.min(.5, acumFala.length / 60));
-    if(acumFala) legenda(acumFala, autoEnvia() ? "gravando… envio sozinho quando você parar de falar" : "gravando… toque em Enviar quando terminar");
+    if(acumFala) legenda(acumFala, autoEnvia() ? "gravando… envio sozinho quando você parar de falar" : "gravando… toque de novo no botão para enviar");
     armaAuto(); desenhaGrav();
   };
   r.onerror = e => {
@@ -1723,11 +1723,19 @@ const ICO_ENVIA = '<svg viewBox="0 0 24 24" width="38" height="38" fill="current
 function iniciaGravacao(){
   if(ligado) return;
   if(!SR){ toast("Este navegador não tem ditado", "Use o ⌨ e o microfone do teclado do iPhone."); $q("teclado").classList.add("on"); $q("txt").focus(); return; }
-  ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 200); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
+  ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); ultAtiv = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 200); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
 }
 function cancelaGravacao(){ limpaAuto(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
+let enviando9 = false;
 function enviaGravacao(){
-  limpaAuto(); const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
+  if(enviando9 || !ligado) return; enviando9 = true; limpaAuto(); clearInterval(gravTimer);
+  /* (iphone-009) CAUSA do envio que não saía: o fim da gravação usava abort() (joga fora as últimas palavras ainda não fechadas) e o soltar/pointerleave do iOS disparava o envio antes do texto existir. Agora: stop(), espera o texto final (até 900 ms) e só então envia. */
+  const r = rec; let feito = false;
+  const segue = () => { if(feito) return; feito = true; enviando9 = false; enviaGravacao2(); };
+  if(r){ r.onend = segue; try{ r.stop(); }catch(e){ segue(); } setTimeout(segue, 900); } else segue();
+}
+function enviaGravacao2(){
+  const t = acumFala.trim(); ligado = false; paraRec(); zeraFala(); desenhaGrav();
   if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
   $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig");
   /* (21/11, dono, prioridade A) a fala segue DIRETO e na hora para o terminal selecionado: sem tela de revisão, sem esperar confirmação e sem reescrever antes
@@ -1746,6 +1754,7 @@ function enviaGravacao(){
   enviaMensagem(t);
 }
 function desenhaGrav(){
+  if(ligado && Date.now() - ultAtiv > 60000){ cancelaGravacao(); toast("Parei de ouvir", "60 segundos sem fala. Nada foi enviado.", false); return; }
   const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
   $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_ENVIA : ICO_MIC;
   const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Converse comigo: fale ou escreva"; if(ligado) $q("msg").value = acumFala;
@@ -2038,7 +2047,7 @@ const RX_MANDA = /^\s*(manda|pode mandar|envia|enviar|manda sim|sim,? manda|ok,?
 const RX_CORRIGE = /^\s*corrig/i;
 /* ---------- v48: chat único com o Claude fixado do PC (lado do app). O PC liga publicando jarvis_uso id=claude_fixado {ativo:true} (renovado a cada <3 min);
    texto do dono -> jarvis_claude_chat (papel dono); resposta do Claude -> papel claude. Sem o lado do PC, tudo segue como antes e o app avisa. ---------- */
-let fixAtivo = false, fixUltId = ARM.get("jv_fixid"), fixAvisou = false, fixBusy = false;
+let fixAtivo = false, fixUltId = ARM.get("jv_fixid"), fixAvisou = false, fixBusy = false, fixHist = false;
 async function puxaFixado(){
   try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0]; fixAtivo = !!(x && x.dados && x.dados.ativo && Date.now() - new Date(x.atualizado_em).getTime() < 420000); }catch(e){ /* sem rede: mantém o último estado */ }
   $q("aviso2").classList.toggle("on", !fixAtivo && carregouAbas); $q("aviso2").textContent = (!fixAtivo && carregouAbas) ? "PC fora do ar: o chat com o Claude não está ligado." : "";
@@ -2086,9 +2095,12 @@ function fixAcoes(){
 async function puxaRespostaClaude(){
   if(fixBusy || document.hidden || !sess) return; fixBusy = true;
   try{
-    if(fixUltId == null){ const u = ((await rest("jarvis_claude_chat?select=id&order=id.desc&limit=1")) || [])[0]; fixUltId = u ? u.id : 0; ARM.set("jv_fixid", fixUltId); }
-    else { const l = (await rest("jarvis_claude_chat?select=id,papel,texto&papel=eq.claude&id=gt." + fixUltId + "&order=id.asc&limit=10")) || [];
-      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal("jarvis", String(m.texto).slice(0, 700)); });   /* iphone-007: sem botão "Pode enviar": nenhum toque obrigatório */ if(l.length) ARM.set("jv_fixid", fixUltId); }
+    if(!fixHist){   /* iphone-008-complemento-2: ao abrir, carrega as últimas ~50 mensagens (os dois lados) */
+      const h = ((await rest("jarvis_claude_chat?select=id,papel,texto,estado&estado=neq.erro&order=id.desc&limit=50")) || []).reverse();
+      h.forEach(m => { fixUltId = Math.max(fixUltId || 0, m.id); bal(m.papel === "claude" ? "jarvis" : "dono", String(m.texto).slice(0, 700)); });
+      if(fixUltId == null){ fixUltId = 0; } ARM.set("jv_fixid", fixUltId); fixHist = true;
+    } else { const l = (await rest("jarvis_claude_chat?select=id,papel,texto&or=(papel.eq.claude,and(papel.eq.dono,estado.eq.espelho))&id=gt." + fixUltId + "&order=id.asc&limit=20")) || [];
+      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal(m.papel === "claude" ? "jarvis" : "dono", String(m.texto).slice(0, 700)); });   /* os dois lados do chat fixado; o que saiu do celular não volta (só papel dono + espelho) */ if(l.length) ARM.set("jv_fixid", fixUltId); }
   }catch(e){} fixBusy = false;
 }
 setInterval(puxaRespostaClaude, 2500); setInterval(() => { if(!document.hidden && sess) puxaFixado(); }, 20000); setTimeout(() => { if(sess) puxaFixado(); }, 2500);
@@ -3006,12 +3018,12 @@ $q("tiraPrint").onclick = tiraPrint;
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
 $q("ligar").onclick = () => ligado ? enviaGravacao() : iniciaGravacao();
-/* melhorias-iphone-001 #4: botão grande — segura para falar, solta para enviar */
+/* iphone-009: botão grande — um toque começa a ouvir, outro toque envia (X cancela) */
 (function(){
-  const b = $q("seguraFalar"); let seg = false;
-  const solta = () => { if(!seg) return; seg = false; b.classList.remove("on"); b.textContent = "🎙 Segure para falar"; if(ligado) enviaGravacao(); };
-  b.addEventListener("pointerdown", e => { e.preventDefault(); if(ligado) return; seg = true; b.classList.add("on"); b.textContent = "● Gravando… solte para enviar"; if(navigator.vibrate) try{ navigator.vibrate(30); }catch(_){} iniciaGravacao(); if(!ligado){ seg = false; b.classList.remove("on"); b.textContent = "🎙 Segure para falar"; } });
-  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => b.addEventListener(ev, solta));
+  const b = $q("seguraFalar");
+  const pinta = () => { b.classList.toggle("on", ligado); b.textContent = ligado ? "■ Toque para enviar" : "🎙 Toque para falar"; };
+  b.addEventListener("click", e => { e.preventDefault(); if(navigator.vibrate) try{ navigator.vibrate(30); }catch(_){} if(ligado) enviaGravacao(); else iniciaGravacao(); pinta(); });
+  setInterval(pinta, 300);
   b.addEventListener("contextmenu", e => e.preventDefault());
 })();
 $q("flEnvia").onclick = enviaGravacao;
@@ -3132,10 +3144,20 @@ $q("chaveSalva").onclick = async () => {
 (function dicaInstalar(){
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
-  if(ios && !standalone && !ARM.get("jv_dica2")){
+  const ua = navigator.userAgent;
+  const foraSafari = /CriOS|FxiOS|EdgiOS|OPiOS|Telegram|Instagram|FBAN|FBAV|Line\/|WhatsApp|GSA\/|; wv\)/i.test(ua) || (ios && !/Safari\//.test(ua));
+  if(ios && !standalone){
     const d = $q("instala"); d.classList.add("on");
-    d.innerHTML = 'Para usar como app (tela cheia e notificações): toque em <b>Compartilhar</b> (quadrado com seta) e depois em <b>Adicionar à Tela de Início</b>. <button class="btop bok" id="dicaOk" style="margin-left:6px">Ok</button>';
-    $q("dicaOk").onclick = () => { d.classList.remove("on"); ARM.set("jv_dica2", 1); };
+    if(foraSafari){
+      d.innerHTML = 'Abra este link no <b>Safari</b> para instalar o app. <button class="btop bok" id="dicaCopia" style="margin-left:6px">Copiar endereço</button>';
+      $q("dicaCopia").onclick = async () => {
+        const end = location.origin + location.pathname;
+        try{ await navigator.clipboard.writeText(end); }catch(e){ const t = document.createElement("textarea"); t.value = end; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); }catch(e2){} t.remove(); }
+        $q("dicaCopia").textContent = "Copiado ✓";
+      };
+    } else {
+      d.innerHTML = '<b>Para instalar:</b> toque em <b>Compartilhar</b> (quadrado com seta ⬆︎, embaixo) e depois em <b>Adicionar à Tela de Início</b> ⬇︎';
+    }
   }
 })();
 if(ARM.get("jv_sess")) hidrataCache();     // abre NA HORA com a última tela guardada; a rede atualiza por trás
