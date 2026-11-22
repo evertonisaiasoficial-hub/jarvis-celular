@@ -1064,7 +1064,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v80";
+const VERSAO = "v81";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -2425,7 +2425,11 @@ function listaTarefasIn(a, tar){
   tar.slice().sort((p, q) => (ORD[p.e] - ORD[q.e])).forEach(q => {
     const k = chaveTar(a, q), d = document.createElement("div"); d.className = "itar" + (q.e === "exec" ? " atual" : "");
     d.innerHTML = '<span class="n"></span><span class="t"></span>'; d.children[0].textContent = (q.e === "erro" ? "✗" : q.e === "exec" ? "▶" : q.n ? q.n + "." : "•"); d.children[1].textContent = q.t;
-    if(tarAbIn.has(k)){ const o = document.createElement("div"); o.className = "ord"; o.textContent = textoOrdem(a, q) || "O PC ainda não enviou o texto desta ordem."; d.appendChild(o); }
+    if(tarAbIn.has(k)){
+      const dt = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {};
+      if(q.e === "exec" && Array.isArray(dt.itens) && dt.itens.length){ const ol = document.createElement("div"); ol.className = "ord"; ol.textContent = "Passos (" + dt.f + " de " + dt.n + " feitos):\n" + dt.itens.map((p, i) => (p.d ? "✓ " : "○ ") + (i + 1) + ". " + p.t).join("\n"); d.appendChild(ol); }
+      const o = document.createElement("div"); o.className = "ord"; o.textContent = textoOrdem(a, q) || "O PC ainda não enviou o texto desta ordem."; d.appendChild(o);
+    }
     d.onclick = ev => { ev.stopPropagation(); if(tarAbIn.has(k)) tarAbIn.delete(k); else tarAbIn.add(k); desenhaInicio(); };
     w.appendChild(d);
   });
@@ -2469,18 +2473,31 @@ function desenhaInicio(){
   const lista = abas.slice().sort((x, y) => pos(x.nome) - pos(y.nome));
   ORD_T.forEach(nm => { if(abas.length && !lista.some(a => a.nome === nm)) lista.push({ nome: nm, estado: "livre", fila: [], _semDados: true }); });
   lista.sort((x, y) => pos(x.nome) - pos(y.nome));
+  const parados = [];
   lista.forEach(a => {
     const e = a.estado === "perg" ? "perg" : a.estado === "trab" ? "trab" : "livre", x = document.createElement("div"); x.className = "inT vidro " + e;
-    const tar = filaDe(a).filter(q => q.e !== "feito");
-    if((e === "trab" || e === "perg") && !tar.some(q => q.e === "exec")){ const dt = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {}, tt = limpaLinha(a.texto) || limpaLinha(dt.passo) || "Trabalhando agora"; tar.unshift({ e: "exec", t: tt, ordem: (dt.ordem || "").trim(), _atual: 1 }); }
-    x.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small></div><em></em>'; x.querySelector("b").textContent = a.nome;
-    x.querySelector("small").textContent = a._semDados ? "sem dados do PC" : a.pausada ? "pausado" : (e === "livre" ? (tar.length ? tar.length + " na fila" : "parado, sem tarefa") : (a.texto || ""));
+    const dt0 = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {};
+    let tar = filaDe(a).filter(q => q.e !== "feito");
+    if(e === "trab" && dt0.titulo) tar = tar.map(q => q.e === "exec" ? Object.assign({}, q, { t: dt0.titulo }) : q);   /* iphone-024: título verdadeiro da ordem */
+    if((e === "trab" || e === "perg") && !tar.some(q => q.e === "exec")){ const dt = dt0, tt = dt.titulo || limpaLinha(a.texto) || limpaLinha(dt.passo) || "Trabalhando agora"; tar.unshift({ e: "exec", t: tt, ordem: (dt.ordem || "").trim(), _atual: 1 }); }
+    if(e === "livre" && !tar.length && !a.pausada && !a._semDados){ parados.push(a.nome); return; }   /* parados sem fila: uma linha só no fim */
+    x.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small><small class="passo"></small></div><em></em>'; x.querySelector("b").textContent = a.nome;
+    let sm = a._semDados ? "sem dados do PC" : a.pausada ? "pausado" : (e === "livre" ? (tar.length ? tar.length + " na fila" : "parado, sem tarefa") : (a.texto || ""));
+    if(e === "trab" && !a.pausada){
+      const ex = tar.find(q => q.e === "exec"), pc = a.pct != null ? Math.round(a.pct) : (dt0.pct != null ? Math.round(dt0.pct) : null), sg = dt0.passo_n && dt0.n ? "passo " + dt0.passo_n + " de " + dt0.n : "";
+      sm = (ex && ex.t ? ex.t : sm); const ps = [sg, pc != null ? pc + "%" : (a.seg != null ? "em andamento há " + dur(a.seg) : "em andamento")].filter(Boolean).join(" · ");
+      x.querySelector(".passo").textContent = ps + (dt0.passo && dt0.passo !== sm ? " — " + limpaLinha(dt0.passo) : "");
+      if(pc != null){ const br = document.createElement("div"); br.className = "ttBarra"; br.style.cssText = "flex:0 0 100%;margin:2px 0 0"; br.innerHTML = "<i></i>"; br.firstChild.style.width = Math.max(2, Math.min(100, pc)) + "%"; x.appendChild(br); }
+    }
+    x.querySelector("small").textContent = sm;
     x.querySelector("em").textContent = e === "perg" ? "ESPERA VOCÊ" : e === "trab" ? "TRABALHANDO" : "PARADO";
     const ab = inAbertos.has(a.nome); x.classList.toggle("aberta", ab); x.querySelector("em").insertAdjacentHTML("afterend", '<span class="seta">›</span>');
     if(ab) x.appendChild(listaTarefasIn(a, tar));
     x.onclick = ev => { if(ev.target.closest(".inTL")) return; if(inAbertos.has(a.nome)) inAbertos.delete(a.nome); else inAbertos.add(a.nome); ARM.set("jv_inabertos", Array.from(inAbertos)); desenhaInicio(); };
     t.appendChild(x);
   });
+  if(parados.length){ const pz = document.createElement("div"); pz.className = "inT vidro livre"; pz.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small></div><em>PARADOS</em>'; pz.querySelector("b").textContent = parados.length + (parados.length === 1 ? " parado" : " parados"); pz.querySelector("small").textContent = parados.join(" · "); pz.style.cursor = "default"; t.appendChild(pz); }
+  if(abas.length && !lista.some(a => a.estado === "trab" || a.estado === "perg")){ const nt = document.createElement("div"); nt.className = "vazio vidro"; nt.textContent = semSinal ? "Sem sinal do PC: não dá para saber o que está rodando." : "Nenhum terminal trabalhando agora."; t.insertBefore(nt, t.firstChild); }
   desenhaConcluidas();
   const n = perguntasAbertas().length, au = $q("inAut"); au.className = "vidro" + (n ? " tem" : ""); au.querySelector("b").textContent = n; au.querySelector("span").textContent = n === 1 ? "autorização esperando você" : "autorizações esperando você";
   const imp = avisos.filter(x => /captcha|login|pix|alerta|risco|permissao/.test(x.tipo))[0] || avisos[0], av = $q("inAviso"); av.innerHTML = "";
@@ -2490,6 +2507,16 @@ function desenhaInicio(){
 }
 $q("inAut").onclick = () => vaiPara("pAvisos");
 setInterval(() => { if(!document.hidden && painelAtual === "pInicio") puxaUsoInicio(); }, 15000);
+/* iphone-024: "atualizado há X s" sempre visível; acima de 30 s sem dado novo do PC, faixa âmbar (dado velho não parece atual) */
+let frescoFaixa = false;
+setInterval(() => {
+  if(usandoCache || !carregouAbas || !abas.length) return;
+  const ult = abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0); if(!ult) return;
+  const s = Math.max(0, Math.round((Date.now() - ult) / 1000)), u = $q("inPcUlt"), av = $q("aviso");
+  if(u && !semSinal) u.textContent = "atualizado há " + dur(s);
+  if(s > 30 && !semSinal && !pcCaiu){ av.textContent = "Sem sinal do PC há " + dur(s) + ": o que aparece pode estar velho."; av.classList.add("on"); frescoFaixa = true; }
+  else if(frescoFaixa && s <= 30){ av.classList.remove("on"); av.textContent = ""; frescoFaixa = false; }
+}, 1000);
 
 /* ---------- Alarme "o PC caiu", Falta você, Saúde (v10.1) ---------- */
 let pcCaiu = false, pcVisto = false, ultSinal = 0;
