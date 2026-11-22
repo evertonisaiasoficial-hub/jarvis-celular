@@ -328,10 +328,14 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 #filaSaida{flex:0 0 auto;margin:6px 0 0;padding:6px 12px;border-radius:14px;background:rgba(255,200,60,.14);color:var(--yel);font:600 13px var(--f)}
 #composer{flex:0 0 auto;display:flex;align-items:flex-end;gap:8px;padding:8px 0 10px}
 #composer #msg,body.bolha #composer #msg{display:block;position:static;left:auto;right:auto;bottom:auto;text-align:left;letter-spacing:0;color:var(--txt);flex:1;min-width:0;min-height:50px;max-height:30vh;padding:13px 15px;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px/1.35 var(--f);resize:none;-webkit-user-select:text;user-select:text}
-#composer #ligar{width:50px;height:50px;flex:0 0 50px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;box-shadow:none;animation:none}
+#composer #ligar{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;box-shadow:none;animation:none}
 #composer #ligar svg{width:26px;height:26px}
 #composer #ligar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);animation:anel 1.6s ease-out infinite}
-#envMsg{width:50px;height:50px;flex:0 0 50px;border-radius:50%;background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206;font:700 20px var(--f)}
+#xGrav{display:none;width:36px;height:36px;flex:0 0 36px;margin-bottom:7px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--txt);font:600 15px var(--f)}
+#xGrav.on{display:block}
+#flutua,#flutua.on{display:none!important}
+#composer #ligar.env{background:linear-gradient(135deg,var(--cy),var(--acc2));color:#1a1206}
+#composer #ligar.env.on{background:linear-gradient(135deg,#ff6b78,#d92c43);color:#fff}
 body.capPisca{animation:capPisca .5s linear 6}
 @keyframes capPisca{50%{box-shadow:inset 0 0 0 100vmax rgba(255,77,94,.35)}}
 .uBar{margin:10px 2px}.uBar .l{display:flex;justify-content:space-between;align-items:baseline;font:600 13.5px var(--f);margin-bottom:5px}.uBar .l small{color:var(--dim);font:500 12px var(--mono)}
@@ -641,8 +645,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="legenda"></div>
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
-      <button id="seguraFalar" aria-label="Toque para falar">🎙 Toque para falar</button>
-      <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
+      <div id="composer"><button id="xGrav" title="Cancelar" aria-label="Cancelar">✕</button><textarea id="msg" rows="1" placeholder="Mensagem" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Falar ou enviar" aria-label="Falar ou enviar"></button></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -944,7 +947,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v62";
+const VERSAO = "v63";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1702,7 +1705,7 @@ function escuta(){
     let todo = ""; for(let i = 0; i < e.results.length; i++) todo += e.results[i][0].transcript + " ";
     acumFala = (base + " " + todo.trim()).trim(); ultAtiv = Date.now();
     nivel = Math.min(1, .35 + Math.min(.5, acumFala.length / 60));
-    if(acumFala) legenda(acumFala, autoEnvia() ? "gravando… envio sozinho quando você parar de falar" : "gravando… toque de novo no botão para enviar");
+    if(acumFala) legenda(acumFala);
     armaAuto(); desenhaGrav();
   };
   r.onerror = e => {
@@ -1756,7 +1759,7 @@ function enviaGravacao2(){
 function desenhaGrav(){
   if(ligado && Date.now() - ultAtiv > 60000){ cancelaGravacao(); toast("Parei de ouvir", "60 segundos sem fala. Nada foi enviado.", false); return; }
   const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
-  $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_ENVIA : ICO_MIC;
+  const temTxt = !ligado && $q("msg").value.trim().length > 0; $q("ligar").classList.toggle("on", ligado); $q("ligar").classList.toggle("env", ligado || temTxt); $q("xGrav").classList.toggle("on", ligado); const ic = (ligado || temTxt) ? ICO_ENVIA : ICO_MIC; if($q("ligar").dataset.ic !== (ligado||temTxt?"e":"m")){ $q("ligar").innerHTML = ic; $q("ligar").dataset.ic = ligado||temTxt?"e":"m"; }
   const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Converse comigo: fale ou escreva"; if(ligado) $q("msg").value = acumFala;
   if(ligado){ $q("flT").textContent = autoFim ? "Enviando em " + Math.max(0.1, (autoFim - Date.now()) / 1000).toFixed(1) + " s · ✕ cancela" : "● " + tempoGrav(); $q("flX").textContent = acumFala ? acumFala.slice(-80) : "fale agora…"; }
 }
@@ -3017,18 +3020,16 @@ $q("fonteMais").onclick = () => trocaFonte(1);
 $q("tiraPrint").onclick = tiraPrint;
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
-$q("ligar").onclick = () => ligado ? enviaGravacao() : iniciaGravacao();
-/* iphone-009: botão grande — um toque começa a ouvir, outro toque envia (X cancela) */
-(function(){
-  const b = $q("seguraFalar");
-  const pinta = () => { b.classList.toggle("on", ligado); b.textContent = ligado ? "■ Toque para enviar" : "🎙 Toque para falar"; };
-  b.addEventListener("click", e => { e.preventDefault(); if(navigator.vibrate) try{ navigator.vibrate(30); }catch(_){} if(ligado) enviaGravacao(); else iniciaGravacao(); pinta(); });
-  setInterval(pinta, 300);
-  b.addEventListener("contextmenu", e => e.preventDefault());
-})();
-$q("flEnvia").onclick = enviaGravacao;
-$q("envMsg").onclick = () => { if(ligado){ enviaGravacao(); return; } const v = $q("msg").value; $q("msg").value = ""; enviaMensagem(v); };
-$q("msg").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); $q("envMsg").click(); } });
+/* iphone-012: UM botão só (canto direito do campo): parado=microfone; ouvindo ou com texto digitado=enviar (seta); ✕ à esquerda só enquanto ouve */
+$q("ligar").onclick = () => {
+  if(navigator.vibrate) try{ navigator.vibrate(30); }catch(_){}
+  if(ligado){ enviaGravacao(); return; }
+  const v = $q("msg").value; if(v.trim()){ $q("msg").value = ""; enviaMensagem(v); desenhaGrav(); return; }
+  iniciaGravacao();
+};
+$q("xGrav").onclick = cancelaGravacao;
+$q("msg").addEventListener("input", desenhaGrav);
+$q("msg").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); $q("ligar").click(); } });
 $q("novaConversa").onclick = novaConversa;
 $q("capBanner").onclick = () => { if(captchas[0]) abreCaptcha(captchas[0].id); };
 $q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pMais"); };
