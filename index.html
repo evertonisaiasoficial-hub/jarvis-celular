@@ -256,6 +256,82 @@ button:active{transform:scale(.97)}
 .pr-it span{position:absolute;left:0;right:0;bottom:0;padding:4px 8px;font:500 11px var(--mono);background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;text-align:left}
 #zoom{position:fixed;inset:0;z-index:60;display:none;background:#000;touch-action:none;overflow:hidden}
 #zoom.on{display:block}
+/* iphone-015 */
+#termSel{display:flex;gap:4px;padding:3px;margin:0 0 8px;border-radius:12px;background:var(--glass2)}
+#termSel button{flex:1;min-height:42px;border-radius:10px;font:700 14px var(--f);color:var(--dim)}
+#termSel button.on{background:var(--cy);color:#06101c}
+#pTerm:not(.modoTar) #termTarefas{display:none}
+#pTerm.modoTar > :not(#termTopo):not(#termSel):not(#termTarefas):not(#termAtalhos){display:none!important}
+.ttH{margin:12px 2px 6px;font:700 13px var(--f);letter-spacing:.06em;text-transform:uppercase;color:var(--cy)}
+.ttL{padding:10px 12px;margin:0 0 6px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.ttL.exec{border-color:rgba(53,230,255,.45)}.ttL.erro{border-color:rgba(255,107,120,.6)}
+.ttL .r1{display:flex;justify-content:space-between;gap:8px;align-items:center;font:600 14.5px/1.3 var(--f)}
+.ttL.fila .r1{font:500 13px/1.3 var(--f);color:#c3cbf0}
+.ttL .mot{font:12.5px/1.35 var(--f);color:#ff9aa3;margin-top:4px}
+.ttBarra{height:7px;border-radius:99px;background:rgba(255,255,255,.12);margin-top:8px;overflow:hidden}.ttBarra i{display:block;height:100%;background:linear-gradient(90deg,var(--cy),var(--acc2))}
+.ttPc{font:600 11.5px var(--mono);color:var(--dim);margin-top:4px}
+.ttChip{flex:0 0 auto;padding:2px 8px;border-radius:99px;font:700 11px var(--f);color:#06101c}
+.ttChip.sem_conferir,.ttChip.sem_prova{background:#8a8fb0}.ttChip.conferido{background:#3ee08f}.ttChip.reprovado{background:#ff6b78;color:#fff}
+.ttDet{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font:13.5px/1.45 var(--f);white-space:pre-wrap;word-break:break-word}
+.ttDet h5{margin:8px 0 3px;font:600 10.5px var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.ttDet ol{margin:0;padding-left:20px}.ttDet li.d{color:#3ee08f}
+.ttVer{margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--cy);color:#06101c;font:700 13px var(--f)}
+.ttConc{width:100%;margin:10px 0;padding:11px 12px;border-radius:12px;text-align:left;font:600 13.5px var(--f);color:var(--dim);background:var(--glass2)}
+/* iphone-016: teclado */
+#composer #msg,body.bolha #composer #msg{font-size:16px!important;line-height:1.35;max-height:calc(4 * 1.35em + 28px)!important;overflow-y:auto;-webkit-text-size-adjust:100%}
+body.kb #nav{display:none!important}
+body.kb #inicio,body.kb #favs,body.kb #capBanner,body.kb #legenda:empty{display:none!important}
+body.kb #chatTopo{padding-top:4px;padding-bottom:4px}
+body.kb #chat{min-height:0;flex:1 1 auto}
+body.kb #composer{padding-bottom:8px}
+body.kb #app{bottom:auto}
+#termAtalhos button{flex:1}
+/* iphone-013/014: Avisos, cartões "Pronto para ver", página da tarefa, balão "pensando" */
+#avFiltro{display:flex;gap:6px;overflow-x:auto;margin:4px 0 8px}
+#avFiltro button{flex:0 0 auto;padding:8px 13px;border-radius:99px;font:600 13px var(--f);color:var(--dim);background:var(--glass2);min-height:38px}
+#avFiltro button.on{color:#06101c;background:var(--cy)}
+.prc{display:flex;gap:10px;align-items:stretch;width:100%;text-align:left;padding:10px;margin:0 0 8px;border-radius:16px;min-height:72px}
+.prc .ft{flex:0 0 64px;height:64px;border-radius:10px;background:#0b1226 center/cover no-repeat;border:1px solid var(--line)}
+.prc .c{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.prc .t{font:700 15px/1.25 var(--f);color:var(--tx)}
+.prc .m{font:500 11.5px var(--mono);color:var(--dim)}
+.prc .x{font:13px/1.35 var(--f);color:#c3cbf0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.selo{display:inline-block;align-self:flex-start;padding:3px 9px;border-radius:99px;font:700 11.5px var(--f);color:#06101c}
+.selo.ok{background:#3ee08f}.selo.am{background:#ffc447}.selo.er{background:#ff6b78;color:#fff}.selo.cz{background:#8a8fb0}
+.prc.am{border-color:rgba(255,196,71,.5)}.prc.er{border-color:rgba(255,107,120,.55)}
+#avVazio{display:none}#avVazio.on{display:block}
+#avAprovBtn{display:block;margin:6px auto 12px;padding:10px 16px;font:600 13px var(--f);color:var(--dim)}
+#tarefaPg{position:fixed;inset:0;z-index:55;display:none;flex-direction:column;background:#070b18;color:var(--tx)}
+#tarefaPg.on{display:flex}
+#tpTopo{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;border-bottom:1px solid var(--line)}
+#tpTopo b{flex:1;font:700 16px/1.25 var(--f)}
+#tpVolta{width:44px;height:44px;border-radius:12px;background:var(--glass2);font-size:20px}
+#tpCorpo{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 20px}
+#tpCorpo h4{margin:14px 0 4px;font:600 11px var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+#tpCorpo p{margin:0;font:15px/1.45 var(--f);white-space:pre-wrap;word-break:break-word}
+.tpFoto{display:block;width:100%;max-height:46vh;object-fit:contain;border-radius:12px;background:#0b1226;border:1px solid var(--line);margin:8px 0}
+.tpAD{display:flex;gap:8px}.tpAD figure{flex:1;margin:0;min-width:0}.tpAD figcaption{font:600 11px var(--f);color:var(--dim);text-align:center}
+.tpConf{font:700 12.5px var(--f);color:#3ee08f;margin:4px 0}
+.tpParte{border:1px solid var(--line);border-radius:14px;margin:8px 0;background:rgba(255,255,255,.04);overflow:hidden}
+.tpParte>button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;padding:12px 12px;text-align:left;font:700 14px var(--f);min-height:46px}
+.tpParte .rs{font:700 12px var(--f)}.tpParte .rs.ok{color:#3ee08f}.tpParte .rs.er{color:#ff6b78}
+.tpParte .cp{display:none;padding:0 12px 12px}.tpParte.on .cp{display:block}
+#tpBot{flex:0 0 auto;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px);border-top:1px solid var(--line);background:rgba(7,11,24,.95)}
+#tpBtns{display:flex;gap:10px}
+#tpBtns button{flex:1;min-height:54px;border-radius:14px;font:700 17px var(--f)}
+#tpBom{background:#3ee08f;color:#06101c}#tpNao{background:#ff6b78;color:#fff}
+#tpMotivo{display:none;margin-bottom:10px}#tpMotivo.on{display:block}
+#tpMotivo textarea{width:100%;min-height:74px;padding:10px;border-radius:12px;border:1px solid var(--line);background:#0b1226;color:var(--tx);font:16px/1.4 var(--f);resize:none}
+#tpMotivo .lin{display:flex;gap:8px;margin-top:8px}
+#tpMotivo .lin button{flex:1;min-height:48px;border-radius:12px;font:700 15px var(--f);background:var(--glass2)}
+#tpMotivo .lin button.env{background:var(--cy);color:#06101c}
+.bal.pensa{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.bal.pensa .pt{display:flex;gap:5px;padding:3px 0}.bal.pensa .pt i{width:8px;height:8px;border-radius:50%;background:var(--cy);opacity:.35;animation:pensa 1.2s infinite ease-in-out}
+.bal.pensa .pt i:nth-child(2){animation-delay:.2s}.bal.pensa .pt i:nth-child(3){animation-delay:.4s}
+.bal.pensa small{font:500 12px var(--f);color:var(--dim)}
+@keyframes pensa{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
+#inPc{margin-top:0}#termTopo{margin:0 0 6px}#termAtalhos{display:flex;gap:8px;margin:0 0 8px}#termAtalhos button{flex:1;min-height:46px;padding:8px;font:600 13.5px var(--f);border-radius:12px}
+
 #zoom img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-drag:none;will-change:transform}
 #zoomX{position:absolute;right:12px;top:calc(env(safe-area-inset-top) + 10px);z-index:2;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);font-size:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 #zoomI{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 10px);text-align:center;font:500 12px var(--mono);color:#9aa3c9;pointer-events:none}
@@ -639,7 +715,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="capBanner"></div>
       <div id="inicio">
         <div id="resumo" class="vidro"><div class="rc"><b id="rTrab">0</b><span>trabalhando</span></div><div class="rc"><b id="rFila">0</b><span>na fila</span></div><div class="rc"><b id="rPend">0</b><span>pendentes</span></div><div id="maq"></div></div>
-        <div id="atalhos"><button class="vidro" data-ir="pTerm"><i>▤</i>Terminais</button><button class="vidro" data-ir="pTar"><i>☰</i>Tarefas</button><button class="vidro" data-ir="pIdeias"><i>💡</i>Ideias</button><button class="vidro" data-ir="pPrint"><i>📷</i>Print do PC</button></div>
+        <div id="atalhos"><button class="vidro" data-ir="pTerm"><i>▤</i>Terminais</button><button class="vidro" data-ir="pTar"><i>☰</i>Tarefas</button><button class="vidro" data-ir="pIdeias"><i>💡</i>Ideias</button></div>
       </div>
       <div id="chat"></div>
       <div id="legenda"></div>
@@ -648,6 +724,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="composer"><button id="xGrav" title="Cancelar" aria-label="Cancelar">✕</button><textarea id="msg" rows="1" placeholder="Mensagem" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Falar ou enviar" aria-label="Falar ou enviar"></button></div>
     </section>
     <section id="pTerm" class="painel">
+      <div id="termTopo"></div><div id="termSel"><button data-m="term" class="on">Terminais</button><button data-m="tar">Tarefas</button></div><div id="termTarefas"></div><div id="termAtalhos"><button class="vidro" id="taComo">Como estão os terminais</button></div>
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
       <button class="parar2" id="pararTerm"></button>
       <div id="termAbas"></div>
@@ -661,9 +738,13 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
     <section id="pTar" class="painel"><div class="tit">Tarefas de todos os terminais</div><div id="listaTar"></div></section>
     <section id="pIdeias" class="painel"><div class="tit">Ideias do PC <span id="ideiasN"></span><span class="sp"></span><button class="btop bok" id="aprovaTodas">Aprovar todas</button></div><div id="ideiasInfo" class="vazio" style="padding:0 2px 8px;text-align:left"></div><div id="listaIdeias"></div></section>
     <section id="pAvisos" class="painel"><div class="tit">Precisa de você <span id="aprovarN"></span></div>
+      <div id="avFiltro"><button data-f="todos" class="on">Todos</button><button data-f="espera">Esperando você</button><button data-f="pronto">Prontos</button><button data-f="erro">Com erro</button></div>
       <div id="avCap"></div>
       <div id="listaAprovar"></div>
-      <div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush" style="display:none">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
+      <div id="listaProntos"></div>
+      <div id="avVazio" class="vazio vidro">Nada esperando você</div>
+      <button id="avAprovBtn" class="btop bno">Ver aprovados</button>
+      <div class="tit">Outros avisos <span class="sp"></span><button class="btop bno" id="ativaPush" style="display:none">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
     <section id="pPrint" class="painel"><div class="tit">Print do PC</div>
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
       <div id="printInfo" class="vazio" style="padding:0 2px 10px;text-align:left">O PC só tira o print quando você toca no botão. Ficam guardados os últimos 10.</div>
@@ -748,12 +829,15 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <div id="teclado"><input id="txt" placeholder="Escreva para o Jarvis…" enterkeyhint="send" autocomplete="off"><button id="enviaTxt">Enviar</button></div>
   <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="tecBtn" title="Escrever">⌨</button></div>
   <nav id="nav">
-    <button data-p="pInicio" class="on"><i>🏠</i>Início</button>
-    <button data-p="pLig"><i>💬</i>Conversa</button>
+    <button data-p="pLig" class="on"><i>💬</i>Conversa</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
+    <button data-p="pAvisos"><i>🔔</i>Avisos</button>
   </nav>
 </div>
 <div id="cheia"><div id="cheiaTop"><div id="cheiaChips"></div><button class="btop bno" id="fonteMenos">A−</button><button class="btop bno" id="fonteMais">A+</button><button class="btop bok" id="fechaCheia">✕ Fechar</button></div><div id="cheiaCorpo"></div></div>
+<div id="tarefaPg"><div id="tpTopo"><button id="tpVolta" aria-label="Voltar">←</button><b id="tpTit"></b></div><div id="tpCorpo"></div>
+  <div id="tpBot"><div id="tpMotivo"><textarea id="tpTxt" placeholder="Diga o que não ficou bom" enterkeyhint="send"></textarea><div class="lin"><button id="tpMic">🎙 Falar</button><button id="tpEnv" class="env">Enviar</button></div></div>
+  <div id="tpBtns"><button id="tpBom">Ficou bom</button><button id="tpNao">Não ficou</button></div></div></div>
 <div id="zoom"><button id="zoomX">✕</button><img id="zoomImg" alt=""><div id="zoomI"></div></div>
 <div class="cartao" id="cfg"><div class="caixa vidro">
   <h2>⚙ Configurações</h2>
@@ -772,7 +856,6 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
     <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
     <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
     <button class="mg vidro" data-ir="pUso"><i>📊</i>Uso</button>
-    <button class="mg vidro" data-ir="pPrint"><i>📷</i>Print do PC</button>
     <button class="mg vidro" data-ir="pAgenda"><i>⏰</i>Agendar</button>
     <button class="mg vidro" data-ir="pLojas"><i>🏪</i>Lojas<b id="rLojas"></b></button>
     <button class="mg vidro" data-ir="pAoVivo"><i>🖥</i>Ao vivo (tela do PC)</button>
@@ -947,7 +1030,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v63";
+const VERSAO = "v69";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1466,7 +1549,7 @@ function desenhaBadges(){
   const bd = (p, n, r) => { const b = document.querySelector('#nav [data-p="' + p + '"]'); if(!b) return; let e = b.querySelector("b"); if(!n){ if(e) e.remove(); return; } if(!e){ e = document.createElement("b"); b.appendChild(e); } e.textContent = n; e.className = r ? "r" : ""; };
   const nAvT = nAv + perguntasAbertas().length + captchas.length, urgT = urg || perguntasAbertas().length > 0 || captchas.length > 0; $q("rAvisos").textContent = nAvT || "";
   bd("pTerm", abas.filter(a => a.estado === "perg").length, true);
-  $q("rIdeias").textContent = ideias.length || ""; bd("pMais", ideias.length + nAvT, urgT);
+  $q("rIdeias").textContent = ideias.length || ""; bd("pMais", ideias.length + nAvT, urgT); bd("pAvisos", nAvT + prontosEspera().length, urgT);
   $q("rTrab").textContent = abas.filter(a => a.estado === "trab").length; $q("rFila").textContent = abas.reduce((n, a) => n + filaDe(a).filter(x => x.e === "fila").length, 0);
   $q("rPend").textContent = nAv + perguntasAbertas().length + captchas.length;
 }
@@ -1496,11 +1579,12 @@ const PN_GUARDA = ["pInicio", "pLig", "pTerm", "pTar", "pAvisos", "pMais", "pIde
 function vaiPara(p){
   if(typeof avAtivo !== "undefined" && avAtivo && p !== "pAoVivo") paraAoVivo("Saí da tela Ao vivo");
   if(typeof verOn !== "undefined" && verOn && p !== "pVer") paraVer();
+  if(p === "pInicio") p = "pTerm";       /* iphone-014: a tela Início saiu; o estado do PC e os botões rápidos foram para o topo de Terminais */
   if(p === "pMais") p = "pLig";          /* iphone-008: tela "Mais" removida; ficam Início, Conversa e Terminais */
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; if(PN_GUARDA.includes(p)) ARM.set("jv_pn", p); $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTerm", pVer: "pTerm", pTar: "pInicio", pAvisos: "pMais", pChave: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTerm", pVer: "pTerm", pTar: "pTerm", pAvisos: "pAvisos", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
@@ -1510,7 +1594,7 @@ function vaiPara(p){
   if(p === "pAoVivo") abreAoVivo();
   if(p === "pVer") abreVer();
   if(p === "pLig") setTimeout(rolaChat, 50);
-  if(p === "pAvisos" && avisos.length){ ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); }
+  if(p === "pAvisos"){ if(avisos.length) ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); puxaProntos(); }
   if(p === "pTerm"){ saidaFim = true; olhando(); puxa(); }
   if(p === "pPrint") puxaPrints();
 }
@@ -1709,7 +1793,9 @@ function escuta(){
     armaAuto(); desenhaGrav();
   };
   r.onerror = e => {
-    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ cancelaGravacao(); legenda("O iPhone bloqueou o microfone.", "Ajustes > Safari > Microfone (ou Ajustes > Jarvis) e toque no microfone de novo."); }
+    if(e.error === "not-allowed" || e.error === "service-not-allowed"){ cancelaGravacao(); ARM.set("jv_audiomodo", true); legenda("O ditado do iPhone está bloqueado.", "Toque no microfone de novo: o app grava o áudio e o PC transcreve."); toast("Ditado do iPhone bloqueado", "Toque no microfone de novo: vou gravar o áudio e o PC transcreve.", false); }
+    else if(e.error === "audio-capture"){ legenda("Não achei o microfone.", "Confira se outro app não está usando o microfone."); }
+    else if(e.error === "network"){ legenda("O ditado precisa de internet.", "Sem sinal agora; tente de novo."); }
   };
   r.onend = () => {
     ouvindoAgora = false; nivel = 0;
@@ -1725,12 +1811,13 @@ const ICO_MIC = '<svg viewBox="0 0 24 24" width="40" height="40" fill="currentCo
 const ICO_ENVIA = '<svg viewBox="0 0 24 24" width="38" height="38" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>';
 function iniciaGravacao(){
   if(ligado) return;
-  if(!SR){ toast("Este navegador não tem ditado", "Use o ⌨ e o microfone do teclado do iPhone."); $q("teclado").classList.add("on"); $q("txt").focus(); return; }
+  if(!SR || ARM.get("jv_audiomodo") === true){ iniciaAudio(); return; }   /* iphone-017: sem ditado do Safari (ex.: ícone da tela de início) grava o áudio e o PC transcreve */
   ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); ultAtiv = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 200); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
 }
-function cancelaGravacao(){ limpaAuto(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
+function cancelaGravacao(){ if(aud){ audLibera(); } limpaAuto(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
 let enviando9 = false;
 function enviaGravacao(){
+  if(aud && ligado){ enviaAudio(); return; }
   if(enviando9 || !ligado) return; enviando9 = true; limpaAuto(); clearInterval(gravTimer);
   /* (iphone-009) CAUSA do envio que não saía: o fim da gravação usava abort() (joga fora as últimas palavras ainda não fechadas) e o soltar/pointerleave do iOS disparava o envio antes do texto existir. Agora: stop(), espera o texto final (até 900 ms) e só então envia. */
   const r = rec; let feito = false;
@@ -2182,7 +2269,7 @@ function hidrataCache(){
 
 /* ---------- Tempo real: Supabase Realtime (WebSocket) — o app é avisado na hora quando algo muda ---------- */
 let rtWs = null, rtJoin = 0, rtRef = 0, rtHb = null, rtTent = 0, rtT = null, rtDeb = {};
-const RT_TABELAS = ["jarvis_abas", "jarvis_avisos", "jarvis_ideias", "jarvis_comandos", "jarvis_pedidos", "jarvis_captcha", "jarvis_uso", "jarvis_agenda"];
+const RT_TABELAS = ["jarvis_tarefas_app", "jarvis_prontos", "jarvis_abas", "jarvis_avisos", "jarvis_ideias", "jarvis_comandos", "jarvis_pedidos", "jarvis_captcha", "jarvis_uso", "jarvis_agenda"];
 const rtOn = () => !!(rtJoin && rtWs && rtWs.readyState === 1 && Date.now() - rtJoin < 90000);
 async function ligaRealtime(){
   if((rtWs && rtWs.readyState <= 1) || !sess || !("WebSocket" in window)) return;
@@ -2209,6 +2296,8 @@ function rtMuda(tab){
   rtDeb[tab] = setTimeout(() => {
     if(tab === "jarvis_abas" || tab === "jarvis_ideias" || tab === "jarvis_comandos") puxa();
     else if(tab === "jarvis_avisos") puxaAvisos();
+    else if(tab === "jarvis_prontos") puxaProntos();
+    else if(tab === "jarvis_tarefas_app"){ if(termModo === "tar") puxaTarefasApp(); }
     else if(tab === "jarvis_captcha") puxaCaptchas();
     else if(tab === "jarvis_pedidos") acompanhaOrdens();
     else if(tab === "jarvis_uso"){ puxaFixado(); puxaUsoInicio(); puxaManha(); puxaSilencio(); if(painelAtual === "pUso") puxaUso(); }
@@ -2673,7 +2762,7 @@ $q("agSalva").onclick = async () => {
 setInterval(() => { if(!document.hidden && painelAtual === "pAgenda") puxaAgenda(); }, 15000);
 
 /* ---------- Favoritos, abrir já ouvindo, cartão de concluída (v10.3) ---------- */
-const FAV_PADRAO = [["Como estão os terminais", "Como estão os terminais?"], ["📷 Print do PC", "__print"]];   // v48: só 2 botões rápidos
+const FAV_PADRAO = [["Como estão os terminais", "Como estão os terminais?"]];   // v48: só 2 botões rápidos
 let favMeus = ARM.get("jv_fav") || [];
 function desenhaFavs(){
   const f = $q("favs"); f.innerHTML = "";
@@ -3162,7 +3251,252 @@ $q("chaveSalva").onclick = async () => {
   }
 })();
 if(ARM.get("jv_sess")) hidrataCache();     // abre NA HORA com a última tela guardada; a rede atualiza por trás
-(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"), ult = ARM.get("jv_pn"); vaiPara(p && $q(p) ? p : (ult && PN_GUARDA.includes(ult) && $q(ult) ? ult : (largo() ? "pTerm" : (CFG.semInicio ? "pLig" : "pInicio")))); })();   /* melhorias-iphone-001 #5: abre na última tela */
+/* ---------- iphone-013: estado "respondendo" do Claude (o PC grava em jarvis_uso id=claude_fixado: respondendo, acao, desde) ---------- */
+let fixResp = false, fixAcao = "", fixDesde = 0, fixBal = null, fixUsoT = 0;
+async function puxaEstadoClaude(){
+  if(document.hidden || !sess) return;
+  try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0], d = (x && x.dados) || {}, fresco = x && Date.now() - new Date(x.atualizado_em).getTime() < 420000;
+    fixAtivo = !!(d.ativo && fresco); fixResp = !!(fixAtivo && d.respondendo); fixAcao = String(d.acao || ""); fixDesde = Number(d.desde || 0) * 1000; }catch(e){}
+  desenhaPensando();
+}
+function desenhaPensando(){
+  const c = $q("chat");
+  if(!fixResp){ if(fixBal){ fixBal.remove(); fixBal = null; } return; }
+  if(!fixBal){ fixBal = document.createElement("div"); fixBal.className = "bal jarvis pensa"; fixBal.innerHTML = '<div class="pt"><i></i><i></i><i></i></div><small></small>'; }
+  const seg = fixDesde ? (Date.now() - fixDesde) / 1000 : 0;
+  fixBal.querySelector("small").textContent = seg > 120 ? "o Claude ainda está trabalhando nisso" + (fixAcao ? " · " + fixAcao : "") : (fixAcao || "pensando…");
+  const perto = c.scrollHeight - c.scrollTop - c.clientHeight < 140;
+  if(c.lastElementChild !== fixBal){ c.appendChild(fixBal); if(perto) c.scrollTop = c.scrollHeight; }
+}
+setInterval(puxaEstadoClaude, 3000); setInterval(() => { if(fixResp) desenhaPensando(); }, 5000);
+
+/* ---------- iphone-014 / pronto-para-ver-001: cartões (tabela jarvis_prontos; formato em ola-claude\jarvis-prontos-schema.sql) ---------- */
+let prontos = [], prontosOk = false, prFiltro = "todos", prAprov = false, prTarefaId = null, prAbertas = {}, prBusy = false;
+const SELO = { pronto: ["Pronto", "ok"], teste: ["Falta o seu teste", "am"], erro: ["Com erro, voltou para o terminal", "er"], andamento: ["Em andamento", "cz"] };
+const prEff = r => r.decisao === "nao" ? "erro" : (SELO[r.estado] ? r.estado : "pronto");
+function prontosEspera(){ return prontos.filter(r => r.decisao !== "bom" && ["pronto", "teste", "erro"].includes(prEff(r))); }
+function prHora(t){ try{ const d = new Date(t); return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " " + hhmm(d.getTime()); }catch(e){ return ""; } }
+async function puxaProntos(){
+  if(prBusy || !sess) return; prBusy = true;
+  try{ prontos = (await rest("jarvis_prontos?select=id,titulo,projeto,estado,selo,feito,falta,teste_passo,mini,decisao,motivo,atualizado_em&order=atualizado_em.desc&limit=80")) || []; prontosOk = true; }catch(e){ /* tabela ainda não existe ou sem rede: lista vazia */ }
+  prBusy = false; desenhaProntos(); desenhaBadges();
+}
+function desenhaProntos(){
+  const l = $q("listaProntos"); if(!l) return; l.innerHTML = "";
+  document.querySelectorAll("#avFiltro button").forEach(b => b.classList.toggle("on", b.dataset.f === prFiltro));
+  $q("avFiltro").style.display = prAprov ? "none" : "";
+  let lista;
+  if(prAprov) lista = prontos.filter(r => r.decisao === "bom");
+  else { lista = prontosEspera(); if(prFiltro === "espera") lista = lista.filter(r => prEff(r) === "teste"); else if(prFiltro === "pronto") lista = lista.filter(r => prEff(r) === "pronto"); else if(prFiltro === "erro") lista = lista.filter(r => prEff(r) === "erro");
+    const ord = { teste: 0, erro: 1, pronto: 2 }; lista.sort((a, b) => (ord[prEff(a)] - ord[prEff(b)]) || (new Date(b.atualizado_em) - new Date(a.atualizado_em))); }   /* urgentes (captcha/aprovação) já estão acima; depois teste, erro, pronto */
+  lista.forEach(r => {
+    const e = prEff(r), b = document.createElement("button"); b.className = "prc vidro " + SELO[e][1];
+    b.innerHTML = '<div class="ft"></div><div class="c"><span class="selo"></span><div class="t"></div><div class="m"></div><div class="x"></div></div>';
+    if(r.mini) b.querySelector(".ft").style.backgroundImage = "url('" + String(r.mini).replace(/'/g, "%27") + "')";
+    const sl = b.querySelector(".selo"); sl.textContent = prAprov ? "Aprovado" : SELO[e][0]; sl.classList.add(prAprov ? "ok" : SELO[e][1]);
+    b.querySelector(".t").textContent = r.titulo; b.querySelector(".m").textContent = (r.projeto || "") + (r.projeto ? " · " : "") + prHora(r.atualizado_em);
+    b.querySelector(".x").textContent = e === "teste" ? "Falta o seu teste: " + (r.teste_passo || "") : (r.feito || "");
+    b.onclick = () => abreTarefa(r.id); l.appendChild(b);
+  });
+  const nAlgo = lista.length || captchas.length || perguntasAbertas().length;
+  $q("avVazio").classList.toggle("on", !nAlgo); $q("avVazio").textContent = prAprov ? "Nenhum aprovado ainda" : (prFiltro === "todos" ? "Nada esperando você" : "Nada neste filtro");
+  $q("avAprovBtn").textContent = prAprov ? "← Voltar para Avisos" : "Ver aprovados";
+}
+document.querySelectorAll("#avFiltro button").forEach(b => b.onclick = () => { prFiltro = b.dataset.f; desenhaProntos(); });
+$q("avAprovBtn").onclick = () => { prAprov = !prAprov; desenhaProntos(); };
+$q("taComo").onclick = () => { vaiPara("pLig"); enviaMensagem("Como estão os terminais?"); };
+(function(){ const t = $q("termTopo"), pc = $q("inPc"); if(t && pc) t.appendChild(pc); })();   /* estado do PC sobe para o topo de Terminais */
+
+let prFull = null;
+async function abreTarefa(id){
+  prTarefaId = id; $q("tarefaPg").classList.add("on"); $q("tpTit").textContent = ""; $q("tpCorpo").innerHTML = '<div class="vazio">Carregando…</div>'; $q("tpMotivo").classList.remove("on"); prFull = null;
+  try{ prFull = ((await rest("jarvis_prontos?id=eq." + encodeURIComponent(id) + "&select=*")) || [])[0] || null; }catch(e){}
+  if(prTarefaId === id) desenhaTarefa();
+}
+function fotoEl(url, mini, info){
+  const im = document.createElement("img"); im.className = "tpFoto"; im.alt = ""; im.src = mini || url;
+  if(mini && url && mini !== url){ const full = new Image(); full.onload = () => { im.src = url; }; full.src = url; }   /* miniatura na hora, imagem cheia quando chegar */
+  im.onclick = () => abreZoom(url || mini, info || "pinça = zoom · arraste = mover"); return im;
+}
+function desenhaTarefa(){
+  const r = prFull; const c = $q("tpCorpo"); if(!r){ c.innerHTML = '<div class="vazio">Não consegui abrir este cartão.</div>'; return; }
+  const e = prEff(r); c.innerHTML = ""; $q("tpTit").textContent = r.titulo;
+  const sl = document.createElement("span"); sl.className = "selo " + SELO[e][1]; sl.textContent = SELO[e][0]; c.appendChild(sl);
+  const m = document.createElement("div"); m.className = "m"; m.style.cssText = "font:500 12px var(--mono);color:var(--dim);margin:6px 0"; m.textContent = (r.projeto || "") + (r.projeto ? " · " : "") + prHora(r.atualizado_em); c.appendChild(m);
+  const partes = Array.isArray(r.partes) ? r.partes.slice().sort((a, b) => (b.n || 0) - (a.n || 0)) : [];
+  const fotoPrincipal = r.foto || r.mini;
+  if(fotoPrincipal){ if(r.antes){ const ad = document.createElement("div"); ad.className = "tpAD"; [["Antes", r.antes], ["Depois", r.foto || r.mini]].forEach(x => { const f = document.createElement("figure"); f.appendChild(fotoEl(x[1], null, x[0])); const cp = document.createElement("figcaption"); cp.textContent = x[0]; f.appendChild(cp); ad.appendChild(f); }); c.appendChild(ad); }
+    else c.appendChild(fotoEl(r.foto, r.mini, "")); }
+  if(r.selo){ const k = document.createElement("div"); k.className = "tpConf"; k.textContent = "✓ Conferido pelo " + (r.selo === "Verifica" ? "Verifica" : "Claude"); c.appendChild(k); }
+  const add = (t, x) => { const h = document.createElement("h4"); h.textContent = t; c.appendChild(h); const p = document.createElement("p"); p.textContent = x; c.appendChild(p); };
+  add("O que foi feito", r.feito || "—");
+  if(e === "teste") add("Falta o seu teste", r.teste_passo || r.falta || "—"); else add("O que falta", r.falta || "Nada, está completo");
+  if(partes.length){
+    const h = document.createElement("h4"); h.textContent = "História da tarefa"; c.appendChild(h);
+    partes.forEach((pt, i) => {
+      const res = String(pt.resultado || ""), erro = /erro|reprov/.test(res), box = document.createElement("div"), aberta = prAbertas[r.id + ":" + pt.n] != null ? prAbertas[r.id + ":" + pt.n] : i === 0;
+      box.className = "tpParte" + (aberta ? " on" : "");
+      const rot = erro ? "deu erro" + (pt.motivo ? ": " + pt.motivo : "") : (res === "corrigido" ? "corrigido ✓" : "conferido ✓");
+      box.innerHTML = '<button><span></span><span class="rs ' + (erro ? "er" : "ok") + '"></span></button><div class="cp"></div>';
+      box.querySelector("button span").textContent = "Parte " + (pt.n || (partes.length - i)) + (pt.em ? " · " + prHora(pt.em) : ""); box.querySelector(".rs").textContent = rot;
+      const cp = box.querySelector(".cp"); const p = document.createElement("p"); p.textContent = pt.texto || ""; cp.appendChild(p);
+      if(pt.foto || pt.mini){ if(pt.antes){ const ad = document.createElement("div"); ad.className = "tpAD"; [["Antes", pt.antes], ["Depois", pt.foto || pt.mini]].forEach(x => { const f = document.createElement("figure"); f.appendChild(fotoEl(x[1], null, x[0])); const cc = document.createElement("figcaption"); cc.textContent = x[0]; f.appendChild(cc); ad.appendChild(f); }); cp.appendChild(ad); } else cp.appendChild(fotoEl(pt.foto, pt.mini, "")); }
+      box.querySelector("button").onclick = () => { const on = !box.classList.contains("on"); box.classList.toggle("on", on); prAbertas[r.id + ":" + pt.n] = on; };
+      c.appendChild(box);
+    });
+  }
+  $q("tpBtns").style.display = r.decisao === "bom" ? "none" : "";
+}
+async function decideTarefa(decisao, motivo){
+  const id = prTarefaId; if(!id) return false;
+  try{ await rest("jarvis_prontos?id=eq." + encodeURIComponent(id), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ decisao: decisao, motivo: motivo || null, decidido_em: new Date().toISOString() }) }); }
+  catch(e){ toast("Não consegui enviar", "Tente de novo.", false); return false; }
+  const r = prontos.find(x => x.id === id); if(r){ r.decisao = decisao; r.motivo = motivo || null; }
+  toast(decisao === "bom" ? "Aprovado ✓" : "Devolvido ao terminal ✓", "", false); fechaTarefa(); desenhaProntos(); desenhaBadges(); return true;
+}
+function fechaTarefa(){ prTarefaId = null; $q("tarefaPg").classList.remove("on"); $q("tpMotivo").classList.remove("on"); if(prRec){ try{ prRec.stop(); }catch(e){} } }
+let prRec = null;
+function prMic(){
+  const ta = $q("tpTxt"), b = $q("tpMic");
+  if(prRec){ const r = prRec; prRec = null; try{ r.stop(); }catch(e){} b.textContent = "🎙 Falar"; if(ta.value.trim()) decideTarefa("nao", ta.value.trim()); return; }   /* segundo toque = enviar */
+  if(!SR){ ta.focus(); toast("Use o microfone do teclado", "Este iPhone não deixa o app ouvir direto.", false); return; }
+  const r = new SR(); r.lang = "pt-BR"; r.interimResults = true; r.continuous = true; const base = ta.value;
+  r.onresult = ev => { let t = ""; for(let i = 0; i < ev.results.length; i++) t += ev.results[i][0].transcript; ta.value = (base ? base + " " : "") + t; };
+  r.onend = () => { if(prRec === r){ prRec = null; b.textContent = "🎙 Falar"; } }; r.onerror = r.onend;
+  prRec = r; b.textContent = "➤ Enviar"; try{ r.start(); }catch(e){ prRec = null; b.textContent = "🎙 Falar"; }
+}
+$q("tpVolta").onclick = fechaTarefa;
+$q("tpBom").onclick = () => decideTarefa("bom", "");
+$q("tpNao").onclick = () => { $q("tpMotivo").classList.add("on"); $q("tpTxt").value = ""; $q("tpTxt").focus(); };
+$q("tpMic").onclick = prMic;
+$q("tpEnv").onclick = () => { const t = $q("tpTxt").value.trim(); if(!t){ toast("Diga o motivo", "Escreva ou fale o que não ficou bom.", false); return; } decideTarefa("nao", t); };
+setInterval(() => { if(!document.hidden && sess) puxaProntos(); }, 15000); setTimeout(() => { if(sess) puxaProntos(); }, 3000);
+
+/* ---------- iphone-016: teclado do iPhone. A área visível real (visualViewport) manda: o app ocupa só o que sobra, o campo fica colado no teclado ---------- */
+(function(){
+  const vv = window.visualViewport, app = $q("app"), msg = $q("msg"), corpo = document.body;
+  function ajustaTeclado(){
+    if(!vv) return;
+    const kb = (window.innerHeight - vv.height - vv.offsetTop) > 90 || (window.innerHeight - vv.height) > 120;
+    if(kb){ app.style.top = vv.offsetTop + "px"; app.style.height = vv.height + "px"; app.style.bottom = "auto"; }
+    else { app.style.top = ""; app.style.height = ""; app.style.bottom = ""; }
+    const mudou = corpo.classList.contains("kb") !== kb; corpo.classList.toggle("kb", kb);
+    if(window.scrollY || document.documentElement.scrollTop){ window.scrollTo(0, 0); }
+    if(mudou || kb){ if(typeof rolaChat === "function") setTimeout(rolaChat, 30); }
+  }
+  if(vv){ vv.addEventListener("resize", ajustaTeclado); vv.addEventListener("scroll", ajustaTeclado); }
+  addEventListener("scroll", () => { if(corpo.classList.contains("kb")) window.scrollTo(0, 0); }, { passive: true });
+  msg.addEventListener("focus", () => { setTimeout(ajustaTeclado, 120); setTimeout(ajustaTeclado, 400); });
+  msg.addEventListener("blur", () => { setTimeout(ajustaTeclado, 120); setTimeout(ajustaTeclado, 400); });
+  window.cresceMsg = function(){ msg.style.height = "auto"; const mx = parseFloat(getComputedStyle(msg).maxHeight) || 114; msg.style.height = Math.min(msg.scrollHeight + 2, mx) + "px"; };
+  msg.addEventListener("input", window.cresceMsg);
+  setInterval(() => { if(msg.value === "" && msg.style.height) msg.style.height = ""; }, 400);   /* campo volta a 1 linha depois de enviar */
+  $q("ligar").addEventListener("mousedown", e => { if(document.activeElement === msg) e.preventDefault(); });   /* enviar não fecha o teclado */
+  $q("chat").addEventListener("click", () => { if(document.activeElement === msg) msg.blur(); });   /* tocar na conversa fecha */
+  ajustaTeclado();
+})();
+
+/* ---------- iphone-015: Tarefas do PC dentro de Terminais (tabela jarvis_tarefas_app publicada por tarefas_ponte.py + fila das abas) ---------- */
+let tarApp = [], tarAppSig = "", ttAbertas = new Set(), ttConc = false, termModo = ARM.get("jv_termmodo") === "tar" ? "tar" : "term";
+const CONF_TXT = { sem_conferir: "feito, sem conferir", conferido: "conferido", reprovado: "reprovado", sem_prova: "feito, sem prova" };
+const nz = t => String(t || "").toLowerCase().normalize("NFD").replace(new RegExp("[\\u0300-\\u036f]", "g"), "").replace(/[^a-z0-9]+/g, " ").trim();
+async function puxaTarefasApp(){
+  if(!sess) return;
+  try{ const r = (await rest("jarvis_tarefas_app?select=*&order=atualizado_em.desc&limit=120")) || [], sig = JSON.stringify(r.map(x => [x.id, x.estado, x.feitos, x.total, x.conferencia, x.atualizado_em]));
+    if(sig === tarAppSig && ttAssinatura() === ttSigAbas) return; tarApp = r; tarAppSig = sig; }catch(e){ return; }
+  desenhaTT();
+}
+let ttSigAbas = "";
+function ttAssinatura(){ return JSON.stringify(abas.map(a => [a.nome, filaDe(a).filter(x => x.e === "fila").map(x => x.t)])); }
+function ttChip(c){ const e = document.createElement("span"); e.className = "ttChip " + (c || "sem_conferir"); e.textContent = CONF_TXT[c] || CONF_TXT.sem_conferir; return e; }
+function ttLinha(r){
+  const d = document.createElement("div"); d.className = "ttL " + r.estado; const aberta = ttAbertas.has(r.id);
+  d.innerHTML = '<div class="r1"><span class="t"></span></div>'; d.querySelector(".t").textContent = (r.estado === "erro" ? "✗ " : r.estado === "exec" ? "▶ " : "✓ ") + r.titulo; d.querySelector(".r1").appendChild(ttChip(r.conferencia));
+  if(r.estado === "erro" && r.motivo){ const m = document.createElement("div"); m.className = "mot"; m.textContent = r.motivo; d.appendChild(m); }
+  if(r.estado === "exec" && r.total > 0){ const b = document.createElement("div"); b.className = "ttBarra"; b.innerHTML = "<i></i>"; b.firstChild.style.width = Math.round(100 * r.feitos / r.total) + "%"; d.appendChild(b); const p = document.createElement("div"); p.className = "ttPc"; p.textContent = r.feitos + " de " + r.total + " passos"; d.appendChild(p); }
+  if(aberta){
+    const det = document.createElement("div"); det.className = "ttDet";
+    const h1 = document.createElement("h5"); h1.textContent = "Contexto"; det.appendChild(h1); det.appendChild(document.createTextNode(r.contexto || "O PC ainda não enviou o contexto."));
+    const ps = Array.isArray(r.passos) ? r.passos : []; if(ps.length){ const h2 = document.createElement("h5"); h2.textContent = "Passo a passo"; det.appendChild(h2); const ol = document.createElement("ol"); ps.forEach(p => { const li = document.createElement("li"); li.textContent = p.t; if(p.d) li.className = "d"; ol.appendChild(li); }); det.appendChild(ol); }
+    if(r.teste){ const h3 = document.createElement("h5"); h3.textContent = "Teste"; det.appendChild(h3); det.appendChild(document.createTextNode(r.teste)); }
+    const card = prontos.find(x => x.id === r.id && x.decisao !== "bom");
+    if(card || r.conferencia === "conferido"){ const v = document.createElement("button"); v.className = "ttVer"; v.textContent = "ver em Avisos"; v.onclick = ev => { ev.stopPropagation(); vaiPara("pAvisos"); if(card) abreTarefa(r.id); }; det.appendChild(v); }
+    d.appendChild(det);
+  }
+  d.onclick = ev => { if(ev.target.closest(".ttVer")) return; if(ttAbertas.has(r.id)) ttAbertas.delete(r.id); else ttAbertas.add(r.id); ttSigAbas = ""; desenhaTT(true); };
+  return d;
+}
+function desenhaTT(forca){
+  const el = $q("termTarefas"); if(!el) return; ttSigAbas = ttAssinatura();
+  const y = $q("corpo").scrollTop; el.innerHTML = "";
+  const por = new Map(); const nomes = abas.map(a => a.nome);
+  const chave = t => { const k = nz(t); const m = nomes.find(n => nz(n) === k || nz(n).includes(k) || (k && k.includes(nz(n)))); return m || t || "Jarvis"; };
+  nomes.forEach(n => por.set(n, { exec: [], fila: [] }));
+  tarApp.filter(r => r.estado === "exec" || r.estado === "erro").forEach(r => { const k = chave(r.terminal); if(!por.has(k)) por.set(k, { exec: [], fila: [] }); por.get(k).exec.push(r); });
+  abas.forEach(a => filaDe(a).filter(x => x.e === "fila").forEach(x => por.get(a.nome).fila.push(x)));
+  let n = 0;
+  por.forEach((v, k) => { if(!v.exec.length && !v.fila.length) return; n++;
+    const h = document.createElement("div"); h.className = "ttH"; h.textContent = k; el.appendChild(h);
+    v.exec.forEach(r => el.appendChild(ttLinha(r)));
+    v.fila.forEach(x => { const d = document.createElement("div"); d.className = "ttL fila"; d.innerHTML = '<div class="r1"><span></span></div>'; d.querySelector("span").textContent = (x.n ? x.n + ". " : "") + x.t; el.appendChild(d); }); });
+  if(!n) el.insertAdjacentHTML("beforeend", '<div class="vazio vidro">Nenhuma tarefa agora</div>');
+  const hoje = tarApp.filter(r => r.estado === "feito"), cb = document.createElement("button"); cb.className = "ttConc"; cb.textContent = "Concluídas hoje: " + hoje.length + (hoje.length ? (ttConc ? " — fechar" : " — ver") : ""); cb.onclick = () => { ttConc = !ttConc; desenhaTT(); }; el.appendChild(cb);
+  if(ttConc) hoje.forEach(r => el.appendChild(ttLinha(r)));
+  $q("corpo").scrollTop = y;
+}
+function modoTerm(m){ termModo = m; ARM.set("jv_termmodo", m); $q("pTerm").classList.toggle("modoTar", m === "tar"); document.querySelectorAll("#termSel button").forEach(b => b.classList.toggle("on", b.dataset.m === m)); if(m === "tar"){ puxaTarefasApp(); desenhaTT(); } }
+document.querySelectorAll("#termSel button").forEach(b => b.onclick = () => modoTerm(b.dataset.m));
+modoTerm(termModo);
+setInterval(() => { if(!document.hidden && sess && termModo === "tar" && painelAtual === "pTerm") puxaTarefasApp(); }, 6000);
+
+/* ---------- iphone-017: gravação de áudio + transcrição no PC (Whisper). A permissão do microfone é pedida dentro do toque. ---------- */
+let aud = null, audPend = null, audTimer = null;
+function audLibera(){ clearInterval(audTimer); if(aud){ try{ aud.rec.onstop = null; if(aud.rec.state !== "inactive") aud.rec.stop(); }catch(e){} try{ aud.stream.getTracks().forEach(t => t.stop()); }catch(e){} } aud = null; }
+async function iniciaAudio(){
+  if(ligado) return;
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){
+    legenda("Este modo do app não grava áudio.", "Abra o Jarvis pelo Safari ou use o microfone do teclado."); toast("Sem microfone neste modo", "Abra pelo Safari ou use o microfone do teclado do iPhone.", false); $q("msg").focus(); return;
+  }
+  ligado = true; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 200); desenhaGrav(); legenda("", "pedindo o microfone…");
+  let stream;
+  try{ stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch(e){ ligado = false; clearInterval(gravTimer); desenhaGrav(); const neg = e && (e.name === "NotAllowedError" || e.name === "SecurityError");
+    legenda(neg ? "Sem permissão do microfone." : "Não consegui abrir o microfone.", neg ? "Ajustes do iPhone > Safari > Microfone (ou Jarvis): permitir. Depois toque de novo." : "Toque de novo; se continuar, use o microfone do teclado."); toast(neg ? "Sem permissão do microfone" : "Microfone não abriu", neg ? "Ajustes > Safari > Microfone: permitir." : "Tente de novo.", false); return; }
+  const tipos = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus"], mime = tipos.find(t => { try{ return MediaRecorder.isTypeSupported(t); }catch(e){ return false; } }) || "";
+  let rec; try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }catch(e){ stream.getTracks().forEach(t => t.stop()); ligado = false; clearInterval(gravTimer); desenhaGrav(); legenda("Não consegui gravar o áudio.", "Use o microfone do teclado do iPhone."); return; }
+  aud = { rec: rec, stream: stream, chunks: [], mime: rec.mimeType || mime || "audio/mp4" };
+  rec.ondataavailable = ev => { if(ev.data && ev.data.size) aud && aud.chunks.push(ev.data); };
+  rec.start(500); legenda("", "ouvindo… 0:00"); clearInterval(audTimer); audTimer = setInterval(() => legenda("", "ouvindo… " + tempoGrav() + " · toque de novo para enviar"), 500);
+}
+async function enviaAudio(){
+  const a = aud; if(!a || enviando9) return; enviando9 = true; clearInterval(audTimer); clearInterval(gravTimer);
+  const dur = Date.now() - gravT0;
+  const fim = new Promise(res => { a.rec.onstop = res; try{ a.rec.stop(); }catch(e){ res(); } setTimeout(res, 1500); }); await fim;
+  try{ a.stream.getTracks().forEach(t => t.stop()); }catch(e){} aud = null; ligado = false; desenhaGrav();
+  const blob = new Blob(a.chunks, { type: a.mime }); enviando9 = false;
+  if(dur < 900 || blob.size < 1500){ legenda("Não ouvi nada.", "Toque no microfone, fale e toque de novo."); toast("Não ouvi nada", "Toque no microfone e fale de novo.", false); return; }
+  audPend = blob; await mandaAudio(blob, a.mime);
+}
+function blobB64(b){ return new Promise((ok, no) => { const f = new FileReader(); f.onload = () => ok(String(f.result).split(",")[1] || ""); f.onerror = () => no(f.error); f.readAsDataURL(b); }); }
+async function mandaAudio(blob, mime){
+  legenda("", "enviando o áudio ao PC…");
+  let id = 0;
+  try{ const r = await rest("jarvis_audio", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ mime: mime || blob.type, b64: await blobB64(blob) }) }); id = (r && r[0] && r[0].id) || 0; }catch(e){}
+  if(!id){ legenda("Não consegui enviar o áudio.", "Sem internet ou a ponte ainda não foi criada. Toque no microfone e fale de novo."); toast("Áudio não enviado", "Verifique a internet e fale de novo.", false); return false; }
+  const t0 = Date.now(); let texto = null, erro = "";
+  while(Date.now() - t0 < 45000){
+    await new Promise(r => setTimeout(r, 1200)); legenda("", (Date.now() - t0 > 6000 ? "transcrevendo no PC… " : "áudio entregue ao PC · ") + Math.round((Date.now() - t0) / 1000) + " s");
+    try{ const r = ((await rest("jarvis_audio?select=estado,texto,erro&id=eq." + id)) || [])[0]; if(r && r.estado === "pronto"){ texto = String(r.texto || "").trim(); break; } if(r && r.estado === "erro"){ erro = r.erro || "erro"; break; } }catch(e){}
+  }
+  legenda("");
+  if(texto === null){ legenda(erro ? "O PC não conseguiu transcrever." : "O PC não respondeu ao áudio.", erro ? "Fale de novo ou use o microfone do teclado." : "Confira se o PC está ligado e tente de novo."); toast(erro ? "Não transcreveu" : "PC não respondeu", erro ? "Fale de novo." : "Confira se o PC está ligado.", false); return false; }
+  if(texto.replace(/[^A-Za-zÀ-ÿ0-9]/g, "").length < 2){ legenda("Não entendi o que você disse.", "Toque no microfone e fale de novo."); toast("Não entendi", "Toque no microfone e fale de novo.", false); return false; }
+  audPend = null; vaiPara("pLig");
+  if(fixAtivo){ const ok = await mandaClaude(texto); if(!ok) enviaMensagem(texto); } else enviaMensagem(texto);
+  return true;
+}
+
+(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : "pLig")); })();   /* iphone-014: abre sempre na Conversa */
 async function iniciaSessao(){
   if(sess){ try{ await garanteDono(); document.body.classList.remove("semlogin"); iniciaSync(); return; }catch(e){ /* cai no login */ } }
   mostraLogin();
