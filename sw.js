@@ -1,6 +1,6 @@
-// Jarvis iPhone v74: guarda a "casca" do app (abre rápido) e mostra as notificações. Os dados sempre vêm da rede (Supabase).
+// Jarvis iPhone v75: guarda a "casca" do app (abre rápido) e mostra as notificações. Os dados sempre vêm da rede (Supabase).
 // Cada versão nova tem um nome de cache novo: o iPhone baixa a versão nova ao abrir, troca sozinho e o app avisa "Atualizado para vX".
-const V = "jarvis-v74";
+const V = "jarvis-v75";
 const CASCA = ["./", "index.html", "config.js", "manifest.webmanifest", "icone-v3-180.png", "icone-v3-192.png", "icone-v3-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(CASCA.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

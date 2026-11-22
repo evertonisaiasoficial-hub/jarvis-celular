@@ -1044,7 +1044,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v74";
+const VERSAO = "v75";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -3460,7 +3460,7 @@ function ttAssinatura(){ return JSON.stringify(abas.map(a => [a.nome, a.estado, 
 function ttChip(c){ const e = document.createElement("span"); e.className = "ttChip " + (c || "sem_conferir"); e.textContent = CONF_TXT[c] || CONF_TXT.sem_conferir; return e; }
 function ttLinha(r){
   const d = document.createElement("div"); d.className = "ttL " + r.estado; const aberta = ttAbertas.has(r.id);
-  d.innerHTML = '<div class="r1"><span class="t"></span></div>'; d.querySelector(".t").textContent = (r.estado === "erro" ? "✗ " : r.estado === "exec" ? "▶ " : r.estado === "fila" ? "• " : "✓ ") + r.titulo; if(r.estado !== "fila") d.querySelector(".r1").appendChild(ttChip(r.conferencia));
+  d.innerHTML = '<div class="r1"><span class="t"></span></div>'; d.querySelector(".t").textContent = (r.estado === "erro" ? "✗ " : r.estado === "exec" ? "▶ " : r.estado === "fila" ? "• " : "✓ ") + (r.n != null ? r.n + ". " : "") + r.titulo; if(r.estado !== "fila") d.querySelector(".r1").appendChild(ttChip(r.conferencia));
   if(r.estado === "erro" && r.motivo){ const m = document.createElement("div"); m.className = "mot"; m.textContent = r.motivo; d.appendChild(m); }
   if(r.estado === "exec" && r.total > 0){ const b = document.createElement("div"); b.className = "ttBarra"; b.innerHTML = "<i></i>"; b.firstChild.style.width = Math.round(100 * r.feitos / r.total) + "%"; d.appendChild(b); const p = document.createElement("div"); p.className = "ttPc"; p.textContent = r.feitos + " de " + r.total + " passos"; d.appendChild(p); }
   if(aberta){
@@ -3482,9 +3482,9 @@ function desenhaTT(forca){
   const por = new Map(); nomes.forEach(n => por.set(n, []));
   /* o que está VIVO vem das abas (o mesmo que a janela do PC mostra agora); a tabela jarvis_tarefas_app só enriquece (título da ordem, passos, progresso, conferência) e traz as concluídas de hoje */
   const fonte = [], porId = new Map(tarApp.map(r => [r.id, r]));
-  abas.forEach(a => filaDe(a).filter(x => x.e === "exec" || x.e === "fila" || x.e === "erro").forEach(x => {
+  abas.forEach(a => filaDe(a).filter(x => (x.e === "exec" || x.e === "fila" || x.e === "erro") && !(x.o === "x" && x.e === "exec")).forEach(x => {   /* "Em andamento" genérico sem pedido não aparece (igual à janela do PC) */
     const tx = textoOrdem(a, x), m = /ordens[\\/](?:entregues|entrada)[\\/]([\w.\-]+?)\.md/.exec(tx || ""), r = (m && porId.get(m[1])) || null;
-    fonte.push({ id: (r && r.id) || ("v" + a.nome + "|" + (x.n || "") + "|" + x.t), terminal: a.nome, titulo: (r && r.titulo) || x.t, estado: x.e, total: r ? r.total : 0, feitos: r ? r.feitos : 0, passos: r ? r.passos : [],
+    fonte.push({ id: (r && r.id) || ("v" + a.nome + "|" + (x.n || "") + "|" + x.t), terminal: a.nome, titulo: (r && r.titulo) || x.t, estado: x.e, n: x.n, total: r ? r.total : 0, feitos: r ? r.feitos : 0, passos: r ? r.passos : [],
       contexto: (r && r.contexto) || tx, teste: r ? r.teste : "", conferencia: r ? r.conferencia : "sem_conferir", motivo: x.e === "erro" ? (x.m || (r && r.motivo) || "") : "" });
   }));
   fonte.forEach(r => { const k = chave(r.terminal); if(!por.has(k)) por.set(k, []); por.get(k).push(r); });
