@@ -19,18 +19,18 @@
 <style>
   /* HOLOGRAMA: fundo escuro profundo, vidro fosco com reflexo, luz neon rosa/violeta discreta nas bordas, orbe no cabeçalho, varredura de luz. Inter. */
   :root{
-    --bg:#070b18; --bg2:#0c1430; --bg3:#1a2858;   /* v24: modo escuro mais profundo (contraste no carro) */
-    --cy:#ffc15e; --cy2:#ffe2ad; --acc2:#ff8a3d;
+    --bg:#000000; --bg2:#02060e; --bg3:#06182c;   /* v24: modo escuro mais profundo (contraste no carro) */
+    --cy:#38d8ff; --cy2:#bff3ff; --acc2:#2b8cff;
     --txt:#ffffff; --dim:#c9d2f5; --line:rgba(255,255,255,.09);
     --glass:rgba(255,255,255,.05); --glass2:rgba(255,255,255,.09);
-    --amb:#ffc15e; --ok:#ffc15e; --bad:#8088a6; --term:rgba(0,0,0,.28);
+    --amb:#38d8ff; --ok:#38d8ff; --bad:#8088a6; --term:rgba(0,0,0,.28);
     --f:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
     --edge:color-mix(in srgb,var(--cy) 26%,rgba(255,255,255,.07));
   }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font:14px/1.4 var(--f);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 /* v24: fundo transparente (a tela do app pinta o fundo escuro); só um brilho suave atrás do símbolo, que some antes da borda (sem emenda) */
-body{background:radial-gradient(closest-side at 50% 50%,color-mix(in srgb,var(--cy) 20%,transparent),transparent 100%)}
+body{background:radial-gradient(closest-side at 50% 50%,color-mix(in srgb,var(--cy) 28%,transparent),transparent 100%)}
 html{background:transparent}   /* v24: sem emenda com o fundo da tela do app */
 body.mudo #stage{opacity:.38}
 body.mudo #orbwrap,body.mudo #orbwrap>i{animation-play-state:paused}   /* v24: mudo = símbolo apagado e parado (menos CPU) */
@@ -42,9 +42,9 @@ body.bolha #msg{display:none}
 /* símbolo: copiado do painel do PC (painel.html) */
   #orbwrap{--s:176px;width:var(--s);height:var(--s);position:relative;flex:0 0 auto;display:grid;place-items:center;animation:float 6s ease-in-out infinite}
   #orbwrap>i{position:absolute;border-radius:50%;display:block}
-  #orbwrap .halo{inset:-40%;background:radial-gradient(circle,color-mix(in srgb,var(--cy) 30%,transparent),transparent 62%);animation:pulse 4s ease-in-out infinite}
-  #orbwrap .tick{inset:0;background:repeating-conic-gradient(color-mix(in srgb,var(--cy) 85%,transparent) 0 .8deg,transparent .8deg 5deg);
-    -webkit-mask:radial-gradient(farthest-side,transparent 92%,#000 93%);mask:radial-gradient(farthest-side,transparent 92%,#000 93%);animation:spin 60s linear infinite;opacity:.75}
+  #orbwrap .halo{inset:-40%;background:radial-gradient(circle,color-mix(in srgb,var(--cy) 42%,transparent),transparent 64%);animation:pulse 3s ease-in-out infinite;opacity:1}
+  #orbwrap .tick{inset:-3%;background:repeating-conic-gradient(color-mix(in srgb,var(--cy) 85%,transparent) 0 .8deg,transparent .8deg 5deg);
+    -webkit-mask:radial-gradient(farthest-side,transparent 92%,#000 93%);mask:radial-gradient(farthest-side,transparent 92%,#000 93%);animation:spin 60s linear infinite;opacity:.95}
   #orbwrap .seg{inset:8%;background:conic-gradient(var(--cy) 0 70deg,transparent 70deg 120deg,color-mix(in srgb,var(--cy) 60%,transparent) 120deg 200deg,transparent 200deg 250deg,var(--cy) 250deg 300deg,transparent 300deg);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));animation:spin 14s linear infinite;opacity:.95}   /* v24: sem drop-shadow animado (pesava a GPU fraca da central) */
   #orbwrap .dash{inset:17%;background:repeating-conic-gradient(color-mix(in srgb,var(--cy) 70%,transparent) 0 10deg,transparent 10deg 16deg);
@@ -323,6 +323,9 @@ input.segredo{width:100%;padding:14px 15px;border-radius:14px;border:1px solid v
 .prop .pc2 button.sel{border-color:var(--cy);color:var(--cy);background:color-mix(in srgb,var(--cy) 18%,transparent)}
 .prop .pb2{display:flex;gap:8px}.prop .pb2 button{flex:1;padding:14px;border-radius:13px;font:700 15.5px var(--f)}
 .prop.feito{opacity:.55}.prop.feito .pb2,.prop.feito .pc2{display:none}
+#seguraFalar{flex:0 0 auto;width:100%;min-height:64px;margin:6px 0 0;border-radius:32px;border:1px solid var(--line);background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;font:700 18px var(--f);touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#seguraFalar.on{background:linear-gradient(135deg,#ff6b78,#d92c43);animation:anel 1.6s ease-out infinite}
+#filaSaida{flex:0 0 auto;margin:6px 0 0;padding:6px 12px;border-radius:14px;background:rgba(255,200,60,.14);color:var(--yel);font:600 13px var(--f)}
 #composer{flex:0 0 auto;display:flex;align-items:flex-end;gap:8px;padding:8px 0 10px}
 #composer #msg,body.bolha #composer #msg{display:block;position:static;left:auto;right:auto;bottom:auto;text-align:left;letter-spacing:0;color:var(--txt);flex:1;min-width:0;min-height:50px;max-height:30vh;padding:13px 15px;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:16px/1.35 var(--f);resize:none;-webkit-user-select:text;user-select:text}
 #composer #ligar{width:50px;height:50px;flex:0 0 50px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--grn),#1fa866);color:#fff;box-shadow:none;animation:none}
@@ -513,7 +516,7 @@ body.capPisca{animation:capPisca .5s linear 6}
 .itar{display:flex;align-items:flex-start;gap:8px;padding:9px 6px;border-top:1px solid var(--line);min-height:44px;color:#fff;font:500 13.5px var(--f)}
 .itar.atual{color:var(--amar);font-weight:700}.itar .n{flex:0 0 auto;font:600 12px var(--mono);opacity:.7;padding-top:1px}.itar .t{flex:1;min-width:0}
 .itar .ord{flex:0 0 100%;white-space:pre-wrap;word-break:break-word;font:500 12.5px var(--f);color:var(--dim);padding:6px 4px 2px}
-.itar{flex-wrap:wrap}
+.itar{flex-wrap:wrap;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.itar.sem{cursor:default;color:var(--dim)}
 #inConc .inT{margin-top:4px}#inConc .itar{color:var(--dim)}
 #cfg .caixa{max-height:90vh;overflow-y:auto}
 /* início: resumo + atalhos */
@@ -562,6 +565,47 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
 @keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.painel.on{animation:none}}
 #conf{z-index:60}
+/* ====== iphone-007 (complemento visual, 22/11): mais aceso, só acabamento (sem botão/texto/tela nova). Animações só em opacity/transform (leves). ====== */
+:root{--cy:#35e6ff;--dim:#b4bbe0;--yel:#ffe14d;--edge:rgba(120,200,255,.28);--line:rgba(120,200,255,.2)}
+body{background:radial-gradient(120% 70% at 50% 0%,#1a2f78 0%,#070a1c 58%) fixed,#05070f;color:#fff}
+body::after{background:none}
+#legenda{color:#fff;text-shadow:0 0 14px rgba(53,230,255,.25)}
+#legenda small,#estadoLig,#versao{color:#c3cbf0}
+.tit{color:var(--cy);text-shadow:0 0 10px rgba(53,230,255,.55)}
+.vidro{border-color:rgba(120,200,255,.3);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 30px rgba(0,0,0,.3),0 0 18px rgba(53,230,255,.07)}
+.chip{color:#fff;border-color:rgba(120,200,255,.3)}
+.chip.sel{border-color:var(--cy);background:color-mix(in srgb,var(--cy) 22%,transparent);box-shadow:0 0 18px rgba(53,230,255,.55),inset 0 0 10px rgba(53,230,255,.2)}
+[data-e="trab"] .d{box-shadow:0 0 10px var(--yel),0 0 18px rgba(255,225,77,.6)}
+.tar[data-e="exec"]{border-color:var(--yel);background:rgba(255,225,77,.16);box-shadow:0 0 16px rgba(255,225,77,.45),inset 0 0 12px rgba(255,225,77,.12)}
+#termCab .at{background:rgba(255,225,77,.16);border-color:var(--yel);color:var(--yel);box-shadow:0 0 14px rgba(255,225,77,.35)}
+#termSaida{color:#fff;border-color:rgba(120,200,255,.28)}
+.mini .l{color:#c3cbf0}
+#orbBox::before{content:"";position:absolute;left:50%;top:50%;width:min(86vw,340px);height:min(86vw,340px);transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(53,230,255,.34) 0%,rgba(53,230,255,.12) 42%,transparent 70%);animation:halo 3.2s ease-in-out infinite}
+#chatTopo #orbBox::before{width:96px;height:96px}
+@keyframes halo{50%{opacity:.55;transform:translate(-50%,-50%) scale(1.07)}}
+#ligar{box-shadow:0 0 36px rgba(62,224,143,.65),0 0 70px rgba(62,224,143,.3),inset 0 2px 0 rgba(255,255,255,.4)}
+#composer #ligar{box-shadow:0 0 18px rgba(62,224,143,.6)}
+#ligar.on{box-shadow:0 0 40px rgba(255,77,94,.75),0 0 80px rgba(255,77,94,.35)}
+#nav button{color:#c3cbf0;transition:color .15s,transform .1s}
+#nav button i{transition:transform .15s,filter .15s}
+#nav button.on{color:var(--cy);text-shadow:0 0 10px rgba(53,230,255,.7)}
+#nav button.on i{transform:scale(1.12);filter:drop-shadow(0 0 7px rgba(53,230,255,.8))}
+.vz.sel{border-color:var(--cy);box-shadow:0 0 16px rgba(53,230,255,.4)}
+.painel.on{animation:entra .18s ease-out}
+@media (prefers-reduced-motion:reduce){#orbBox::before{animation:none}}
+/* ====== iphone-008: tela inteira, versão pequena, estado de entrega, sem "Mais" ====== */
+html{background:#02040a;min-height:100%;min-height:-webkit-fill-available}
+body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
+#app{top:0;left:0;right:0;bottom:0;height:var(--vh,100%);padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+#nav{padding-bottom:calc(env(safe-area-inset-bottom) + 4px);padding-left:max(6px,env(safe-area-inset-left));padding-right:max(6px,env(safe-area-inset-right))}
+#aviso2{display:none;margin:0 12px 6px;padding:6px 12px;border-radius:12px;background:rgba(255,225,77,.1);border:1px solid rgba(255,225,77,.4);color:#ffe14d;font-size:12.5px}
+#aviso2.on{display:block}
+.bal .entrega{display:block;margin-top:3px;font:500 10.5px var(--mono);opacity:.75;text-align:right}
+.bal .entrega.erro,.bal .entrega.pcoff{color:#ff8a96;opacity:1}
+.bal .entrega.ok{color:#3ee08f}
+.bal .tentaDeNovo{margin-left:8px;padding:3px 10px;border-radius:10px;background:rgba(255,255,255,.16);font:600 11px var(--mono);color:#fff}
+#cfgVersaoW{margin-top:12px;text-align:center;font:500 9px var(--mono);letter-spacing:.14em;color:var(--dim);opacity:.6}
+#cfgBtn{min-width:44px;min-height:44px}
 </style></head>
 <body class="idle">
 
@@ -569,7 +613,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <header id="topo"><b id="topoTit">Conversa</b><span class="sp"></span><span id="pcDot" class="pcd" title="PC"></span><span id="pcTxt">PC</span><button id="cfgBtn" title="Configurações">⚙</button></header>
   <div id="toast" class="vidro" role="status" aria-live="polite"></div>
   <div id="faixa"><div id="chips"></div></div>
-  <div id="aviso"></div>
+  <div id="aviso"></div><div id="aviso2"></div>
   <div id="instala" class="vidro"></div>
   <main id="corpo">
     <section id="pInicio" class="painel">
@@ -588,7 +632,7 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <section id="pLig" class="painel on">
       <div id="chatTopo"><div id="orbBox"><div id="stage"><div id="orbwrap"><i class="halo"></i><i class="tick"></i><i class="seg"></i><i class="dash"></i><i class="wave"></i><i class="wave w2"></i><canvas id="orb"></canvas></div></div></div>
         <div class="ct"><b>Jarvis</b><div id="estadoLig">Converse comigo: fale ou escreva</div></div>
-        <button class="btop bno" id="novaConversa">＋ Nova</button></div>
+        <button class="btop bno" id="novaConversa">＋ Nova</button><button class="btop bno" id="cfgBtn3" title="Ajustes" aria-label="Ajustes">⚙</button></div>
       <div id="capBanner"></div>
       <div id="inicio">
         <div id="resumo" class="vidro"><div class="rc"><b id="rTrab">0</b><span>trabalhando</span></div><div class="rc"><b id="rFila">0</b><span>na fila</span></div><div class="rc"><b id="rPend">0</b><span>pendentes</span></div><div id="maq"></div></div>
@@ -598,8 +642,8 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
       <div id="legenda"></div>
       <div id="favs"></div><div id="favNovo"><input id="favTxt" maxlength="80" placeholder="Nova ordem favorita…" autocomplete="off"><button class="btop bok" id="favSalva">Salvar</button><button class="btop bno" id="favCancela">✕</button></div>
       <div id="anexoChip" class="vidro"><img id="anexoImg" alt=""><span id="anexoTxt">Foto anexada: vai junto com o próximo pedido</span><button class="btop bno" id="anexoTira" aria-label="Tirar a foto">✕</button></div>
+      <button id="seguraFalar" aria-label="Segure para falar">🎙 Segure para falar</button>
       <div id="composer"><textarea id="msg" rows="1" placeholder="Fale (🎙) ou escreva para o Jarvis…" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Ditar"></button><button id="envMsg" title="Enviar">➤</button></div>
-      <div id="rodape"><span id="versao">VERSÃO v48</span></div>
     </section>
     <section id="pTerm" class="painel">
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
@@ -617,19 +661,11 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <section id="pAvisos" class="painel"><div class="tit">Precisa de você <span id="aprovarN"></span></div>
       <div id="avCap"></div>
       <div id="listaAprovar"></div>
-      <div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
+      <div class="tit">Avisos <span class="sp"></span><button class="btop bno" id="ativaPush" style="display:none">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
     <section id="pPrint" class="painel"><div class="tit">Print do PC</div>
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
       <div id="printInfo" class="vazio" style="padding:0 2px 10px;text-align:left">O PC só tira o print quando você toca no botão. Ficam guardados os últimos 10.</div>
       <div id="gradePrints"></div></section>
-    <section id="pMais" class="painel"><div class="tit">Mais</div>
-      <button class="parar2" id="pararMais"></button>
-      <div id="maisGrade">
-        <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
-        <button class="mg vidro" data-ir="pAvisos"><i>🔔</i>Avisos<b id="rAvisos"></b></button>
-        <button class="mg vidro" id="maisCfg"><i>⚙</i>Configurações</button>
-      </div>
-    </section>
     <section id="pAoVivo" class="painel"><div class="tit">Ao vivo do PC <span class="sp"></span><button class="btop bno" id="avParar">■ Parar</button></div>
       <div id="avAviso">● Ao vivo ligado: o PC mostra um aviso na tela dele. Desliga sozinho após 5 min sem toque.</div>
       <div id="avChips"></div>
@@ -713,7 +749,6 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <button data-p="pInicio" class="on"><i>🏠</i>Início</button>
     <button data-p="pLig"><i>💬</i>Conversa</button>
     <button data-p="pTerm"><i>▤</i>Terminais</button>
-    <button data-p="pMais"><i>⋯</i>Mais</button>
   </nav>
 </div>
 <div id="cheia"><div id="cheiaTop"><div id="cheiaChips"></div><button class="btop bno" id="fonteMenos">A−</button><button class="btop bno" id="fonteMais">A+</button><button class="btop bok" id="fechaCheia">✕ Fechar</button></div><div id="cheiaCorpo"></div></div>
@@ -723,11 +758,14 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
   <p class="s l1">Escolha a voz do Jarvis. <a href="#" id="saibaMais">Saiba mais</a></p>
   <p class="s" id="cfgMais" style="display:none">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
   <div id="listaVozes"></div>
+  <button class="vz" id="autoTg" style="margin-top:12px"><span class="gen">🎙</span><span><span class="vn"></span><small>Ligado: envia sozinho ~1,5 s depois que você para de falar. Desligado: toque em Enviar.</small></span></button>
   <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0;display:none"></p>
   <div class="tit" style="margin-top:14px">Ferramentas</div>
   <div id="cfgGrade">
+    <button class="mg vidro" data-ir="pIdeias"><i>💡</i>Ideias<b id="rIdeias"></b></button>
+    <button class="mg vidro" data-ir="pAvisos"><i>🔔</i>Avisos<b id="rAvisos"></b></button>
     <button class="mg vidro" id="maisChave"><i>🔑</i><span id="maisChaveTxt">Chave da IA</span></button>
     <button class="mg vidro" data-ir="pMemoria"><i>🧠</i>Memória</button>
     <button class="mg vidro" data-ir="pSaude"><i>🩺</i>Saúde<b id="rSaude"></b></button>
@@ -739,8 +777,8 @@ button:active,.mg:active,.chip:active{transform:scale(.96);filter:brightness(1.2
     <button class="mg vidro" id="maisAtualiza"><i>⟳</i>Atualizar</button>
   </div>
   <div style="display:none"><div id="vivo"></div><div id="enviados"></div></div>
-  <p class="s" style="margin:10px 0 0">Versão <b id="cfgVersao"></b></p>
   <p class="s l1" style="margin:10px 0 0">Face ID: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
+  <div id="cfgVersaoW"><span id="cfgVersao"></span></div>
 </div></div>
 <div id="decisao"><div class="cx vidro"><h3 id="decT"></h3><div id="decLista"></div><button class="btop bno" id="decDepois" style="width:100%;margin-top:4px">Decidir depois</button></div></div>
 <div id="recibo"><div class="cx vidro"><h3 id="recT"></h3><div id="recCorpo"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btop bok" id="recFecha" style="flex:1">Entendi</button></div></div></div>
@@ -778,14 +816,14 @@ const SZ = 118, dpr = Math.max(1, window.devicePixelRatio || 1), SS = Math.max(2
 const W = SZ * SS, C = W / 2, Rc = 0.455 * W, TILT = 0.90, RAD = Math.PI / 180, LS = SS * .5;     // TILT: leve inclinação 3D; LS: 1 "px" de design
 orb.width = orb.height = W; orb.style.width = orb.style.height = SZ + "px";
 const PAL = {
-  mudo:   { stops: ["#2a2d5c", "#5a62a0", "#a4acea", "#eceeff"], sh: "150,160,230", g: "110,120,210", m: "170,178,240", h: "236,238,255" },
+  mudo:   { stops: ["#1a2030", "#3a4a66", "#6c819f", "#c3d0e4"], sh: "110,130,160", g: "80,100,130", m: "130,150,180", h: "200,212,230" },
   ouve:   { stops: ["#0a3d8f", "#1e9bff", "#5fe0ff", "#e6fbff"], sh: "80,200,255", g: "40,170,255", m: "120,225,255", h: "230,250,255" },
-  quieto: { stops: ["#6b3a10", "#e0903a", "#ffc98a", "#fff0dc"], sh: "255,190,110", g: "240,150,70", m: "255,210,150", h: "255,240,222" },
-  on:     { stops: ["#a24a00", "#ff9a2a", "#ffd27a", "#ffffff"], sh: "255,205,110", g: "255,165,50", m: "255,225,160", h: "255,250,235" },
+  quieto: { stops: ["#05406e", "#1aa6e8", "#6fe4ff", "#e6fbff"], sh: "60,200,255", g: "30,160,240", m: "110,225,255", h: "230,250,255" },
+  on:     { stops: ["#0a5fb5", "#35c6ff", "#a8f0ff", "#ffffff"], sh: "120,230,255", g: "60,200,255", m: "170,240,255", h: "245,253,255" },
   muted:  { stops: ["#26262a", "#4f4f56", "#8e8e98", "#e6e6ec"], sh: "160,160,170", g: "120,120,130", m: "180,180,190", h: "236,236,242" },
   nocall: { stops: ["#202023", "#3b3b42", "#68686f", "#c4c4cc"], sh: "115,115,125", g: "95,95,105",   m: "145,145,155", h: "210,210,218" },
 };
-const CYS = { on: "#ffc15e", ouve: "#5fe0ff", mudo: "#a4acea", quieto: "#ffc98a" };      // cor dos anéis por estado
+const CYS = { on: "#9ff3ff", ouve: "#38e8ff", mudo: "#6c819f", quieto: "#38d8ff" };      // cor dos anéis por estado
 let state = "quieto", pal = PAL.quieto, MODO = 0, ATIVO = false;
 function depth(g, p){                                        // cor por PROFUNDIDADE: fundo (topo) escuro -> frente (base) clara
   const gr = g.createLinearGradient(0, C - Rc * TILT, 0, C + Rc * TILT);
@@ -906,7 +944,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v48";
+const VERSAO = "v57";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1069,6 +1107,7 @@ let toastT = null, toastFila = [], toastAtual = null, toastLoc = ARM.get("jv_loc
 function toast(titulo, texto, guardar){
   titulo = String(titulo || ""); texto = String(texto || "").replace(/\s+/g, " ").slice(0, 140);
   if(guardar !== false){ toastLoc.unshift({ titulo: titulo, texto: texto, criado_em: new Date().toISOString(), tipo: "app" }); toastLoc = toastLoc.slice(0, 50); ARM.set("jv_locais", toastLoc); if(typeof desenhaAvisos === "function" && painelAtual === "pAvisos") desenhaAvisos(); }
+  if(guardar !== false) return;   /* iphone-007: avisos dentro do app DESLIGADOS (só erro/pedido de ação, que passam guardar=false); tudo segue no Telegram */
   toastFila.push({ titulo: titulo, texto: texto });
   if(!toastAtual) mostraToast(); else pintaContador();
 }
@@ -1092,7 +1131,7 @@ const filaDe = a => Array.isArray(a.fila) ? a.fila : [];
 const atualDe = a => filaDe(a).find(x => x.e === "exec");
 
 /* ---------- sincronia com o PC ---------- */
-let sync = null, ocupado = false, ultAviso = ARM.get("jv_ultaviso") || 0, avisoIni = false;
+let sigAnt = "", sync = null, ocupado = false, ultAviso = ARM.get("jv_ultaviso") || 0, avisoIni = false;
 function iniciaSync(){
   if(sync) return;
   puxa(); puxaAvisos(); olhando(); salvaPushSilencioso(); carregaConversa(); setTimeout(() => { try{ puxaChave(); }catch(e){} }, 1500);
@@ -1122,7 +1161,9 @@ async function puxa(){
     if(!destino || !abas.find(x => x.nome === destino)) destino = (abas.find(x => x.nome === "Jarvis") || abas[0] || {}).nome || "";
     if(!termSel || !abas.find(x => x.nome === termSel)) termSel = destino;
     terminou(antes, abas);
-    desenhaTudo();
+    /* iphone-008: só redesenha quando algo mudou de verdade (ignora relógio, cpu, ram); sem pisca nem pulo de rolagem */
+    const sig = JSON.stringify([abas.map(x => [x.nome, x.estado, x.texto, x.pct, x.total, x.feito, x.fila, x.pausada, x.pergunta, x.detalhe, x.saida]), ideias.map(x => x.id), semSinal, painelAtual, termSel, destino]);
+    if(sig !== sigAnt){ sigAnt = sig; const sc = document.querySelector(".painel.on"), st = sc ? sc.scrollTop : 0, sb = $q("corpo").scrollTop; desenhaTudo(); if(sc) sc.scrollTop = st; $q("corpo").scrollTop = sb; } else { desenhaPc(); desenhaTopo(); desenhaBadges(); }
     const av = $q("aviso"); av.classList.toggle("on", semSinal); av.textContent = semSinal ? "O PC está sem sinal (desligado ou sem o Jarvis). Os pedidos ficam guardados e saem quando ele voltar." : "";
     alarmePc(); desenhaFalta();
     if(cheiaOn) puxaCheia();
@@ -1442,16 +1483,19 @@ function desenhaPc(){
   $q("pcTxt").textContent = usandoCache ? "Estado guardado de " + hhmm(cacheT) : (ok ? "PC ligado" : (carregouAbas || falhaRede ? "PC sem sinal" : "PC…")) + (carregouAbas && ult ? " · último contato " + hhmm(ult) + (semSinal ? " (há " + minAtras(ult) + ")" : "") : "");
 }
 function ajustaGrade(){          // última linha da grade do Mais nunca fica com buraco
+  if(!document.getElementById("maisGrade")) return;
   const g = $q("maisGrade"); if(!g) return; const it = [...g.children].filter(x => x.offsetParent !== null || true); it.forEach(x => x.style.gridColumn = "");
   const cols = getComputedStyle(g).gridTemplateColumns.split(" ").length, r = it.length % cols;
   if(r && it.length) it[it.length - 1].style.gridColumn = "span " + (cols - r + 1);
 }
 addEventListener("resize", ajustaGrade);
+const PN_GUARDA = ["pInicio", "pLig", "pTerm", "pTar", "pAvisos", "pMais", "pIdeias", "pAprovar"];   // telas leves que o app guarda para abrir nelas
 function vaiPara(p){
   if(typeof avAtivo !== "undefined" && avAtivo && p !== "pAoVivo") paraAoVivo("Saí da tela Ao vivo");
   if(typeof verOn !== "undefined" && verOn && p !== "pVer") paraVer();
+  if(p === "pMais") p = "pLig";          /* iphone-008: tela "Mais" removida; ficam Início, Conversa e Terminais */
   if(largo() && p === "pLig") p = "pTerm";
-  painelAtual = p; $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
+  painelAtual = p; if(PN_GUARDA.includes(p)) ARM.set("jv_pn", p); $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
   const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTerm", pVer: "pTerm", pTar: "pInicio", pAvisos: "pMais", pChave: "pMais", pCaptcha: "pMais" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
@@ -1510,8 +1554,34 @@ async function pararTudo(){
 let ultPedidoId = null, ultPedidoOff = false, ultPedidoTexto = null;
 async function mandaPedido(aba, texto){
   if(anexoPend) texto = texto + String.fromCharCode(10, 10) + "[anexo: " + anexoPend.name + "]";
-  try{ const r = await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ aba: aba, texto: texto }) }); ultPedidoId = (r && r[0] && r[0].id) || null; ultPedidoOff = !!semSinal; ultPedidoTexto = texto; if(anexoPend) tiraAnexo(true); return true; }catch(e){ return false; }
+  try{ const r = await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ aba: aba, texto: texto }) }); ultPedidoId = (r && r[0] && r[0].id) || null; ultPedidoOff = !!semSinal; ultPedidoTexto = texto; if(anexoPend) tiraAnexo(true); return true; }
+  catch(e){
+    /* melhorias-iphone-001 #2: sem sinal → guarda no app e manda sozinho quando a internet voltar */
+    if(!navigator.onLine || /failed to fetch|network|load failed|timed? ?out|abort|internet/i.test(String(e && e.message || e))){
+      const fila = ARM.get("jv_saida") || []; fila.push({ aba: aba, texto: texto, t: Date.now() }); ARM.set("jv_saida", fila.slice(-30));
+      if(anexoPend) tiraAnexo(true); desenhaSaida(); toast("Na fila · sem sinal", "Guardei o pedido. Envio sozinho quando a internet voltar.", false); return true;
+    }
+    return false;
+  }
 }
+let saidaOcup = false;
+function desenhaSaida(){
+  const n = (ARM.get("jv_saida") || []).length; let el = $q("filaSaida");
+  if(!el){ el = document.createElement("div"); el.id = "filaSaida"; $q("composer").before(el); }
+  el.textContent = n ? "⏳ " + n + " pedido(s) na fila — envio quando o sinal voltar" : ""; el.style.display = n ? "" : "none";
+}
+async function esvaziaSaida(){
+  if(saidaOcup || !navigator.onLine || !sess) return; let fila = ARM.get("jv_saida") || []; if(!fila.length) return; saidaOcup = true;
+  try{
+    while(fila.length){
+      const p = fila[0];
+      await rest("jarvis_pedidos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ aba: p.aba, texto: p.texto }) });
+      fila.shift(); ARM.set("jv_saida", fila); desenhaSaida(); toast("Enviado da fila ✓ · " + p.aba, String(p.texto).slice(0, 100));
+    }
+  }catch(e){}
+  saidaOcup = false;
+}
+addEventListener("online", () => setTimeout(esvaziaSaida, 800)); setInterval(esvaziaSaida, 15000); setTimeout(() => { desenhaSaida(); esvaziaSaida(); }, 1500);
 
 /* ---------- notificações (Web Push) ---------- */
 function b64u(s){ const p = "=".repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
@@ -1534,11 +1604,12 @@ async function ativaPush(){
     toast("Notificações ativadas ✓", "Tarefa concluída, ideia nova, captcha/login e Pix chegam no iPhone.");
   }catch(e){ toast("Não consegui ativar", String(e.message || e)); }
 }
+/* iphone-007: push do app DESLIGADO. Cancela a inscrição deste iPhone e apaga do servidor (os avisos ficam só no Telegram). */
 async function salvaPushSilencioso(){
   try{
-    if(!("serviceWorker" in navigator) || !("PushManager" in window) || Notification.permission !== "granted") return;
+    if(!("serviceWorker" in navigator) || !("PushManager" in window)) return;
     const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
-    if(sub){ await salvaInscricao(sub); $q("ativaPush").textContent = "🔔 Ativadas ✓"; }
+    if(sub){ const ep = sub.endpoint; await sub.unsubscribe(); try{ await rest("jarvis_push?endpoint=eq." + encodeURIComponent(ep), { method: "DELETE", headers: { Prefer: "return=minimal" } }); }catch(e){} }
   }catch(e){}
 }
 
@@ -1578,6 +1649,7 @@ function desenhaVozes(){
   $q("vozDica").textContent = !temM ? "Seu iPhone não tem voz masculina em português do Brasil. Baixe uma em Ajustes > Acessibilidade > Conteúdo Falado > Vozes > Português (Brasil) > Felipe (escolha a versão Aprimorada ou Premium)."
     : qualidadeVoz(melhorM) < 3 ? "Para uma voz ainda mais natural, baixe a versão Premium ou Aprimorada em Ajustes > Acessibilidade > Conteúdo Falado > Vozes > Português (Brasil)." : "";
 }
+function desenhaAutoTg(){ const b = $q("autoTg"), on = autoEnvia(); b.className = "vz" + (on ? " sel" : ""); b.querySelector(".vn").textContent = "Enviar ao parar de falar: " + (on ? "LIGADO" : "desligado"); }
 function desenhaFalaTg(){
   const b = $q("falaTg"), on = !!ARM.get("jv_fala"); b.className = "vz" + (on ? " sel" : ""); b.querySelector(".vn").textContent = on ? "Jarvis responde falando: LIGADO" : "Jarvis responde falando: desligado";
   b.querySelector("small").textContent = on ? "Toque para desligar (a voz abaixo é a que ele usa)" : "O app só mostra texto. Toque para ligar a voz de resposta.";
@@ -1607,6 +1679,17 @@ let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, lig
 function paraRec(){ if(rec){ try{ rec.onend = null; rec.abort(); }catch(e){} rec = null; } ouvindoAgora = false; }
 let acumFala = "";
 const zeraFala = () => { acumFala = ""; };
+/* (22/11, iphone-007) ENVIO AUTOMÁTICO: ~1,5 s sem novas palavras envia sozinho; a barra mostra a contagem e o ✕ cancela. Fala vazia/ruído (<2 letras) não envia. Ajuste "Enviar ao parar de falar" (padrão ligado). */
+const autoEnvia = () => ARM.get("jv_auto") !== false;
+let autoT = null, autoFim = 0, autoUlt = "";
+function limpaAuto(){ clearTimeout(autoT); autoT = null; autoFim = 0; }
+function armaAuto(){
+  if(!autoEnvia() || !ligado || previa){ limpaAuto(); return; }
+  const t = acumFala.replace(/[^A-Za-zÀ-ÿ0-9]/g, "");
+  if(t.length < 2){ limpaAuto(); return; }
+  clearTimeout(autoT); autoFim = Date.now() + 1500;
+  autoT = setTimeout(() => { autoT = null; autoFim = 0; if(ligado && !previa && acumFala.trim().length >= 2) enviaGravacao(); }, 1500);
+}
 const tempoGrav = () => { const s = Math.floor((Date.now() - gravT0) / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
 /* A gravação NÃO para quando você troca de tela no app: ela vive aqui, fora das telas. O iOS encerra o microfone em pausas; religa sozinho e CONTINUA juntando a fala. */
 function escuta(){
@@ -1619,8 +1702,8 @@ function escuta(){
     let todo = ""; for(let i = 0; i < e.results.length; i++) todo += e.results[i][0].transcript + " ";
     acumFala = (base + " " + todo.trim()).trim();
     nivel = Math.min(1, .35 + Math.min(.5, acumFala.length / 60));
-    if(acumFala) legenda(acumFala, "gravando… toque em Enviar quando terminar");
-    desenhaGrav();
+    if(acumFala) legenda(acumFala, autoEnvia() ? "gravando… envio sozinho quando você parar de falar" : "gravando… toque em Enviar quando terminar");
+    armaAuto(); desenhaGrav();
   };
   r.onerror = e => {
     if(e.error === "not-allowed" || e.error === "service-not-allowed"){ cancelaGravacao(); legenda("O iPhone bloqueou o microfone.", "Ajustes > Safari > Microfone (ou Ajustes > Jarvis) e toque no microfone de novo."); }
@@ -1640,11 +1723,11 @@ const ICO_ENVIA = '<svg viewBox="0 0 24 24" width="38" height="38" fill="current
 function iniciaGravacao(){
   if(ligado) return;
   if(!SR){ toast("Este navegador não tem ditado", "Use o ⌨ e o microfone do teclado do iPhone."); $q("teclado").classList.add("on"); $q("txt").focus(); return; }
-  ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 500); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
+  ligado = true; acumFala = $q("msg").value.trim(); rapidos = 0; gravT0 = Date.now(); mantemTela(); clearInterval(gravTimer); gravTimer = setInterval(desenhaGrav, 200); desenhaGrav(); legenda("", "gravando… fale agora"); escuta();
 }
-function cancelaGravacao(){ ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
+function cancelaGravacao(){ limpaAuto(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; desenhaGrav(); if(atualizarDepois) location.reload(); }
 function enviaGravacao(){
-  const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
+  limpaAuto(); const t = acumFala.trim(); ligado = false; clearInterval(gravTimer); paraRec(); zeraFala(); desenhaGrav();
   if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
   $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig");
   /* (21/11, dono, prioridade A) a fala segue DIRETO e na hora para o terminal selecionado: sem tela de revisão, sem esperar confirmação e sem reescrever antes
@@ -1654,6 +1737,7 @@ function enviaGravacao(){
     const t0 = performance.now(); bal("dono", t);
     mandaPedido(destino, t.slice(0, 3900)).then(ok => {
       const ms = Math.round(performance.now() - t0);
+      if(ok && (ARM.get("jv_saida") || []).some(x => x.texto === t.slice(0, 3900))) return;   // ficou na fila (sem sinal): o aviso "Na fila" já saiu
       if(ok){ guardaEnviado(destino, t, "direto"); toast("Enviado · " + destino, t.slice(0, 120) + " (" + ms + " ms)"); }
       else toast("Não enviei", "Verifique a internet e fale de novo.");
     });
@@ -1665,7 +1749,7 @@ function desenhaGrav(){
   const f = $q("flutua"); f.classList.toggle("on", ligado && !previa);
   $q("ligar").classList.toggle("on", ligado); $q("ligar").innerHTML = ligado ? ICO_ENVIA : ICO_MIC;
   const e = $q("estadoLig"); e.classList.toggle("on", ligado); e.textContent = ligado ? "● Gravando… " + tempoGrav() : "Converse comigo: fale ou escreva"; if(ligado) $q("msg").value = acumFala;
-  if(ligado){ $q("flT").textContent = "● " + tempoGrav(); $q("flX").textContent = acumFala ? acumFala.slice(-80) : "fale agora…"; }
+  if(ligado){ $q("flT").textContent = autoFim ? "Enviando em " + Math.max(0.1, (autoFim - Date.now()) / 1000).toFixed(1) + " s · ✕ cancela" : "● " + tempoGrav(); $q("flX").textContent = acumFala ? acumFala.slice(-80) : "fale agora…"; }
 }
 
 /* ---------- cérebro (Edge Function jarvis-cerebro; a chave fica no Supabase) ---------- */
@@ -1941,7 +2025,7 @@ addEventListener("keydown", e => { if(e.key === "Escape"){ if(zel.classList.cont
 /* ---------- v6: CONVERSA com a IA (Sonnet), como no Claude ---------- */
 let conversaId = ARM.get("jv_conversa") || ("c" + Date.now()); ARM.set("jv_conversa", conversaId);
 let pendente = null, notaPendente = "", conversando = false;
-function bal(papel, texto, extra){ const c = $q("chat"), d = document.createElement("div"); d.className = "bal " + papel + (extra ? " " + extra : ""); d.textContent = texto; c.appendChild(d); c.scrollTop = c.scrollHeight; mostraInicio(); return d; }
+function bal(papel, texto, extra){ const c = $q("chat"), d = document.createElement("div"); d.className = "bal " + papel + (extra ? " " + extra : ""); d.textContent = texto; const perto = c.scrollHeight - c.scrollTop - c.clientHeight < 120; c.appendChild(d); if(perto || papel === "dono") c.scrollTop = c.scrollHeight; mostraInicio(); return d; }
 function rolaChat(){ const c = $q("chat"); c.scrollTop = c.scrollHeight; }
 async function carregaConversa(){
   $q("chat").innerHTML = ""; pendente = null;
@@ -1956,13 +2040,42 @@ const RX_CORRIGE = /^\s*corrig/i;
    texto do dono -> jarvis_claude_chat (papel dono); resposta do Claude -> papel claude. Sem o lado do PC, tudo segue como antes e o app avisa. ---------- */
 let fixAtivo = false, fixUltId = ARM.get("jv_fixid"), fixAvisou = false, fixBusy = false;
 async function puxaFixado(){
-  try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0]; fixAtivo = !!(x && x.dados && x.dados.ativo && Date.now() - new Date(x.atualizado_em).getTime() < 180000); }catch(e){ fixAtivo = false; }
-  if(!fixAtivo && !fixAvisou && painelAtual === "pLig" && carregouAbas){ fixAvisou = true; bal("nota", "O chat do Claude fixado ainda não está ligado no PC. Por enquanto seus pedidos seguem pelo caminho de antes; nada trava."); }
+  try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0]; fixAtivo = !!(x && x.dados && x.dados.ativo && Date.now() - new Date(x.atualizado_em).getTime() < 420000); }catch(e){ /* sem rede: mantém o último estado */ }
+  $q("aviso2").classList.toggle("on", !fixAtivo && carregouAbas); $q("aviso2").textContent = (!fixAtivo && carregouAbas) ? "PC fora do ar: o chat com o Claude não está ligado." : "";
+}
+function entregaTxt(st, s, id, texto){
+  st.className = "entrega " + s; st.innerHTML = "";
+  const T = { env: "enviando…", fila: "enviado · esperando o PC", pc: "entregue ao PC…", ok: "entregue ao Claude ✓", erro: "não entregue", pcoff: "não entregue · PC fora do ar" };
+  st.appendChild(document.createTextNode(T[s] || s));
+  if(s === "erro" || s === "pcoff"){ const b = document.createElement("button"); b.className = "tentaDeNovo"; b.textContent = "Tentar de novo"; b.onclick = () => reenviaClaude(st, id, texto); st.appendChild(b); }
+}
+async function acompanhaEntrega(st, id, texto){
+  const t0 = Date.now(); let ult = "";
+  while(true){
+    await new Promise(r => setTimeout(r, 1500));
+    let e = "novo"; try{ const r = ((await rest("jarvis_claude_chat?select=estado&id=eq." + id)) || [])[0]; if(r) e = r.estado; }catch(x){}
+    const seg = (Date.now() - t0) / 1000;
+    let s = e === "erro" ? "erro" : e === "colado" ? (seg > 14 ? "ok" : "pc") : (seg > 20 ? (fixAtivo ? "erro" : "pcoff") : "fila");
+    if(s !== ult){ ult = s; entregaTxt(st, s, id, texto); }
+    if(s === "erro" || s === "pcoff" || s === "ok") return;
+    if(seg > 60) return;
+  }
+}
+async function reenviaClaude(st, id, texto){
+  let e = "erro"; try{ const r = ((await rest("jarvis_claude_chat?select=estado&id=eq." + id)) || [])[0]; if(r) e = r.estado; }catch(x){}
+  if(e === "novo"){ entregaTxt(st, "fila", id, texto); acompanhaEntrega(st, id, texto); return; }     /* ainda na fila do PC: não duplica */
+  if(e === "colado"){ entregaTxt(st, "ok", id, texto); return; }
+  entregaTxt(st, "env", id, texto); const nid = await gravaClaude(texto);
+  if(nid){ entregaTxt(st, "fila", nid, texto); acompanhaEntrega(st, nid, texto); } else entregaTxt(st, "erro", id, texto);
+}
+async function gravaClaude(texto){
+  try{ const r = await rest("jarvis_claude_chat", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ papel: "dono", texto: texto.slice(0, 3900) }) }); return (r && r[0] && r[0].id) || 0; }catch(e){ return 0; }
 }
 async function mandaClaude(texto){
-  bal("dono", texto);
-  try{ await rest("jarvis_claude_chat", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ papel: "dono", texto: texto.slice(0, 3900) }) }); toast("Enviado ao Claude", texto.slice(0, 100)); return true; }
-  catch(e){ toast("Não consegui falar com o Claude do PC", String(e.message || e).slice(0, 80), false); return false; }
+  const b = bal("dono", texto), st = document.createElement("small"); b.appendChild(st); entregaTxt(st, "env", 0, texto);
+  const id = await gravaClaude(texto);
+  if(!id){ entregaTxt(st, "erro", 0, texto); return true; }       /* mostra "não entregue" + botão; nunca some calado */
+  entregaTxt(st, "fila", id, texto); acompanhaEntrega(st, id, texto); return true;
 }
 function fixAcoes(){
   const w = document.createElement("div"); w.className = "fixAcoes"; w.innerHTML = '<button class="btop bok" data-a="ok">✓ Pode enviar</button><div class="l"><input maxlength="900" placeholder="Corrigir… (escreva o que mudar)" autocomplete="off"><button class="btop bno" data-a="cor">Corrigir</button></div>';
@@ -1971,14 +2084,14 @@ function fixAcoes(){
   return w;
 }
 async function puxaRespostaClaude(){
-  if(!fixAtivo || fixBusy || document.hidden || painelAtual !== "pLig") return; fixBusy = true;
+  if(fixBusy || document.hidden || !sess) return; fixBusy = true;
   try{
     if(fixUltId == null){ const u = ((await rest("jarvis_claude_chat?select=id&order=id.desc&limit=1")) || [])[0]; fixUltId = u ? u.id : 0; ARM.set("jv_fixid", fixUltId); }
     else { const l = (await rest("jarvis_claude_chat?select=id,papel,texto&papel=eq.claude&id=gt." + fixUltId + "&order=id.asc&limit=10")) || [];
-      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal("jarvis", String(m.texto).slice(0, 700)); $q("chat").appendChild(fixAcoes()); rolaChat(); }); if(l.length) ARM.set("jv_fixid", fixUltId); }
+      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal("jarvis", String(m.texto).slice(0, 700)); });   /* iphone-007: sem botão "Pode enviar": nenhum toque obrigatório */ if(l.length) ARM.set("jv_fixid", fixUltId); }
   }catch(e){} fixBusy = false;
 }
-setInterval(puxaRespostaClaude, 2000); setInterval(() => { if(!document.hidden && sess) puxaFixado(); }, 20000); setTimeout(() => { if(sess) puxaFixado(); }, 2500);
+setInterval(puxaRespostaClaude, 2500); setInterval(() => { if(!document.hidden && sess) puxaFixado(); }, 20000); setTimeout(() => { if(sess) puxaFixado(); }, 2500);
 async function enviaMensagem(texto){
   texto = String(texto || "").trim(); if(!texto || conversando) return;
   if(fixAtivo){ if(await mandaClaude(texto)) return; }
@@ -2150,10 +2263,10 @@ const tarAbIn = new Set();
 function textoOrdem(a, q){ const det = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {}; return ((q.e === "exec" ? det.ordem : "") || q.ordem || q.f || q.t || "").trim(); }
 function listaTarefasIn(a, tar){
   const w = document.createElement("div"); w.className = "inTL";
-  if(!tar.length){ const v = document.createElement("div"); v.className = "itar"; v.textContent = "Nenhuma tarefa."; w.appendChild(v); return w; }
+  if(!tar.length){ const v = document.createElement("div"); v.className = "itar sem"; v.textContent = "Nenhuma tarefa na fila deste terminal."; w.appendChild(v); return w; }
   tar.slice().sort((p, q) => (ORD[p.e] - ORD[q.e])).forEach(q => {
     const k = chaveTar(a, q), d = document.createElement("div"); d.className = "itar" + (q.e === "exec" ? " atual" : "");
-    d.innerHTML = '<span class="n"></span><span class="t"></span>'; d.children[0].textContent = (q.e === "erro" ? "✗" : q.n ? q.n + "." : "•"); d.children[1].textContent = q.t;
+    d.innerHTML = '<span class="n"></span><span class="t"></span>'; d.children[0].textContent = (q.e === "erro" ? "✗" : q.e === "exec" ? "▶" : q.n ? q.n + "." : "•"); d.children[1].textContent = q.t;
     if(tarAbIn.has(k)){ const o = document.createElement("div"); o.className = "ord"; o.textContent = textoOrdem(a, q) || "O PC ainda não enviou o texto desta ordem."; d.appendChild(o); }
     d.onclick = ev => { ev.stopPropagation(); if(tarAbIn.has(k)) tarAbIn.delete(k); else tarAbIn.add(k); desenhaInicio(); };
     w.appendChild(d);
@@ -2201,6 +2314,7 @@ function desenhaInicio(){
   lista.forEach(a => {
     const e = a.estado === "perg" ? "perg" : a.estado === "trab" ? "trab" : "livre", x = document.createElement("div"); x.className = "inT vidro " + e;
     const tar = filaDe(a).filter(q => q.e !== "feito");
+    if((e === "trab" || e === "perg") && !tar.some(q => q.e === "exec")){ const dt = (a.detalhe && typeof a.detalhe === "object") ? a.detalhe : {}, tt = limpaLinha(a.texto) || limpaLinha(dt.passo) || "Trabalhando agora"; tar.unshift({ e: "exec", t: tt, ordem: (dt.ordem || "").trim(), _atual: 1 }); }
     x.innerHTML = '<span class="p"></span><div class="c"><b></b><small></small></div><em></em>'; x.querySelector("b").textContent = a.nome;
     x.querySelector("small").textContent = a._semDados ? "sem dados do PC" : a.pausada ? "pausado" : (e === "livre" ? (tar.length ? tar.length + " na fila" : "parado, sem tarefa") : (a.texto || ""));
     x.querySelector("em").textContent = e === "perg" ? "ESPERA VOCÊ" : e === "trab" ? "TRABALHANDO" : "PARADO";
@@ -2311,13 +2425,15 @@ $q("anexoIn").onchange = async () => {
 $q("anexoTira").onclick = () => tiraAnexo(false);
 
 /* ---------- Ao vivo do PC (v10.7) ---------- */
-let avAtivo = false, avTimers = [], avS = 1, avTx = 0, avTy = 0, avPtr = {}, avGest = null, avVisto = "", avConf = "", avBusy = false, avAvisouFim = false;
+let avAtivo = false, avTimers = [], avS = 1, avTx = 0, avTy = 0, avPtr = {}, avGest = null, avVisto = "", avConf = "", avBusy = false, avAvisouFim = false, avReg = [0, 0, 1, 1], avPed = null, avPend = null, avRecT = null, avFull = false;
 const avRow = () => rest("jarvis_aovivo?id=eq.pc&select=ver_ate,alvo,quadro,w,h,janelas,confirmar,aviso,atualizado_em");
-async function avLiga(){ try{ await rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString(), alvo: $q("avAlvo").value || "tela" }) }); }catch(e){} }
+/* iphone-006: com zoom, pede ao PC só o pedaço que está na tela, em resolução cheia ("tela@x,y,w,h", frações da tela inteira); sem zoom volta à imagem leve */
+const avAlvoAtual = () => ($q("avAlvo").value || "tela") + (avPed ? "@" + avPed.map(v => v.toFixed(4)).join(",") : "");
+async function avLiga(){ try{ await rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: new Date(Date.now() + 40000).toISOString(), alvo: avAlvoAtual() }) }); }catch(e){} }
 async function abreAoVivo(){
   if(avAtivo) return;
   if(!(await exigeFace("Ver e tocar na tela do PC"))){ vaiPara("pTerm"); return; }
-  avAtivo = true; avS = 1; avTx = avTy = 0; avVisto = ""; avConf = ""; avAvisouFim = false; $q("avImg").removeAttribute("src"); avAplica(); avCtlSet(false);
+  avAtivo = true; avS = 1; avTx = avTy = 0; avVisto = ""; avConf = ""; avAvisouFim = false; avReg = [0, 0, 1, 1]; avPed = null; avPend = null; avFull = false; $q("avImg").removeAttribute("src"); avAplica(); avCtlSet(false);
   await avLiga();
   avTimers.push(setInterval(avLiga, 15000), setInterval(avPoll, 900));
   avPoll();
@@ -2327,7 +2443,29 @@ function paraAoVivo(motivo){
   rest("jarvis_aovivo?id=eq.pc", { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ ver_ate: null }) }).catch(() => {});
   const im = $q("avImg"); im.removeAttribute("src"); if(avUrl){ try{ URL.revokeObjectURL(avUrl); }catch(_){} avUrl = null; }
 }
-let avUrl = null;
+let avUrl = null, avUltBytes = 0;
+function avVisivel(){
+  const t = $q("avTela"), im = $q("avImg"), W = t.clientWidth || 1, Ht = t.clientHeight || 1, Hi = im.clientHeight || Ht, R = avReg;
+  const x0 = Math.max(0, -avTx / (avS * W)), x1 = Math.min(1, (W - avTx) / (avS * W)), y0 = Math.max(0, -avTy / (avS * Hi)), y1 = Math.min(1, (Ht - avTy) / (avS * Hi));
+  return { x: R[0] + x0 * R[2], y: R[1] + y0 * R[3], w: Math.max(0.001, (x1 - x0) * R[2]), h: Math.max(0.001, (y1 - y0) * R[3]) };
+}
+$q("avImg").addEventListener("load", () => {
+  const p = avPend; avPend = null; if(!p) return; const R = p.R, V = p.V, igual = R.every((v, i) => Math.abs(v - avReg[i]) < 1e-4);
+  if(avFull && R[2] * R[3] > 0.999){ avFull = false; avReg = [0, 0, 1, 1]; avS = 1; avTx = avTy = 0; avAplica(); return; }
+  if(!igual){
+    const W = $q("avTela").clientWidth || 1, Hi = $q("avImg").clientHeight || 1; avReg = R.slice();
+    avS = Math.min(5, Math.max(1, R[2] / V.w)); avTx = -((V.x - R[0]) / R[2]) * avS * W; avTy = -((V.y - R[1]) / R[3]) * avS * Hi;
+  }
+  avAplica();
+});
+function avDecide(){
+  if(!avAtivo || avFull) return; const V = avVisivel(), area = V.w * V.h; let quer = null;
+  if(area < 0.45){ const mx = V.w * 0.12, my = V.h * 0.12, x = Math.max(0, V.x - mx), y = Math.max(0, V.y - my); quer = [x, y, Math.min(1 - x, V.w + 2 * mx), Math.min(1 - y, V.h + 2 * my)]; }
+  const p = avPed;
+  if(!quer){ if(p){ avPed = null; avLiga(); } return; }
+  if(p && p[0] <= V.x + 0.002 && p[1] <= V.y + 0.002 && p[0] + p[2] >= V.x + V.w - 0.002 && p[1] + p[3] >= V.y + V.h - 0.002 && p[2] * p[3] <= 2.6 * area) return;
+  avPed = quer; avLiga();
+}
 async function avPoll(){
   if(!avAtivo || document.hidden || avBusy) return; avBusy = true;
   try{
@@ -2342,7 +2480,7 @@ async function avPoll(){
     if(r.quadro && r.atualizado_em !== avVisto){
       avVisto = r.atualizado_em; const t = await token();
       const f = await fetch(CFG.url + "/storage/v1/object/authenticated/jarvis-aovivo/" + encodeURIComponent(r.quadro) + "?t=" + Date.now(), { headers: { apikey: CFG.anon, Authorization: "Bearer " + t }, cache: "no-store" });
-      if(f.ok){ const u = URL.createObjectURL(await f.blob()), velho = avUrl; avUrl = u; $q("avImg").src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000); }
+      if(f.ok){ const bl = await f.blob(), u = URL.createObjectURL(bl), velho = avUrl; avUrl = u; avUltBytes = bl.size; let rec = /^rec:/.test(r.aviso || "") ? r.aviso.slice(4).split(",").map(Number) : [0, 0, 1, 1]; if(rec.length !== 4 || rec.some(isNaN)) rec = [0, 0, 1, 1]; avPend = { V: avVisivel(), R: rec }; $q("avImg").src = u; if(velho) setTimeout(() => URL.revokeObjectURL(velho), 3000); }
     }
   }catch(e){} finally{ avBusy = false; }
 }
@@ -2357,15 +2495,17 @@ function avChipsDesenha(janelas){
   const c = $q("avChips"), sel = $q("avAlvo").value; c.innerHTML = "";
   [{ v: "tela", t: "🖥 Tela inteira" }].concat((janelas || []).map(j => ({ v: "janela:" + j.id, t: j.titulo }))).forEach(x => { const b = document.createElement("button"); b.className = "chip" + (x.v === sel ? " sel" : ""); b.textContent = x.t; b.onclick = () => { $q("avAlvo").value = x.v; avCtlSet(false); $q("avAlvo").onchange(); avChipsDesenha(janelas); }; c.appendChild(b); });
 }
-$q("avAlvo").onchange = () => { avLiga(); avS = 1; avTx = avTy = 0; avAplica(); };
+$q("avAlvo").onchange = () => { avPed = null; avFull = false; avReg = [0, 0, 1, 1]; avPend = null; avLiga(); avS = 1; avTx = avTy = 0; avAplica(); };
 function avAplica(){
   const t = $q("avTela"), w = t.clientWidth, h = t.clientHeight; avS = Math.min(5, Math.max(1, avS));
   avTx = Math.min(0, Math.max(w - w * avS, avTx)); avTy = Math.min(0, Math.max(h - h * avS, avTy));
   $q("avZ").style.transform = "translate(" + avTx + "px," + avTy + "px) scale(" + avS + ")";
+  if(avS <= 1.02 && avReg[2] * avReg[3] < 0.999 && !avFull && avPed){ avFull = true; avPed = null; avLiga(); }   /* tirou o zoom no pedaço: volta à tela inteira, leve */
+  clearTimeout(avRecT); avRecT = setTimeout(avDecide, 350);
 }
 function avZoom(f){ const t = $q("avTela"), cx = t.clientWidth / 2, cy = t.clientHeight / 2, s0 = avS; avS = Math.min(5, Math.max(1, avS * f)); const k = avS / s0; avTx = cx - (cx - avTx) * k; avTy = cy - (cy - avTy) * k; avAplica(); }
 $q("avMenos").onclick = () => avZoom(1 / 1.4); $q("avMais").onclick = () => avZoom(1.4); $q("avAjusta").onclick = () => { avS = 1; avTx = avTy = 0; avAplica(); };
-async function avEnvia(ev){ try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [ev] }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e), false); } }
+async function avEnvia(ev){ ev.r = avReg.map(v => +v.toFixed(5)); try{ await rest("jarvis_aovivo_eventos", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ eventos: [ev] }) }); }catch(e){ toast("Não consegui mandar o toque", String(e.message || e), false); } }
 $q("avSobe").onclick = () => !avCtl ? toast("Só assistindo", "Ligue Controlar para rolar.", false) : avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: 360 }); $q("avDesce").onclick = () => !avCtl ? toast("Só assistindo", "Ligue Controlar para rolar.", false) : avEnvia({ t: "rolar", x: 0.5, y: 0.5, dy: -360 });
 (function toquesAoVivo(){
   const tela = $q("avTela"); let ini = null;
@@ -2852,7 +2992,9 @@ $q("capEsq").onclick = () => capFino(-1); $q("capDir").onclick = () => capFino(1
 
 /* ---------- botões ---------- */
 $q("cfgBtn2").onclick = () => $q("cfgBtn").click();
-$q("cfgBtn").onclick = async () => { if(!(await exigeFace("Abrir configurações"))) return; desenhaFace(); $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); };
+$q("cfgBtn3").onclick = () => $q("cfgBtn").click();
+$q("cfgBtn").onclick = async () => { if(!(await exigeFace("Abrir configurações"))) return; desenhaFace(); $q("cfg").classList.add("on"); $q("cfgVersao").textContent = VERSAO; achaVoz(); desenhaVozes(); desenhaFalaTg(); desenhaAutoTg(); };
+$q("autoTg").onclick = () => { ARM.set("jv_auto", !autoEnvia()); if(!autoEnvia()) limpaAuto(); desenhaAutoTg(); };
 $q("fechaCfg").onclick = () => { $q("cfg").classList.remove("on"); try{ speechSynthesis.cancel(); }catch(e){} };
 $q("vozTeste").onclick = testaVoz; $q("falaTg").onclick = () => { ARM.set("jv_fala", !ARM.get("jv_fala")); desenhaFalaTg(); };
 $q("abreCheia").onclick = () => abreCheia(termSel && cheiaModo !== "todos" ? termSel : "todos");
@@ -2864,11 +3006,18 @@ $q("tiraPrint").onclick = tiraPrint;
 $q("entrar").onclick = entrar;
 $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
 $q("ligar").onclick = () => ligado ? enviaGravacao() : iniciaGravacao();
+/* melhorias-iphone-001 #4: botão grande — segura para falar, solta para enviar */
+(function(){
+  const b = $q("seguraFalar"); let seg = false;
+  const solta = () => { if(!seg) return; seg = false; b.classList.remove("on"); b.textContent = "🎙 Segure para falar"; if(ligado) enviaGravacao(); };
+  b.addEventListener("pointerdown", e => { e.preventDefault(); if(ligado) return; seg = true; b.classList.add("on"); b.textContent = "● Gravando… solte para enviar"; if(navigator.vibrate) try{ navigator.vibrate(30); }catch(_){} iniciaGravacao(); if(!ligado){ seg = false; b.classList.remove("on"); b.textContent = "🎙 Segure para falar"; } });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => b.addEventListener(ev, solta));
+  b.addEventListener("contextmenu", e => e.preventDefault());
+})();
 $q("flEnvia").onclick = enviaGravacao;
 $q("envMsg").onclick = () => { if(ligado){ enviaGravacao(); return; } const v = $q("msg").value; $q("msg").value = ""; enviaMensagem(v); };
 $q("msg").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); $q("envMsg").click(); } });
 $q("novaConversa").onclick = novaConversa;
-$q("maisCfg").onclick = () => $q("cfgBtn").click();
 $q("capBanner").onclick = () => { if(captchas[0]) abreCaptcha(captchas[0].id); };
 $q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pMais"); };
 $q("capTxtEnv").onclick = () => { if(!capLibera()) return; const v = $q("capTxt").value.slice(0, 64); if(!v) return; $q("capTxt").value = ""; mandaCapEventos([{ t: "texto", texto: v, dt: 0 }]); };
@@ -2904,6 +3053,10 @@ vf.onclick = () => { saidaFim = true; ts.scrollTop = ts.scrollHeight; vf.style.d
 setInterval(() => { if(!document.hidden && abas.some(a => a.estado === "trab")){ abas.forEach(a => { if(a.estado === "trab" && a.seg != null) a.seg += 1; }); desenhaVivo(); const a = abas.find(x => x.nome === termSel); if(a) $q("tcTempo").textContent = a.estado === "trab" ? "⏱ " + dur(a.seg) : ""; } }, 1000);
 
 /* ---------- tela ligada, atualização automática, instalação e arranque ---------- */
+/* iphone-008: tela inteira e teclado — a altura do app acompanha a área visível (teclado aberto, deitado) sem faixa sobrando */
+function ajustaAltura(){ const v = window.visualViewport, h = v ? v.height : innerHeight; document.documentElement.style.setProperty("--vh", Math.round(h) + "px"); if(v && v.offsetTop) scrollTo(0, 0); }
+if(window.visualViewport){ visualViewport.addEventListener("resize", ajustaAltura); visualViewport.addEventListener("scroll", ajustaAltura); }
+addEventListener("orientationchange", () => setTimeout(ajustaAltura, 250)); addEventListener("resize", ajustaAltura); ajustaAltura();
 async function mantemTela(){ try{ if("wakeLock" in navigator) await navigator.wakeLock.request("screen"); }catch(e){} }
 document.addEventListener("visibilitychange", () => { if(!document.hidden){ mantemTela(); if(sess){ puxa(); puxaAvisos(); olhando(); } confereVersao(); } });
 let swReg = null, atualizarDepois = false;
@@ -2913,6 +3066,7 @@ if("serviceWorker" in navigator){
   navigator.serviceWorker.addEventListener("controllerchange", () => {          // versão nova instalada: recarrega (se estiver em ligação, espera desligar)
     if(!tinhaControle) return;
     if(ligado){ atualizarDepois = true; toast("Versão nova pronta", "Atualizo quando a ligação terminar."); return; }
+    if(($q("msg") && $q("msg").value.trim()) || document.activeElement === $q("msg")){ atualizarDepois = true; return; }   /* não recarrega enquanto escreve */
     location.reload();
   });
 }
@@ -2985,7 +3139,7 @@ $q("chaveSalva").onclick = async () => {
   }
 })();
 if(ARM.get("jv_sess")) hidrataCache();     // abre NA HORA com a última tela guardada; a rede atualiza por trás
-(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : (CFG.semInicio ? "pLig" : "pInicio"))); })();
+(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"), ult = ARM.get("jv_pn"); vaiPara(p && $q(p) ? p : (ult && PN_GUARDA.includes(ult) && $q(ult) ? ult : (largo() ? "pTerm" : (CFG.semInicio ? "pLig" : "pInicio")))); })();   /* melhorias-iphone-001 #5: abre na última tela */
 async function iniciaSessao(){
   if(sess){ try{ await garanteDono(); document.body.classList.remove("semlogin"); iniciaSync(); return; }catch(e){ /* cai no login */ } }
   mostraLogin();
