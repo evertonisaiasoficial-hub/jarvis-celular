@@ -1030,7 +1030,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v69";
+const VERSAO = "v70";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -2190,7 +2190,12 @@ async function puxaRespostaClaude(){
       h.forEach(m => { fixUltId = Math.max(fixUltId || 0, m.id); bal(m.papel === "claude" ? "jarvis" : "dono", String(m.texto).slice(0, 700)); });
       if(fixUltId == null){ fixUltId = 0; } ARM.set("jv_fixid", fixUltId); fixHist = true;
     } else { const l = (await rest("jarvis_claude_chat?select=id,papel,texto&or=(papel.eq.claude,and(papel.eq.dono,estado.eq.espelho))&id=gt." + fixUltId + "&order=id.asc&limit=20")) || [];
-      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); bal(m.papel === "claude" ? "jarvis" : "dono", String(m.texto).slice(0, 700)); });   /* os dois lados do chat fixado; o que saiu do celular não volta (só papel dono + espelho) */ if(l.length) ARM.set("jv_fixid", fixUltId); }
+      l.forEach(m => { fixUltId = Math.max(fixUltId, m.id); const el = bal(m.papel === "claude" ? "jarvis" : "dono", String(m.texto).slice(0, 700)); if(m.papel === "claude") fixVivo[m.id] = { el: el, txt: String(m.texto) }; });   /* os dois lados do chat fixado; o que saiu do celular não volta (só papel dono + espelho) */ if(l.length) ARM.set("jv_fixid", fixUltId); }
+    /* mensagem do Claude em andamento: o PC altera o texto da MESMA linha a cada parágrafo; atualiza o balão existente, sem criar outro */
+    const ids = Object.keys(fixVivo).map(Number).sort((a, b) => a - b).slice(-3);
+    if(ids.length){ const r = (await rest("jarvis_claude_chat?select=id,texto&id=in.(" + ids.join(",") + ")")) || [];
+      r.forEach(m => { const v = fixVivo[m.id]; if(v && v.txt !== String(m.texto)){ v.txt = String(m.texto); v.el.textContent = v.txt.slice(0, 700); } }); }
+    Object.keys(fixVivo).map(Number).sort((a, b) => a - b).slice(0, -3).forEach(k => delete fixVivo[k]);
   }catch(e){} fixBusy = false;
 }
 setInterval(puxaRespostaClaude, 2500); setInterval(() => { if(!document.hidden && sess) puxaFixado(); }, 20000); setTimeout(() => { if(sess) puxaFixado(); }, 2500);
@@ -3252,11 +3257,17 @@ $q("chaveSalva").onclick = async () => {
 })();
 if(ARM.get("jv_sess")) hidrataCache();     // abre NA HORA com a última tela guardada; a rede atualiza por trás
 /* ---------- iphone-013: estado "respondendo" do Claude (o PC grava em jarvis_uso id=claude_fixado: respondendo, acao, desde) ---------- */
+const fixVivo = {};
 let fixResp = false, fixAcao = "", fixDesde = 0, fixBal = null, fixUsoT = 0;
 async function puxaEstadoClaude(){
   if(document.hidden || !sess) return;
   try{ const x = ((await rest("jarvis_uso?id=eq.claude_fixado&select=dados,atualizado_em")) || [])[0], d = (x && x.dados) || {}, fresco = x && Date.now() - new Date(x.atualizado_em).getTime() < 420000;
     fixAtivo = !!(d.ativo && fresco); fixResp = !!(fixAtivo && d.respondendo); fixAcao = String(d.acao || ""); fixDesde = Number(d.desde || 0) * 1000; }catch(e){}
+  try{ /* ordem ajudante-atividade-para-app-e-painel: o PC publica jarvis_uso id=claude_atividade {estado, atividade, t}; balão "…" com a frase em pensando/trabalhando/respondendo/ainda; ocioso/pronto/recebeu = sem balão */
+    const y = ((await rest("jarvis_uso?id=eq.claude_atividade&select=dados")) || [])[0], a = (y && y.dados) || {};
+    if(["pensando", "trabalhando", "respondendo", "ainda"].includes(a.estado) && Date.now() / 1000 - Number(a.t || 0) < 120){ fixResp = true; fixAcao = String(a.atividade || ""); fixDesde = 0; }
+    else if(a.estado && Date.now() / 1000 - Number(a.t || 0) < 120){ fixResp = false; }
+  }catch(e){}
   desenhaPensando();
 }
 function desenhaPensando(){
