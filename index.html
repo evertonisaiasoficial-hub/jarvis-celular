@@ -20,7 +20,7 @@
   /* HOLOGRAMA: fundo escuro profundo, vidro fosco com reflexo, luz neon rosa/violeta discreta nas bordas, orbe no cabeçalho, varredura de luz. Inter. */
   :root{
     --bg:#000000; --bg2:#02060e; --bg3:#06182c;   /* v24: modo escuro mais profundo (contraste no carro) */
-    --cy:#38d8ff; --cy2:#bff3ff; --acc2:#2b8cff;
+    --cy:#ffc933; --cy2:#bff3ff; --acc2:#2b8cff;
     --txt:#ffffff; --dim:#c9d2f5; --line:rgba(255,255,255,.09);
     --glass:rgba(255,255,255,.05); --glass2:rgba(255,255,255,.09);
     --amb:#38d8ff; --ok:#38d8ff; --bad:#8088a6; --term:rgba(0,0,0,.28);
@@ -30,7 +30,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font:14px/1.4 var(--f);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 /* v24: fundo transparente (a tela do app pinta o fundo escuro); só um brilho suave atrás do símbolo, que some antes da borda (sem emenda) */
-body{background:radial-gradient(closest-side at 50% 50%,color-mix(in srgb,var(--cy) 28%,transparent),transparent 100%)}
+body{background:radial-gradient(closest-side at 50% 50%,color-mix(in srgb,var(--cy) 38%,transparent),transparent 100%)}
 html{background:transparent}   /* v24: sem emenda com o fundo da tela do app */
 body.mudo #stage{opacity:.38}
 body.mudo #orbwrap,body.mudo #orbwrap>i{animation-play-state:paused}   /* v24: mudo = símbolo apagado e parado (menos CPU) */
@@ -59,6 +59,18 @@ body.bolha #msg{display:none}
   @keyframes pulse{50%{opacity:.4}}
 
 
+/* iphone-022 */
+#inFresco{padding:6px 12px;margin:2px 0 6px;font:600 12px var(--mono);color:var(--dim)}#inFresco.ambar{color:#ffb020;border-color:#ffb020}
+#inTrab{padding:4px 2px 8px;font:700 13.5px var(--f)}
+#inPull{height:0;overflow:hidden;text-align:center;font:600 12px var(--mono);color:var(--dim);transition:height .15s}#inPull.on{height:26px}
+/* iphone-021 */
+#aviso2,#pLig,#composer,#acoes,#teclado,#flutua,#favs,#favNovo,#anexoChip,#novaConversa,#capBanner,#autoTg,#maisChave,#avCtl,#avSobe,#avDesce,#tpMotivo,#cfgGrade [data-ir="pMemoria"],#cfgGrade [data-ir="pAgenda"],#cfgGrade [data-ir="pLojas"]{display:none!important}
+#pcLinha{padding:12px 14px;margin-bottom:8px;font:700 15px/1.35 var(--f)}
+#pcBtns{display:grid;gap:8px;margin:6px 0 10px}
+#pcBtns button{min-height:48px;border-radius:12px;font:700 15px var(--f)}
+#tpQuick{display:grid;gap:8px;margin-bottom:10px}#tpQuick:not(.on){display:none}
+#tpQuick button{min-height:48px;border-radius:12px;font:700 15px var(--f);background:var(--glass2)}
+#adId{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0b1226;color:var(--tx);font:16px var(--f);margin:6px 0}
 /* ====== Jarvis iPhone v2 ====== */
 :root{--red:#ff4d5e;--grn:#3ee08f;--yel:#ffd24a;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--navh:64px}
 html,body{height:100%;overscroll-behavior:none}
@@ -702,22 +714,29 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
 </style></head>
 <body class="idle">
 
-<div id="app" data-p="pLig">
-  <header id="topo"><b id="topoTit">Conversa</b><span class="sp"></span><span id="pcDot" class="pcd" title="PC"></span><span id="pcTxt">PC</span><button id="cfgBtn" title="Configurações">⚙</button></header>
+<div id="app" data-p="pInicio">
+  <header id="topo"><b id="topoTit">Início</b><span class="sp"></span><span id="pcDot" class="pcd" title="PC"></span><span id="pcTxt">PC</span><button id="cfgBtn" title="Configurações">⚙</button></header>
   <div id="toast" class="vidro" role="status" aria-live="polite"></div>
   <div id="faixa"><div id="chips"></div></div>
   <div id="aviso"></div><div id="aviso2"></div>
   <main id="corpo">
     <section id="pInicio" class="painel">
+      <div id="inPull">↓ solte para atualizar</div>
       <div id="inCorpo">
         <div id="inPc" class="vidro"><span id="inPcDot" class="pcd"></span><div class="c"><b id="inPcTxt">PC…</b><small id="inPcUlt"></small></div><button id="cfgBtn2" title="Configurações" aria-label="Configurações">⚙</button></div>
+        <div id="inFresco" class="vidro">…</div>
+        <div id="pcLinha" class="vidro">Carregando…</div>
+        <div id="pcBtns"><button class="btop bok" id="pcJanelas">🪟 Janelas e telas do PC ao vivo</button><button class="btop bok" id="pcAnyDesk">🖥 Acessar o PC (AnyDesk)</button></div>
         <div class="tit">Gastos do Claude</div><div id="inBarras"></div><div id="inUsoNota" class="inNota"></div>
         <div id="inManha"></div>
         <div id="inSil"></div>
-        <div class="tit">Terminais</div><div id="inTerm"></div>
+        <div class="tit">Terminais</div><div id="inTrab"></div><div id="inTerm"></div>
         <div id="inConc"></div>
+        <div class="tit">Tarefas</div><div id="inTar"></div>
         <button id="inAut" class="vidro"><span>Autorizações esperando você</span><b>0</b></button>
         <div class="tit">Último aviso importante</div><div id="inAviso"></div>
+        <div class="tit">Lojas</div><div id="ljResumo" class="vidro" style="padding:12px;margin-bottom:8px;text-align:center;font:700 16px var(--f)"></div><div id="ljVendas"></div>
+        <div class="vazio" style="text-align:left;padding:6px 2px">Só para olhar. Para falar com o Claude, use o app Claude. A senha do AnyDesk nunca fica aqui.</div>
       </div>
       <div id="inVer" class="vazio" style="padding:8px 2px"></div>
     </section>
@@ -767,7 +786,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="avChips"></div>
       <div id="avBar"><button class="btop bno" id="avCtl" aria-pressed="false">🔒 Controlar: desligado</button><select id="avAlvo" aria-label="Tela ou janela"><option value="tela">Tela inteira</option></select><button class="btop bno" id="avMenos" aria-label="Menos zoom">−</button><button class="btop bno" id="avMais" aria-label="Mais zoom">+</button><button class="btop bno" id="avAjusta">Ajustar</button><button class="btop bno" id="avSobe" aria-label="Rolar para cima">⇧</button><button class="btop bno" id="avDesce" aria-label="Rolar para baixo">⇩</button></div>
       <div id="avTela"><div id="avZ"><img id="avImg" alt="Tela do PC ao vivo" draggable="false"></div><div id="avDot"></div></div>
-      <div class="vazio" style="text-align:left;padding:6px 2px">Um toque = um clique no PC. Dois dedos: zoom e mover. Se o toque cair em pagar, excluir, enviar dinheiro ou desligar, o PC pergunta aqui antes de clicar. A imagem não fica guardada.</div>
+      <div class="vazio" style="text-align:left;padding:6px 2px">Só para olhar: o toque não faz nada no PC (para controlar, use o AnyDesk). Dois dedos: zoom e mover. A imagem não fica guardada.</div>
     </section>
     <section id="pVer" class="painel"><div class="tit">Só mostrar <span class="sp"></span><button class="btop bno" id="verParar">■ Parar</button></div>
       <div id="verChips"></div>
@@ -788,8 +807,6 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div class="vazio" style="text-align:left;padding:4px 2px">Dica: na Conversa escreva "amanhã às 8h faça X" que eu agendo. O PC envia na hora certa; se estiver desligado, envia assim que voltar, na ordem em que foram agendadas.</div>
     </section>
     <section id="pLojas" class="painel"><div class="tit">Lojas no bolso <span id="ljN"></span></div>
-      <div id="ljResumo" class="vidro" style="padding:12px;margin-bottom:8px;text-align:center;font:700 16px var(--f)"></div>
-      <div class="tit">Vendas de hoje</div><div id="ljVendas"></div>
       <div class="tit">Esperando você (resposta sugerida)</div><div id="ljPend"></div>
       <div class="tit">Pix para pagar</div><div id="ljPix"></div>
       <div class="vazio" style="text-align:left;padding:4px 2px">Nada sai para cliente por aqui: Enviar e Corrigir só avisam o app Cuida Aí Lojas, que confere e responde pelo Chrome dele. Pix: o app nunca paga; "Marcar como pago" só registra que você pagou. O código copia-e-cola não vem para o celular (fica no PC).</div>
@@ -842,14 +859,14 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <div id="teclado"><input id="txt" placeholder="Escreva para o Jarvis…" enterkeyhint="send" autocomplete="off"><button id="enviaTxt">Enviar</button></div>
   <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="tecBtn" title="Escrever">⌨</button></div>
   <nav id="nav">
-    <button data-p="pLig" class="on"><i>💬</i>Conversa</button>
+    <button data-p="pInicio" class="on"><i>🏠</i>Início</button>
     <button data-p="pTar"><i>☰</i>Tarefas</button>
     <button data-p="pAvisos"><i>🔔</i>Avisos</button>
   </nav>
 </div>
 <div id="cheia"><div id="cheiaTop"><div id="cheiaChips"></div><button class="btop bno" id="fonteMenos">A−</button><button class="btop bno" id="fonteMais">A+</button><button class="btop bok" id="fechaCheia">✕ Fechar</button></div><div id="cheiaCorpo"></div></div>
 <div id="tarefaPg"><div id="tpTopo"><button id="tpVolta" aria-label="Voltar">←</button><b id="tpTit"></b><button id="tpAnt" class="tpSeta" aria-label="Aviso anterior">‹</button><button id="tpProx" class="tpSeta" aria-label="Próximo aviso">›</button></div><div id="tpCorpo"></div>
-  <div id="tpBot"><div id="tpMotivo"><textarea id="tpTxt" placeholder="Diga o que não ficou bom" enterkeyhint="send"></textarea><div class="lin"><button id="tpMic">🎙 Falar</button><button id="tpEnv" class="env">Enviar</button></div></div>
+  <div id="tpBot"><div id="tpQuick"><button data-m="não funciona">Não funciona</button><button data-m="ficou feio">Ficou feio</button><button data-m="falta coisa">Falta coisa</button><button data-m="">Só marcar (falo no app Claude)</button></div>
   <div id="tpBtns"><button id="tpBom">Ficou bom</button><button id="tpNao">Não ficou</button></div></div></div>
 <div id="desfaz"><span id="desfazT"></span><button id="desfazB">Desfazer</button></div>
 <div id="zoom"><button id="zoomX">✕</button><img id="zoomImg" alt=""><div id="zoomI"></div></div>
@@ -858,7 +875,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <p class="s l1">Escolha a voz do Jarvis. <a href="#" id="saibaMais">Saiba mais</a></p>
   <p class="s" id="cfgMais" style="display:none">O Jarvis agora só mostra texto (não responde falando). Se ligar a resposta falada, a voz masculina pt-BR mais natural do iPhone é usada; escolha abaixo.</p>
   <div id="listaVozes"></div>
-  <button class="vz" id="autoTg" style="margin-top:12px"><span class="gen">🎙</span><span><span class="vn"></span><small>Desligado (padrão): toque no botão para falar e toque de novo para enviar. Ligado: envia sozinho ~1,5 s depois que você para de falar.</small></span></button>
+  <button class="vz" id="autoTg" style="margin-top:12px;display:none"><span class="gen">🎙</span><span><span class="vn"></span><small>Desligado (padrão): toque no botão para falar e toque de novo para enviar. Ligado: envia sozinho ~1,5 s depois que você para de falar.</small></span></button>
   <button class="vz" id="falaTg" style="margin-top:12px"><span class="gen">🔈</span><span><span class="vn"></span><small></small></span></button>
   <div class="idea" style="padding:0;margin:8px 0 0"><div class="ac" style="margin-top:0"><button class="bno" id="vozTeste">▶ Ouvir teste</button><button class="bok" id="fechaCfg">Pronto</button></div></div>
   <p class="s" id="vozDica" style="margin:12px 0 0;display:none"></p>
@@ -877,6 +894,8 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   </div>
   <div style="display:none"><div id="vivo"></div><div id="enviados"></div></div>
   <p class="s l1" style="margin:10px 0 0">Face ID: <b id="faceTxt"></b> <button class="btop bok" id="faceBtn" style="margin-left:8px"></button></p>
+  <p class="s l1" style="margin:12px 0 0">ID do AnyDesk do PC (só o número; a senha NÃO fica no app)</p>
+  <input id="adId" inputmode="numeric" autocomplete="off" placeholder="ex.: 123 456 789">
   <div id="cfgVersaoW"><span id="cfgVersao"></span></div>
 </div></div>
 <div id="decisao"><div class="cx vidro"><h3 id="decT"></h3><div id="decLista"></div><button class="btop bno" id="decDepois" style="width:100%;margin-top:4px">Decidir depois</button></div></div>
@@ -917,14 +936,15 @@ const W = SZ * SS, C = W / 2, Rc = 0.455 * W, TILT = 0.90, RAD = Math.PI / 180, 
 orb.width = orb.height = W; orb.style.width = orb.style.height = SZ + "px";
 const PAL = {
   mudo:   { stops: ["#1a2030", "#3a4a66", "#6c819f", "#c3d0e4"], sh: "110,130,160", g: "80,100,130", m: "130,150,180", h: "200,212,230" },
-  ouve:   { stops: ["#0a3d8f", "#1e9bff", "#5fe0ff", "#e6fbff"], sh: "80,200,255", g: "40,170,255", m: "120,225,255", h: "230,250,255" },
-  quieto: { stops: ["#05406e", "#1aa6e8", "#6fe4ff", "#e6fbff"], sh: "60,200,255", g: "30,160,240", m: "110,225,255", h: "230,250,255" },
-  on:     { stops: ["#0a5fb5", "#35c6ff", "#a8f0ff", "#ffffff"], sh: "120,230,255", g: "60,200,255", m: "170,240,255", h: "245,253,255" },
+  ouve:   { stops: ["#a04a00", "#ff9d00", "#ffd23a", "#fff6c8"], sh: "255,190,40", g: "255,160,0", m: "255,215,90", h: "255,248,210" },
+  quieto: { stops: ["#8a4200", "#f08c00", "#ffc928", "#fff1b8"], sh: "255,176,30", g: "245,150,0", m: "255,205,80", h: "255,244,200" },
+  on:     { stops: ["#b85a00", "#ffae00", "#ffe066", "#ffffff"], sh: "255,205,70", g: "255,175,10", m: "255,225,120", h: "255,252,225" },
+  offline:{ stops: ["#5a0610", "#d3202f", "#ff5a66", "#ffd6d9"], sh: "255,70,80", g: "230,30,45", m: "255,100,110", h: "255,225,228" },
   muted:  { stops: ["#26262a", "#4f4f56", "#8e8e98", "#e6e6ec"], sh: "160,160,170", g: "120,120,130", m: "180,180,190", h: "236,236,242" },
   nocall: { stops: ["#202023", "#3b3b42", "#68686f", "#c4c4cc"], sh: "115,115,125", g: "95,95,105",   m: "145,145,155", h: "210,210,218" },
 };
-const CYS = { on: "#9ff3ff", ouve: "#38e8ff", mudo: "#6c819f", quieto: "#38d8ff" };      // cor dos anéis por estado
-let state = "quieto", pal = PAL.quieto, MODO = 0, ATIVO = false;
+const CYS = { on: "#ffe27a", ouve: "#ffc933", mudo: "#6c819f", quieto: "#ffb81f", offline: "#ff4a58" };      // cor dos anéis por estado
+let state = "quieto", pal = PAL.quieto, MODO = 0, ATIVO = false, OFFLINE = false;
 function depth(g, p){                                        // cor por PROFUNDIDADE: fundo (topo) escuro -> frente (base) clara
   const gr = g.createLinearGradient(0, C - Rc * TILT, 0, C + Rc * TILT);
   gr.addColorStop(0, p.stops[0]); gr.addColorStop(.35, p.stops[1]); gr.addColorStop(.62, p.stops[2]); gr.addColorStop(1, p.stops[3]); return gr; }
@@ -972,10 +992,10 @@ function drawOrb(now){
   orbRaf = requestAnimationFrame(drawOrb);
   if(now - lastDraw < 30){ return; } lastDraw = now;                                 // v24: no máximo ~30 quadros/s (central fraca; continua suave)
   const dt = Math.min(.1, (now - last) / 1000); last = now;
-  const st = MODO === 2 ? "on" : !ATIVO ? "mudo" : MODO === 1 ? "ouve" : "quieto";   // MUDO = lilás apagado · ATIVO ouvindo = azul · falando = âmbar
+  const st = !ATIVO ? "mudo" : OFFLINE ? "offline" : MODO === 2 ? "on" : MODO === 1 ? "ouve" : "quieto";   // MUDO = lilás apagado · ATIVO ouvindo = azul · falando = âmbar
   if(st !== state){ state = st; pal = PAL[st]; lastKey = ""; document.documentElement.style.setProperty("--cy", CYS[st]); }
   let tgt = S.lvl_claude || 0;
-  if(MODO === 1 && ATIVO) tgt = Math.max(tgt, .2 + .1 * Math.sin(now / 420));      // ATIVO ouvindo: pulsa suave, azul
+  if(MODO === 1 && ATIVO) tgt = Math.max(tgt, .2 + .1 * Math.sin(now / 420));      // ATIVO ouvindo: pulsa suave, dourado
   else if(MODO === 0) tgt = .05 + .04 * Math.sin(now / 1100);                      // parado: respira devagar
   else if(tgt < .03) tgt = 0;                                  // silêncio: tudo para
   if(tgt > lvl) lvl += (tgt - lvl) * (1 - Math.pow(.15, dt * 60)); else lvl += (tgt - lvl) * (1 - Math.pow(.70, dt * 60));
@@ -1044,7 +1064,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v76";
+const VERSAO = "v80";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1572,7 +1592,7 @@ function desenhaParar(){
   b.classList.toggle("ret", !!todas); b.textContent = todas ? "▶ RETOMAR" : "■ PARAR TUDO";
   document.querySelectorAll(".parar2").forEach(m => { m.classList.toggle("ret", !!todas); m.textContent = todas ? "▶ Retomar tudo" : "■ Parar tudo — segure 1 segundo"; });
 }
-const TITULOS = { pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pVer: "Ver terminais", pChave: "Chave da IA", pCaptcha: "Captcha" };
+const TITULOS = { pPC: "PC", pInicio: "Início", pLig: "Conversa", pTerm: "Terminais", pTar: "Tarefas", pIdeias: "Ideias", pAvisos: "Avisos", pPrint: "Print do PC", pMais: "Mais", pMemoria: "Memória", pUso: "Uso", pSaude: "Saúde", pLojas: "Lojas", pAgenda: "Agendar", pAoVivo: "Ao vivo", pVer: "Ver terminais", pChave: "Chave da IA", pCaptcha: "Captcha" };
 function desenhaPc(){
   if(usandoCache && !falhaRede){ $q("pcDot").className = "pcd"; $q("pcTxt").textContent = "atualizando…"; $q("inPcDot").className = "pcd"; $q("inPcTxt").textContent = "Atualizando…"; $q("inPcUlt").textContent = ""; return; }
   const ok = carregouAbas && !semSinal && !falhaRede;
@@ -1589,17 +1609,16 @@ function ajustaGrade(){          // última linha da grade do Mais nunca fica co
   if(r && it.length) it[it.length - 1].style.gridColumn = "span " + (cols - r + 1);
 }
 addEventListener("resize", ajustaGrade);
-const PN_GUARDA = ["pInicio", "pLig", "pTerm", "pTar", "pAvisos", "pMais", "pIdeias", "pAprovar"];   // telas leves que o app guarda para abrir nelas
+const PN_GUARDA = ["pInicio", "pTerm", "pTar", "pAvisos", "pMais", "pIdeias", "pAprovar"];   // telas leves que o app guarda para abrir nelas
 function vaiPara(p){
   if(typeof avAtivo !== "undefined" && avAtivo && p !== "pAoVivo") paraAoVivo("Saí da tela Ao vivo");
   if(typeof verOn !== "undefined" && verOn && p !== "pVer") paraVer();
-  if(p === "pInicio") p = "pTerm";       /* iphone-014: a tela Início saiu; o estado do PC e os botões rápidos foram para o topo de Terminais */
+  if(p === "pLig" || p === "pMais" || p === "pLojas" || p === "pAgenda" || p === "pMemoria" || p === "pChave") p = "pTar";   /* iphone-021: sem Conversa */
   if(p === "pMais") p = "pLig";          /* iphone-008: tela "Mais" removida; ficam Início, Conversa e Terminais */
-  if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; if(PN_GUARDA.includes(p)) ARM.set("jv_pn", p); $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTar", pVer: "pTar", pTerm: "pTar", pAvisos: "pAvisos", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
-  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pInicio", pVer: "pTar", pTerm: "pTar", pAvisos: "pAvisos", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); desenhaPC(); puxaLojas(); puxaSaude(); puxaTarefasApp(true); puxa(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
   if(p === "pSaude") puxaSaude();
@@ -2439,7 +2458,7 @@ function desenhaInicio(){
   $q("inCorpo").classList.toggle("velho", off && carregouAbas);
   // barras do plano (só valores que o PC publicou: nada de estimativa)
   const b = $q("inBarras"); b.innerHTML = ""; const d = (usoIn && usoIn.dados) || {};
-  b.appendChild(barraUso("7 dias", d.d7 == null ? null : d.d7, d.d7r)); b.appendChild(barraUso("CTX (terminal ativo)", d.ctx == null ? null : d.ctx));
+  b.appendChild(barraUso("7d", d.d7 == null ? null : d.d7, d.d7r)); b.appendChild(barraUso("CTX (terminal ativo)", d.ctx == null ? null : d.ctx));
   const velhoUso = usoIn && Date.now() - new Date(usoIn.atualizado_em).getTime() > 180000;
   $q("inUsoNota").textContent = !usoIn ? "O PC ainda não enviou o gasto." : velhoUso ? "Dado de " + hhmm(new Date(usoIn.atualizado_em).getTime()) + " (o PC parou de enviar)." : "Atualizado às " + hhmm(new Date(usoIn.atualizado_em).getTime()) + ".";
   $q("inBarras").classList.toggle("velho", !!velhoUso);
@@ -3407,7 +3426,7 @@ function mostraDesfaz(id, txt){
     desenhaProntos(); desenhaBadges(); };
   desfazT = setTimeout(() => $q("desfaz").classList.remove("on"), 5000);
 }
-function fechaTarefa(){ prTarefaId = null; setTimeout(() => { $q("corpo").scrollTop = prScroll; }, 0); $q("tarefaPg").classList.remove("on"); $q("tpMotivo").classList.remove("on"); if(prRec){ try{ prRec.stop(); }catch(e){} } }
+function fechaTarefa(){ prTarefaId = null; setTimeout(() => { $q("corpo").scrollTop = prScroll; }, 0); $q("tarefaPg").classList.remove("on"); $q("tpQuick").classList.remove("on"); if(prRec){ try{ prRec.stop(); }catch(e){} } }
 let prRec = null;
 function prMic(){
   const ta = $q("tpTxt"), b = $q("tpMic");
@@ -3419,12 +3438,11 @@ function prMic(){
   prRec = r; b.textContent = "➤ Enviar"; try{ r.start(); }catch(e){ prRec = null; b.textContent = "🎙 Falar"; }
 }
 $q("tpVolta").onclick = fechaTarefa;
-function tpVai(d){ const i = prLista.indexOf(prTarefaId), j = i + d; if(i < 0 || j < 0 || j >= prLista.length) return; $q("tpMotivo").classList.remove("on"); abreTarefa(prLista[j]); $q("tpCorpo").scrollTop = 0; }
+function tpVai(d){ const i = prLista.indexOf(prTarefaId), j = i + d; if(i < 0 || j < 0 || j >= prLista.length) return; $q("tpQuick").classList.remove("on"); abreTarefa(prLista[j]); $q("tpCorpo").scrollTop = 0; }
 $q("tpAnt").onclick = () => tpVai(-1); $q("tpProx").onclick = () => tpVai(1);
 $q("tpBom").onclick = () => decideTarefa("bom", "");
-$q("tpNao").onclick = () => { $q("tpMotivo").classList.add("on"); $q("tpTxt").value = ""; $q("tpTxt").focus(); };
-$q("tpMic").onclick = prMic;
-$q("tpEnv").onclick = () => { const t = $q("tpTxt").value.trim(); if(!t){ toast("Diga o motivo", "Escreva ou fale o que não ficou bom.", false); return; } decideTarefa("nao", t); };
+$q("tpNao").onclick = () => { $q("tpQuick").classList.toggle("on"); };
+document.querySelectorAll("#tpQuick button").forEach(b => { b.onclick = () => decideTarefa("nao", b.dataset.m ? "Não ficou: " + b.dataset.m + " (o dono explica no app Claude)" : "Não ficou (o dono explica no app Claude)"); });
 setInterval(() => { if(!document.hidden && sess) puxaProntos(); }, 15000); setTimeout(() => { if(sess) puxaProntos(); }, 3000);
 
 /* ---------- iphone-016: teclado do iPhone. A área visível real (visualViewport) manda: o app ocupa só o que sobra, o campo fica colado no teclado ---------- */
@@ -3471,6 +3489,9 @@ function ttLinha(r){
   if(r.estado === "exec" && r.total > 0){ const b = document.createElement("div"); b.className = "ttBarra"; b.innerHTML = "<i></i>"; b.firstChild.style.width = Math.round(100 * r.feitos / r.total) + "%"; d.appendChild(b); const p = document.createElement("div"); p.className = "ttPc"; p.textContent = r.feitos + " de " + r.total + " passos"; d.appendChild(p); }
   if(aberta){
     const det = document.createElement("div"); det.className = "ttDet";
+    const ab0 = abas.find(x => nz(x.nome) === nz(r.terminal)), velho0 = !ab0 || (Date.now() - (new Date(ab0.atualizado_em).getTime() || 0) > 30000);
+    const stT = r.estado === "erro" ? "Parada: " + (r.motivo || "deu erro") : r.estado === "feito" ? "Concluída" : velho0 ? "Parada: sem sinal do PC" : ab0 && ab0.pausada ? "Parada: terminal pausado" : r.estado === "exec" ? "Executando agora" : "Na fila";
+    const sp0 = document.createElement("div"); sp0.className = "ttEst"; sp0.style.cssText = "font:800 14px var(--f);margin:4px 0 8px;color:" + (stT === "Executando agora" ? "#3ee08f" : /^Parada/.test(stT) ? "#ffb020" : "var(--tx)"); sp0.textContent = stT; det.appendChild(sp0);
     const h1 = document.createElement("h5"); h1.textContent = "Contexto"; det.appendChild(h1); det.appendChild(document.createTextNode(r.contexto || "O PC ainda não enviou o contexto."));
     const ps = Array.isArray(r.passos) ? r.passos : []; if(ps.length){ const h2 = document.createElement("h5"); h2.textContent = "Passo a passo"; det.appendChild(h2); const ol = document.createElement("ol"); ps.forEach(p => { const li = document.createElement("li"); li.textContent = p.t; if(p.d) li.className = "d"; ol.appendChild(li); }); det.appendChild(ol); }
     if(r.teste){ const h3 = document.createElement("h5"); h3.textContent = "Teste"; det.appendChild(h3); det.appendChild(document.createTextNode(r.teste)); }
@@ -3562,7 +3583,90 @@ async function mandaAudio(blob, mime){
   return true;
 }
 
-(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : (largo() ? "pTerm" : "pLig")); })();   /* iphone-014: abre sempre na Conversa */
+/* iphone-022 */
+/* Início = o painel do PC: uso 7d/CTX, terminais com progresso, tarefas. Dado velho (>30 s) nunca aparece como de agora. */
+const ST_VELHO_MS = 30000;
+const ultimoDado = () => abas.reduce((m, x) => Math.max(m, new Date(x.atualizado_em).getTime() || 0), 0);
+function frescoTxt(){
+  const f = $q("inFresco"); if(!f) return; const ult = ultimoDado(), velho = carregouAbas && (!ult || Date.now() - ult > ST_VELHO_MS);
+  f.textContent = !carregouAbas ? "carregando…" : velho ? "⚠ sem sinal do PC há " + (ult ? minAtras(ult) : "?") + " — o estado abaixo é antigo" : "atualizado há " + Math.max(0, Math.round((Date.now() - ultSync) / 1000)) + " s";
+  f.className = "vidro" + (velho ? " ambar" : "");
+}
+setInterval(() => { if(painelAtual === "pInicio") frescoTxt(); }, 1000);
+const desenhaInicio0 = desenhaInicio;
+desenhaInicio = function(){ desenhaInicio0(); try{ retoqueInicio(); }catch(e){} };
+function retoqueInicio(){
+  const ult = ultimoDado(), velho = carregouAbas && (!ult || Date.now() - ult > ST_VELHO_MS);
+  frescoTxt();
+  const trab = abas.filter(a => a.estado === "trab" || a.estado === "perg");
+  $q("inTrab").textContent = velho ? "Trabalhando: sem sinal do PC" : "Trabalhando: " + (trab.length ? trab.map(a => a.nome).join(", ") : "nenhum terminal");
+  document.querySelectorAll("#inTerm .inT").forEach(x => {
+    const a = abas.find(y => y.nome === x.querySelector("b").textContent); if(!a) return; const sm = x.querySelector("small");
+    if(velho){ x.querySelector("em").textContent = "SEM SINAL"; x.classList.remove("trab", "perg"); x.classList.add("livre"); sm.textContent = "sem sinal do PC há " + (ult ? minAtras(ult) : "?"); return; }
+    const t = Number(a.total) || 0, f = Number(a.feito) || 0;
+    if(t > 0){ const p = f >= t ? 100 : (a.pct != null ? a.pct : Math.round(100 * f / t)); const pr = f >= t ? f + "/" + t + " — 100%" : "item " + (f + 1) + " de " + t + " — " + p + "%"; sm.textContent = (sm.textContent && !/^\d+ na fila$|^parado/.test(sm.textContent) ? sm.textContent + " · " : "") + pr; }
+  });
+}
+/* tarefas também no Início (mesma lista da tela Tarefas) */
+const desenhaTT0 = desenhaTT;
+desenhaTT = function(f){ desenhaTT0(f); const el = $q("termTarefas"), alvo = $q("inTar"); if(!el || !alvo) return; alvo.innerHTML = ""; const k = el.cloneNode(true); k.removeAttribute("id"); /* clones perdem clique: religaTT refaz pelo estado compartilhado */ alvo.appendChild(k); religaTT(alvo); };
+function religaTT(alvo){
+  /* o clone é só visual; cada linha reabre o detalhe pelo mesmo estado compartilhado (ttAbertas) */
+  alvo.querySelectorAll(".ttL").forEach((d, i) => { d.onclick = () => { const orig = $q("termTarefas").querySelectorAll(".ttL")[i]; if(orig) orig.click(); }; });
+  alvo.querySelectorAll(".ttH").forEach((h, i) => { h.onclick = () => { const orig = $q("termTarefas").querySelectorAll(".ttH")[i]; if(orig) orig.click(); }; });
+  alvo.querySelectorAll(".ttConc").forEach(b => { b.onclick = () => { const orig = $q("termTarefas").querySelector(".ttConc"); if(orig) orig.click(); }; });
+  alvo.querySelectorAll(".ttVer").forEach((b, i) => { b.onclick = ev => { ev.stopPropagation(); const orig = $q("termTarefas").querySelectorAll(".ttVer")[i]; if(orig) orig.click(); }; });
+}
+/* atualiza sozinho a cada 5 s, sem a tela pular */
+async function atualizaInicio(){
+  const sc = $q("pInicio"), y = sc.scrollTop, cb = $q("corpo").scrollTop;
+  try{ await Promise.all([puxa(), puxaUsoInicio(), puxaTarefasApp(true)]); }catch(e){}
+  sc.scrollTop = y; $q("corpo").scrollTop = cb;
+}
+setInterval(() => { if(!document.hidden && sess && painelAtual === "pInicio") atualizaInicio(); }, 5000);
+/* puxar para baixo atualiza na hora */
+(function(){
+  const el = $q("pInicio"), pull = $q("inPull"); let y0 = null, dy = 0;
+  el.addEventListener("touchstart", e => { y0 = (el.scrollTop <= 0 && $q("corpo").scrollTop <= 0) ? e.touches[0].clientY : null; dy = 0; }, { passive: true });
+  el.addEventListener("touchmove", e => { if(y0 == null) return; dy = e.touches[0].clientY - y0; pull.classList.toggle("on", dy > 60); }, { passive: true });
+  el.addEventListener("touchend", async () => { const go = y0 != null && dy > 70; y0 = null; if(!go){ pull.classList.remove("on"); return; } pull.textContent = "atualizando…"; await atualizaInicio(); pull.textContent = "↓ solte para atualizar"; pull.classList.remove("on"); });
+  window.puxarParaAtualizar = atualizaInicio;
+})();
+
+/* ---------- iphone-021: só vistoria ---------- */
+/* nada sai do app para o chat do Claude: pedidos, voz, áudio e foto ficam desligados */
+enviaMensagem = async function(){ return false; };
+mandaClaude = async function(){ return false; };
+mandaPedido = async function(){ return false; };
+iniciaGravacao = function(){};
+try{ iniciaAudio = function(){}; }catch(e){}
+try{ enviaAudio = async function(){ return false; }; }catch(e){}
+try{ ARM.set("jv_saida", []); }catch(e){}
+function desenhaPC(){
+  const n = abas.length, trab = abas.filter(a => a.estado === "trab").length, perg = abas.filter(a => a.estado === "perg").length, trav = abas.filter(a => a.pausada).length;
+  const painel = !carregouAbas ? "painel: carregando…" : semSinal ? "painel SEM SINAL" + (ultSinal ? " há " + minAtras(ultSinal) : "") : "painel no ar";
+  const q = window.__quedasHoje == null ? "quedas hoje: sem dado" : "quedas hoje: " + window.__quedasHoje;
+  $q("pcLinha").textContent = n + " terminais de pé · " + trab + " trabalhando · " + (perg + trav) + " travados · " + painel + " · " + q;
+  $q("pcLinha").style.borderColor = semSinal ? "var(--red)" : "";
+}
+$q("pcJanelas").onclick = () => vaiPara("pAoVivo");
+/* quedas de hoje: só se o PC publicar em jarvis_uso 'saude' (dados.quedas_hoje); senão aparece "sem dado" */
+const puxaSaude0 = puxaSaude;
+puxaSaude = async function(){ try{ const sa = ((await rest("jarvis_uso?id=eq.saude&select=dados")) || [])[0]; const d = sa && sa.dados || {}; window.__quedasHoje = (d.quedas_hoje == null ? null : d.quedas_hoje); }catch(e){} desenhaPC(); return puxaSaude0(); };
+/* AnyDesk: só o ID (nunca a senha). anydesk:ID abre o app; sem o app, vai para a App Store */
+const AD_STORE = "https://apps.apple.com/app/anydesk-remote-desktop/id1176131273";
+$q("adId").value = ARM.get("jv_anydesk") || "";
+$q("adId").addEventListener("change", () => { ARM.set("jv_anydesk", $q("adId").value.replace(/[^0-9]/g, "")); toast("ID do AnyDesk guardado", "A senha não é guardada aqui.", false); });
+$q("pcAnyDesk").onclick = () => {
+  const id = String(ARM.get("jv_anydesk") || "").replace(/[^0-9]/g, "");
+  if(!id){ toast("Falta o ID do AnyDesk", "Abra os ajustes (⚙) e digite o ID do PC.", false); $q("cfgBtn").click(); return; }
+  let saiu = false; const vis = () => { if(document.hidden) saiu = true; }; document.addEventListener("visibilitychange", vis);
+  location.href = "anydesk:" + id;
+  setTimeout(() => { document.removeEventListener("visibilitychange", vis); if(!saiu) location.href = AD_STORE; }, 1800);
+};
+
+(function irPelaUrl(){ const p = new URLSearchParams(location.search).get("p"); vaiPara(p && $q(p) ? p : "pInicio"); })();   /* iphone-022: abre no Início */
+
 async function iniciaSessao(){
   if(sess){ try{ await garanteDono(); document.body.classList.remove("semlogin"); iniciaSync(); return; }catch(e){ /* cai no login */ } }
   mostraLogin();
