@@ -256,6 +256,19 @@ button:active{transform:scale(.97)}
 .pr-it span{position:absolute;left:0;right:0;bottom:0;padding:4px 8px;font:500 11px var(--mono);background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;text-align:left}
 #zoom{position:fixed;inset:0;z-index:60;display:none;background:#000;touch-action:none;overflow:hidden}
 #zoom.on{display:block}
+/* iphone-019 */
+#tarResumo{margin:0 2px 10px;font:600 13.5px var(--f);color:#c3cbf0}
+#termVolta{min-height:44px;margin:0 0 8px}
+.ttH{display:flex;align-items:center;gap:8px;cursor:pointer;min-height:36px}.ttH .nm{flex:1}.ttH .ver{font:600 11px var(--f);color:var(--dim);text-transform:none;letter-spacing:0}
+.ttDot{width:11px;height:11px;border-radius:50%;flex:0 0 11px;background:#8a8fb0}.ttDot.trab{background:#35e6ff;box-shadow:0 0 8px #35e6ff}.ttDot.livre{background:#3ee08f}.ttDot.perg{background:#ffc447}.ttDot.trav{background:#ff6b78}
+.ttSem{margin:12px 2px;font:500 13px/1.5 var(--f);color:var(--dim)}
+/* iphone-018 */
+#pCaptcha .tit{display:flex;align-items:center}#pCaptcha #capFecha{order:-1;margin-right:10px;min-height:44px;min-width:44px}
+.tpSeta{width:44px;height:44px;border-radius:12px;background:var(--glass2);font-size:26px;line-height:1}.tpSeta:disabled{opacity:.3}
+#tpVolta{min-width:44px}
+#desfaz{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 76px);z-index:70;display:none;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:14px;background:#1d2547;border:1px solid var(--cy);font:600 14.5px var(--f);color:var(--tx)}
+#desfaz.on{display:flex}#desfaz button{padding:8px 14px;border-radius:10px;background:var(--cy);color:#06101c;font:700 14px var(--f);min-height:40px}
+#avAnt{display:block;margin:0 0 8px;padding:10px 14px;font:700 14px var(--f)}
 /* iphone-015 */
 #termSel{display:flex;gap:4px;padding:3px;margin:0 0 8px;border-radius:12px;background:var(--glass2)}
 #termSel button{flex:1;min-height:42px;border-radius:10px;font:700 14px var(--f);color:var(--dim)}
@@ -724,7 +737,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div id="composer"><button id="xGrav" title="Cancelar" aria-label="Cancelar">✕</button><textarea id="msg" rows="1" placeholder="Mensagem" enterkeyhint="send"></textarea><button id="anexar" title="Anexar foto ao pedido" aria-label="Anexar foto">📎</button><input type="file" id="anexoIn" accept="image/*" hidden><button id="ligar" title="Falar ou enviar" aria-label="Falar ou enviar"></button></div>
     </section>
     <section id="pTerm" class="painel">
-      <div id="termTopo"></div><div id="termSel"><button data-m="term" class="on">Terminais</button><button data-m="tar">Tarefas</button></div><div id="termTarefas"></div><div id="termAtalhos"><button class="vidro" id="taComo">Como estão os terminais</button></div>
+      <div id="termTopo"><button class="btop bno" id="termVolta">← Tarefas</button></div>
       <div class="tit">Terminais <span class="sp"></span><button class="btop bno" id="termMenos" aria-label="Diminuir letra">A−</button><button class="btop bno" id="termMais" aria-label="Aumentar letra">A+</button><button class="btop bno" id="abreCheia">⛶ Tela cheia</button></div>
       <button class="parar2" id="pararTerm"></button>
       <div id="termAbas"></div>
@@ -735,15 +748,15 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       <div class="tit">Fila deste terminal</div>
       <div id="termFila"></div>
     </section>
-    <section id="pTar" class="painel"><div class="tit">Tarefas de todos os terminais</div><div id="listaTar"></div></section>
+    <section id="pTar" class="painel"><div id="tarTopo"></div><div id="tarResumo"></div><div id="termTarefas"></div><div id="listaTar" style="display:none"></div></section>
     <section id="pIdeias" class="painel"><div class="tit">Ideias do PC <span id="ideiasN"></span><span class="sp"></span><button class="btop bok" id="aprovaTodas">Aprovar todas</button></div><div id="ideiasInfo" class="vazio" style="padding:0 2px 8px;text-align:left"></div><div id="listaIdeias"></div></section>
     <section id="pAvisos" class="painel"><div class="tit">Precisa de você <span id="aprovarN"></span></div>
-      <div id="avFiltro"><button data-f="todos" class="on">Todos</button><button data-f="espera">Esperando você</button><button data-f="pronto">Prontos</button><button data-f="erro">Com erro</button></div>
+      <div id="avFiltro"><button data-f="todos" class="on">Todos</button><button data-f="espera">Esperando você</button><button data-f="pronto">Prontos</button><button data-f="erro">Com erro</button><button data-f="ant">Anteriores</button></div>
       <div id="avCap"></div>
       <div id="listaAprovar"></div>
       <div id="listaProntos"></div>
       <div id="avVazio" class="vazio vidro">Nada esperando você</div>
-      <button id="avAprovBtn" class="btop bno">Ver aprovados</button>
+      
       <div class="tit">Outros avisos <span class="sp"></span><button class="btop bno" id="ativaPush" style="display:none">🔔 Ativar notificações</button></div><div id="listaAvisos"></div></section>
     <section id="pPrint" class="painel"><div class="tit">Print do PC</div>
       <button class="btn-pr" id="tiraPrint">📷 Tirar print do PC agora</button>
@@ -812,7 +825,7 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
       </div>
       <div id="chaveRes" class="vazio" style="padding:10px 2px;text-align:left"></div>
     </section>
-    <section id="pCaptcha" class="painel"><div class="tit">Captcha<span class="sp"></span><button class="btop bno" id="capFecha">Voltar</button></div>
+    <section id="pCaptcha" class="painel"><div class="tit">Captcha<span class="sp"></span><button class="btop bno" id="capFecha">← Voltar</button></div>
       <div id="capInfo" class="vazio" style="padding:0 2px 10px;text-align:left">Quando aparecer captcha numa loja, ele chega como notificação e você resolve aqui, tocando e arrastando na página ao vivo. A automação nunca resolve sozinha.</div>
       <div id="capLista"></div>
       <div id="capVivo" style="display:none"><div id="capTit"></div>
@@ -830,14 +843,15 @@ body{min-height:100vh;min-height:-webkit-fill-available;margin:0}
   <div id="acoes"><button id="parar">■ PARAR TUDO</button><button id="tecBtn" title="Escrever">⌨</button></div>
   <nav id="nav">
     <button data-p="pLig" class="on"><i>💬</i>Conversa</button>
-    <button data-p="pTerm"><i>▤</i>Terminais</button>
+    <button data-p="pTar"><i>☰</i>Tarefas</button>
     <button data-p="pAvisos"><i>🔔</i>Avisos</button>
   </nav>
 </div>
 <div id="cheia"><div id="cheiaTop"><div id="cheiaChips"></div><button class="btop bno" id="fonteMenos">A−</button><button class="btop bno" id="fonteMais">A+</button><button class="btop bok" id="fechaCheia">✕ Fechar</button></div><div id="cheiaCorpo"></div></div>
-<div id="tarefaPg"><div id="tpTopo"><button id="tpVolta" aria-label="Voltar">←</button><b id="tpTit"></b></div><div id="tpCorpo"></div>
+<div id="tarefaPg"><div id="tpTopo"><button id="tpVolta" aria-label="Voltar">←</button><b id="tpTit"></b><button id="tpAnt" class="tpSeta" aria-label="Aviso anterior">‹</button><button id="tpProx" class="tpSeta" aria-label="Próximo aviso">›</button></div><div id="tpCorpo"></div>
   <div id="tpBot"><div id="tpMotivo"><textarea id="tpTxt" placeholder="Diga o que não ficou bom" enterkeyhint="send"></textarea><div class="lin"><button id="tpMic">🎙 Falar</button><button id="tpEnv" class="env">Enviar</button></div></div>
   <div id="tpBtns"><button id="tpBom">Ficou bom</button><button id="tpNao">Não ficou</button></div></div></div>
+<div id="desfaz"><span id="desfazT"></span><button id="desfazB">Desfazer</button></div>
 <div id="zoom"><button id="zoomX">✕</button><img id="zoomImg" alt=""><div id="zoomI"></div></div>
 <div class="cartao" id="cfg"><div class="caixa vidro">
   <h2>⚙ Configurações</h2>
@@ -1030,7 +1044,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v70";
+const VERSAO = "v74";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -1584,7 +1598,7 @@ function vaiPara(p){
   if(largo() && p === "pLig") p = "pTerm";
   painelAtual = p; if(PN_GUARDA.includes(p)) ARM.set("jv_pn", p); $q("app").dataset.p = p; $q("topoTit").textContent = TITULOS[p] || "Jarvis"; if(p === "pMais") setTimeout(ajustaGrade, 0);
   document.querySelectorAll(".painel").forEach(x => x.classList.toggle("on", x.id === p || (largo() && x.id === "pLig")));
-  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTerm", pVer: "pTerm", pTar: "pTerm", pAvisos: "pAvisos", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
+  const NAV_DE = { pIdeias: "pMais", pPrint: "pMais", pMemoria: "pMais", pUso: "pMais", pSaude: "pMais", pLojas: "pMais", pAgenda: "pMais", pAoVivo: "pTar", pVer: "pTar", pTerm: "pTar", pAvisos: "pAvisos", pChave: "pMais", pCaptcha: "pAvisos" }; document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.p === (NAV_DE[p] || p)));
   if(p === "pInicio"){ desenhaInicio(); puxaUsoInicio(); puxaManha(); puxaSilencio(); }
   if(p === "pMemoria") puxaMemoria();
   if(p === "pUso") puxaUso();
@@ -1596,6 +1610,7 @@ function vaiPara(p){
   if(p === "pLig") setTimeout(rolaChat, 50);
   if(p === "pAvisos"){ if(avisos.length) ARM.set("jv_avisto", avisos[0].id); desenhaBadges(); puxaProntos(); }
   if(p === "pTerm"){ saidaFim = true; olhando(); puxa(); }
+  if(p === "pTar"){ puxaTarefasApp(true); desenhaTT(); }
   if(p === "pPrint") puxaPrints();
 }
 
@@ -1765,6 +1780,11 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null, rapidos = 0, iniciouEm = 0, ouvindoAgora = false, nivel = 0, ligado = false, pensando = false, hist = [], gravT0 = 0, gravTimer = null;   // "ligado" = está gravando
 function paraRec(){ if(rec){ try{ rec.onend = null; rec.abort(); }catch(e){} rec = null; } ouvindoAgora = false; }
 let acumFala = "", ultAtiv = 0;
+/* iphone-018: o iOS religa o ditado e às vezes entrega de novo a frase inteira; juntar sem repetir e colapsar "X X" em "X" */
+const nfala = t => String(t || "").toLowerCase().replace(/[^a-z0-9à-ÿ ]+/g, " ").replace(/ +/g, " ").trim();
+function colapsaDup(t){ t = String(t || "").trim(); const w = t.split(/ +/); for(let k = 2; k <= 4; k++){ if(w.length % k) continue; const n = w.length / k, a = nfala(w.slice(0, n).join(" ")); if(n >= 3 && a && Array.from({ length: k }, (_, i) => nfala(w.slice(i * n, (i + 1) * n).join(" "))).every(x => x === a)) return w.slice(0, n).join(" "); } return t; }
+function juntaFala(base, novo){ base = String(base || "").trim(); novo = String(novo || "").trim(); if(!base) return colapsaDup(novo); if(!novo) return base;
+  const nb = nfala(base), nn = nfala(novo); if(nn.startsWith(nb)) return colapsaDup(novo); if(nb.endsWith(nn) || nb === nn) return base; return colapsaDup(base + " " + novo); }
 const zeraFala = () => { acumFala = ""; };
 /* (22/11, iphone-007) ENVIO AUTOMÁTICO: ~1,5 s sem novas palavras envia sozinho; a barra mostra a contagem e o ✕ cancela. Fala vazia/ruído (<2 letras) não envia. Ajuste "Enviar ao parar de falar" (padrão ligado). */
 const autoEnvia = () => ARM.get("jv_auto") === true;   /* (iphone-009) padrão DESLIGADO: corta a fala quando ele pensa */
@@ -1787,7 +1807,7 @@ function escuta(){
   r.onstart = () => { ouvindoAgora = true; };
   r.onresult = e => {
     let todo = ""; for(let i = 0; i < e.results.length; i++) todo += e.results[i][0].transcript + " ";
-    acumFala = (base + " " + todo.trim()).trim(); ultAtiv = Date.now();
+    acumFala = juntaFala(base, todo.trim()); ultAtiv = Date.now();
     nivel = Math.min(1, .35 + Math.min(.5, acumFala.length / 60));
     if(acumFala) legenda(acumFala);
     armaAuto(); desenhaGrav();
@@ -1825,7 +1845,7 @@ function enviaGravacao(){
   if(r){ r.onend = segue; try{ r.stop(); }catch(e){ segue(); } setTimeout(segue, 900); } else segue();
 }
 function enviaGravacao2(){
-  const t = acumFala.trim(); ligado = false; paraRec(); zeraFala(); desenhaGrav();
+  const t = colapsaDup(acumFala.trim()); ligado = false; paraRec(); zeraFala(); desenhaGrav();
   if(t.length < 2){ toast("Não ouvi nada", "Toque no microfone e fale de novo."); return; }
   $q("msg").value = ""; legenda(""); $q("flX").textContent = ""; vaiPara("pLig");
   /* (21/11, dono, prioridade A) a fala segue DIRETO e na hora para o terminal selecionado: sem tela de revisão, sem esperar confirmação e sem reescrever antes
@@ -2119,6 +2139,13 @@ const zFim = e => { zp.delete(e.pointerId); iniciaGesto(); };
 zel.addEventListener("pointerup", zFim); zel.addEventListener("pointercancel", zFim);
 zel.addEventListener("wheel", e => { e.preventDefault(); zoomEm(e.clientX, e.clientY, zs.s * (e.deltaY < 0 ? 1.2 : 1 / 1.2)); }, { passive: false });
 $q("zoomX").onclick = fechaZoom;
+zel.addEventListener("click", e => { if(e.target.id === "zoomX") return; const r = zimg.getBoundingClientRect(); if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) fechaZoom(); });   /* iphone-018: tocar fora da foto fecha */
+/* iphone-018: arrastar da borda esquerda para a direita = Voltar (foto -> página da tarefa -> lista; captcha -> Avisos; Anteriores -> lista atual) */
+(function(){ let x0 = null, y0 = 0;
+  addEventListener("touchstart", e => { const t = e.touches[0]; x0 = (e.touches.length === 1 && t.clientX < 28) ? t.clientX : null; y0 = t.clientY; }, { passive: true });
+  addEventListener("touchend", e => { if(x0 == null) return; const t = e.changedTouches[0], dx = t.clientX - x0, dy = Math.abs(t.clientY - y0); x0 = null; if(dx < 70 || dy > 70) return;
+    if(zel.classList.contains("on")) fechaZoom(); else if($q("tarefaPg").classList.contains("on")) fechaTarefa(); else if(painelAtual === "pCaptcha") $q("capFecha").click(); else if(prAprov){ prFiltro = "todos"; prAprov = false; desenhaProntos(); } }, { passive: true });
+})();
 addEventListener("keydown", e => { if(e.key === "Escape"){ if(zel.classList.contains("on")) fechaZoom(); else if(cheiaOn) fechaCheia(); } });
 
 /* ---------- v6: CONVERSA com a IA (Sonnet), como no Claude ---------- */
@@ -2302,7 +2329,7 @@ function rtMuda(tab){
     if(tab === "jarvis_abas" || tab === "jarvis_ideias" || tab === "jarvis_comandos") puxa();
     else if(tab === "jarvis_avisos") puxaAvisos();
     else if(tab === "jarvis_prontos") puxaProntos();
-    else if(tab === "jarvis_tarefas_app"){ if(termModo === "tar") puxaTarefasApp(); }
+    else if(tab === "jarvis_tarefas_app"){ puxaTarefasApp(); }
     else if(tab === "jarvis_captcha") puxaCaptchas();
     else if(tab === "jarvis_pedidos") acompanhaOrdens();
     else if(tab === "jarvis_uso"){ puxaFixado(); puxaUsoInicio(); puxaManha(); puxaSilencio(); if(painelAtual === "pUso") puxaUso(); }
@@ -2963,6 +2990,7 @@ let capLiberado = false;
 function capLibera(){ if(capLiberado || !faceAtivo()) return true; exigeFace("Resolver o captcha").then(ok => { if(ok){ capLiberado = true; toast("Liberado ✓", "Pode tocar no captcha.", false); } }); return false; }
 let capS = 1, capTx = 0, capTy = 0, capPtr = {}, capGest = null, capPend = null, capPendT = 0, capBuf = [], capBufT = 0, capFlushT = 0, capUlt = 0, capAncora = null, capFimP = null, capIni = null, capSeg = null, capPrimeira = true, capBusyF = false, capTick = 0, capFila = Promise.resolve(), capIgnora = false, capCheio = false;
 function abreCaptcha(id){
+  if(painelAtual === "pAvisos") prScroll = $q("corpo").scrollTop;
   capSel = id; capLiberado = false; capS = 1; capTx = 0; capTy = 0; capPrimeira = true; capAncora = capFimP = capIni = capSeg = null; capUlt = Date.now();
   vaiPara("pCaptcha"); $q("capVivo").style.display = ""; $q("capTit").textContent = "Abrindo a página da loja…"; capOlhaT = 0;
   clearInterval(capTimer); capTimer = setInterval(capRoda, 300); atualizaQuadro(); desenhaCaptchas(); capLayout();
@@ -3126,7 +3154,7 @@ $q("msg").addEventListener("input", desenhaGrav);
 $q("msg").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); $q("ligar").click(); } });
 $q("novaConversa").onclick = novaConversa;
 $q("capBanner").onclick = () => { if(captchas[0]) abreCaptcha(captchas[0].id); };
-$q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pMais"); };
+$q("capFecha").onclick = () => { fechaCaptcha(); vaiPara("pAvisos"); setTimeout(() => { $q("corpo").scrollTop = prScroll; }, 0); };
 $q("capTxtEnv").onclick = () => { if(!capLibera()) return; const v = $q("capTxt").value.slice(0, 64); if(!v) return; $q("capTxt").value = ""; mandaCapEventos([{ t: "texto", texto: v, dt: 0 }]); };
 document.querySelectorAll("#capTec [data-tecla]").forEach(b => b.onclick = () => mandaCapEventos([{ t: "tecla", tecla: b.dataset.tecla, dt: 0 }])); $q("flCancel").onclick = cancelaGravacao;
 desenhaGrav(); desenhaEnviados();
@@ -3282,45 +3310,45 @@ function desenhaPensando(){
 setInterval(puxaEstadoClaude, 3000); setInterval(() => { if(fixResp) desenhaPensando(); }, 5000);
 
 /* ---------- iphone-014 / pronto-para-ver-001: cartões (tabela jarvis_prontos; formato em ola-claude\jarvis-prontos-schema.sql) ---------- */
-let prontos = [], prontosOk = false, prFiltro = "todos", prAprov = false, prTarefaId = null, prAbertas = {}, prBusy = false;
+let prontos = [], prontosOk = false, prFiltro = "todos", prAprov = false, prLista = [], prScroll = 0, prTarefaId = null, prAbertas = {}, prBusy = false;
 const SELO = { pronto: ["Pronto", "ok"], teste: ["Falta o seu teste", "am"], erro: ["Com erro, voltou para o terminal", "er"], andamento: ["Em andamento", "cz"] };
 const prEff = r => r.decisao === "nao" ? "erro" : (SELO[r.estado] ? r.estado : "pronto");
 function prontosEspera(){ return prontos.filter(r => r.decisao !== "bom" && ["pronto", "teste", "erro"].includes(prEff(r))); }
 function prHora(t){ try{ const d = new Date(t); return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " " + hhmm(d.getTime()); }catch(e){ return ""; } }
 async function puxaProntos(){
   if(prBusy || !sess) return; prBusy = true;
-  try{ prontos = (await rest("jarvis_prontos?select=id,titulo,projeto,estado,selo,feito,falta,teste_passo,mini,decisao,motivo,atualizado_em&order=atualizado_em.desc&limit=80")) || []; prontosOk = true; }catch(e){ /* tabela ainda não existe ou sem rede: lista vazia */ }
+  try{ prontos = (await rest("jarvis_prontos?select=id,titulo,projeto,estado,selo,feito,falta,teste_passo,mini,decisao,motivo,decidido_em,atualizado_em&order=atualizado_em.desc&limit=80")) || []; prontosOk = true; }catch(e){ /* tabela ainda não existe ou sem rede: lista vazia */ }
   prBusy = false; desenhaProntos(); desenhaBadges();
 }
 function desenhaProntos(){
   const l = $q("listaProntos"); if(!l) return; l.innerHTML = "";
   document.querySelectorAll("#avFiltro button").forEach(b => b.classList.toggle("on", b.dataset.f === prFiltro));
-  $q("avFiltro").style.display = prAprov ? "none" : "";
   let lista;
-  if(prAprov) lista = prontos.filter(r => r.decisao === "bom");
+  if(prAprov){ lista = prontos.filter(r => r.decisao).sort((a, b) => new Date(b.decidido_em || b.atualizado_em) - new Date(a.decidido_em || a.atualizado_em));
+    const vb = document.createElement("button"); vb.id = "avAnt"; vb.className = "vidro"; vb.textContent = "← Voltar para a lista atual"; vb.onclick = () => { prFiltro = "todos"; prAprov = false; desenhaProntos(); }; l.appendChild(vb); }
   else { lista = prontosEspera(); if(prFiltro === "espera") lista = lista.filter(r => prEff(r) === "teste"); else if(prFiltro === "pronto") lista = lista.filter(r => prEff(r) === "pronto"); else if(prFiltro === "erro") lista = lista.filter(r => prEff(r) === "erro");
     const ord = { teste: 0, erro: 1, pronto: 2 }; lista.sort((a, b) => (ord[prEff(a)] - ord[prEff(b)]) || (new Date(b.atualizado_em) - new Date(a.atualizado_em))); }   /* urgentes (captcha/aprovação) já estão acima; depois teste, erro, pronto */
   lista.forEach(r => {
     const e = prEff(r), b = document.createElement("button"); b.className = "prc vidro " + SELO[e][1];
     b.innerHTML = '<div class="ft"></div><div class="c"><span class="selo"></span><div class="t"></div><div class="m"></div><div class="x"></div></div>';
     if(r.mini) b.querySelector(".ft").style.backgroundImage = "url('" + String(r.mini).replace(/'/g, "%27") + "')";
-    const sl = b.querySelector(".selo"); sl.textContent = prAprov ? "Aprovado" : SELO[e][0]; sl.classList.add(prAprov ? "ok" : SELO[e][1]);
-    b.querySelector(".t").textContent = r.titulo; b.querySelector(".m").textContent = (r.projeto || "") + (r.projeto ? " · " : "") + prHora(r.atualizado_em);
+    const sl = b.querySelector(".selo"); sl.textContent = prAprov ? (r.decisao === "bom" ? "Aprovado" : "Devolvido ao terminal") : SELO[e][0]; sl.classList.add(prAprov ? (r.decisao === "bom" ? "ok" : "er") : SELO[e][1]);
+    b.querySelector(".t").textContent = r.titulo; b.querySelector(".m").textContent = (r.projeto || "") + (r.projeto ? " · " : "") + (prAprov ? "fechado em " + prHora(r.decidido_em || r.atualizado_em) : prHora(r.atualizado_em));
     b.querySelector(".x").textContent = e === "teste" ? "Falta o seu teste: " + (r.teste_passo || "") : (r.feito || "");
     b.onclick = () => abreTarefa(r.id); l.appendChild(b);
   });
-  const nAlgo = lista.length || captchas.length || perguntasAbertas().length;
-  $q("avVazio").classList.toggle("on", !nAlgo); $q("avVazio").textContent = prAprov ? "Nenhum aprovado ainda" : (prFiltro === "todos" ? "Nada esperando você" : "Nada neste filtro");
-  $q("avAprovBtn").textContent = prAprov ? "← Voltar para Avisos" : "Ver aprovados";
+  prLista = lista.map(x => x.id);
+  const nAlgo = lista.length || (!prAprov && (captchas.length || perguntasAbertas().length));
+  $q("avVazio").classList.toggle("on", !nAlgo); $q("avVazio").textContent = prAprov ? "Nenhum aviso fechado ainda" : (prFiltro === "todos" ? "Nada esperando você" : "Nada neste filtro");
 }
-document.querySelectorAll("#avFiltro button").forEach(b => b.onclick = () => { prFiltro = b.dataset.f; desenhaProntos(); });
-$q("avAprovBtn").onclick = () => { prAprov = !prAprov; desenhaProntos(); };
-$q("taComo").onclick = () => { vaiPara("pLig"); enviaMensagem("Como estão os terminais?"); };
-(function(){ const t = $q("termTopo"), pc = $q("inPc"); if(t && pc) t.appendChild(pc); })();   /* estado do PC sobe para o topo de Terminais */
+document.querySelectorAll("#avFiltro button").forEach(b => b.onclick = () => { prFiltro = b.dataset.f; prAprov = prFiltro === "ant"; desenhaProntos(); });
+$q("termVolta").onclick = () => vaiPara("pTar");
+(function(){ const t = $q("tarTopo"), pc = $q("inPc"); if(t && pc) t.appendChild(pc); })();   /* estado do PC no topo de Tarefas */
 
 let prFull = null;
 async function abreTarefa(id){
-  prTarefaId = id; $q("tarefaPg").classList.add("on"); $q("tpTit").textContent = ""; $q("tpCorpo").innerHTML = '<div class="vazio">Carregando…</div>'; $q("tpMotivo").classList.remove("on"); prFull = null;
+  if(!$q("tarefaPg").classList.contains("on")) prScroll = $q("corpo").scrollTop;
+  prTarefaId = id; { const i = prLista.indexOf(id); $q("tpAnt").disabled = i <= 0; $q("tpProx").disabled = i < 0 || i >= prLista.length - 1; } $q("tarefaPg").classList.add("on"); $q("tpTit").textContent = ""; $q("tpCorpo").innerHTML = '<div class="vazio">Carregando…</div>'; $q("tpMotivo").classList.remove("on"); prFull = null;
   try{ prFull = ((await rest("jarvis_prontos?id=eq." + encodeURIComponent(id) + "&select=*")) || [])[0] || null; }catch(e){}
   if(prTarefaId === id) desenhaTarefa();
 }
@@ -3363,9 +3391,17 @@ async function decideTarefa(decisao, motivo){
   try{ await rest("jarvis_prontos?id=eq." + encodeURIComponent(id), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ decisao: decisao, motivo: motivo || null, decidido_em: new Date().toISOString() }) }); }
   catch(e){ toast("Não consegui enviar", "Tente de novo.", false); return false; }
   const r = prontos.find(x => x.id === id); if(r){ r.decisao = decisao; r.motivo = motivo || null; }
-  toast(decisao === "bom" ? "Aprovado ✓" : "Devolvido ao terminal ✓", "", false); fechaTarefa(); desenhaProntos(); desenhaBadges(); return true;
+  fechaTarefa(); desenhaProntos(); desenhaBadges(); mostraDesfaz(id, decisao === "bom" ? "Aprovado ✓" : "Devolvido ao terminal ✓"); return true;
 }
-function fechaTarefa(){ prTarefaId = null; $q("tarefaPg").classList.remove("on"); $q("tpMotivo").classList.remove("on"); if(prRec){ try{ prRec.stop(); }catch(e){} } }
+let desfazT = null;
+function mostraDesfaz(id, txt){
+  $q("desfazT").textContent = txt; $q("desfaz").classList.add("on"); clearTimeout(desfazT);
+  $q("desfazB").onclick = async () => { clearTimeout(desfazT); $q("desfaz").classList.remove("on");
+    try{ await rest("jarvis_prontos?id=eq." + encodeURIComponent(id), { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ decisao: null, motivo: null, decidido_em: null }) }); const r = prontos.find(x => x.id === id); if(r){ r.decisao = null; r.motivo = null; } toast("Desfeito ✓", "O aviso voltou para a lista.", false); }catch(e){ toast("Não consegui desfazer", "Tente de novo.", false); }
+    desenhaProntos(); desenhaBadges(); };
+  desfazT = setTimeout(() => $q("desfaz").classList.remove("on"), 5000);
+}
+function fechaTarefa(){ prTarefaId = null; setTimeout(() => { $q("corpo").scrollTop = prScroll; }, 0); $q("tarefaPg").classList.remove("on"); $q("tpMotivo").classList.remove("on"); if(prRec){ try{ prRec.stop(); }catch(e){} } }
 let prRec = null;
 function prMic(){
   const ta = $q("tpTxt"), b = $q("tpMic");
@@ -3377,6 +3413,8 @@ function prMic(){
   prRec = r; b.textContent = "➤ Enviar"; try{ r.start(); }catch(e){ prRec = null; b.textContent = "🎙 Falar"; }
 }
 $q("tpVolta").onclick = fechaTarefa;
+function tpVai(d){ const i = prLista.indexOf(prTarefaId), j = i + d; if(i < 0 || j < 0 || j >= prLista.length) return; $q("tpMotivo").classList.remove("on"); abreTarefa(prLista[j]); $q("tpCorpo").scrollTop = 0; }
+$q("tpAnt").onclick = () => tpVai(-1); $q("tpProx").onclick = () => tpVai(1);
 $q("tpBom").onclick = () => decideTarefa("bom", "");
 $q("tpNao").onclick = () => { $q("tpMotivo").classList.add("on"); $q("tpTxt").value = ""; $q("tpTxt").focus(); };
 $q("tpMic").onclick = prMic;
@@ -3411,18 +3449,18 @@ setInterval(() => { if(!document.hidden && sess) puxaProntos(); }, 15000); setTi
 let tarApp = [], tarAppSig = "", ttAbertas = new Set(), ttConc = false, termModo = ARM.get("jv_termmodo") === "tar" ? "tar" : "term";
 const CONF_TXT = { sem_conferir: "feito, sem conferir", conferido: "conferido", reprovado: "reprovado", sem_prova: "feito, sem prova" };
 const nz = t => String(t || "").toLowerCase().normalize("NFD").replace(new RegExp("[\\u0300-\\u036f]", "g"), "").replace(/[^a-z0-9]+/g, " ").trim();
-async function puxaTarefasApp(){
+async function puxaTarefasApp(forca){
   if(!sess) return;
   try{ const r = (await rest("jarvis_tarefas_app?select=*&order=atualizado_em.desc&limit=120")) || [], sig = JSON.stringify(r.map(x => [x.id, x.estado, x.feitos, x.total, x.conferencia, x.atualizado_em]));
-    if(sig === tarAppSig && ttAssinatura() === ttSigAbas) return; tarApp = r; tarAppSig = sig; }catch(e){ return; }
+    if(!forca && sig === tarAppSig && ttAssinatura() === ttSigAbas) return; tarApp = r; tarAppSig = sig; }catch(e){ return; }
   desenhaTT();
 }
 let ttSigAbas = "";
-function ttAssinatura(){ return JSON.stringify(abas.map(a => [a.nome, filaDe(a).filter(x => x.e === "fila").map(x => x.t)])); }
+function ttAssinatura(){ return JSON.stringify(abas.map(a => [a.nome, a.estado, !!a.pausada, filaDe(a).filter(x => x.e === "fila").map(x => x.t)])); }
 function ttChip(c){ const e = document.createElement("span"); e.className = "ttChip " + (c || "sem_conferir"); e.textContent = CONF_TXT[c] || CONF_TXT.sem_conferir; return e; }
 function ttLinha(r){
   const d = document.createElement("div"); d.className = "ttL " + r.estado; const aberta = ttAbertas.has(r.id);
-  d.innerHTML = '<div class="r1"><span class="t"></span></div>'; d.querySelector(".t").textContent = (r.estado === "erro" ? "✗ " : r.estado === "exec" ? "▶ " : "✓ ") + r.titulo; d.querySelector(".r1").appendChild(ttChip(r.conferencia));
+  d.innerHTML = '<div class="r1"><span class="t"></span></div>'; d.querySelector(".t").textContent = (r.estado === "erro" ? "✗ " : r.estado === "exec" ? "▶ " : r.estado === "fila" ? "• " : "✓ ") + r.titulo; if(r.estado !== "fila") d.querySelector(".r1").appendChild(ttChip(r.conferencia));
   if(r.estado === "erro" && r.motivo){ const m = document.createElement("div"); m.className = "mot"; m.textContent = r.motivo; d.appendChild(m); }
   if(r.estado === "exec" && r.total > 0){ const b = document.createElement("div"); b.className = "ttBarra"; b.innerHTML = "<i></i>"; b.firstChild.style.width = Math.round(100 * r.feitos / r.total) + "%"; d.appendChild(b); const p = document.createElement("div"); p.className = "ttPc"; p.textContent = r.feitos + " de " + r.total + " passos"; d.appendChild(p); }
   if(aberta){
@@ -3440,25 +3478,36 @@ function ttLinha(r){
 function desenhaTT(forca){
   const el = $q("termTarefas"); if(!el) return; ttSigAbas = ttAssinatura();
   const y = $q("corpo").scrollTop; el.innerHTML = "";
-  const por = new Map(); const nomes = abas.map(a => a.nome);
-  const chave = t => { const k = nz(t); const m = nomes.find(n => nz(n) === k || nz(n).includes(k) || (k && k.includes(nz(n)))); return m || t || "Jarvis"; };
-  nomes.forEach(n => por.set(n, { exec: [], fila: [] }));
-  tarApp.filter(r => r.estado === "exec" || r.estado === "erro").forEach(r => { const k = chave(r.terminal); if(!por.has(k)) por.set(k, { exec: [], fila: [] }); por.get(k).exec.push(r); });
-  abas.forEach(a => filaDe(a).filter(x => x.e === "fila").forEach(x => por.get(a.nome).fila.push(x)));
-  let n = 0;
-  por.forEach((v, k) => { if(!v.exec.length && !v.fila.length) return; n++;
-    const h = document.createElement("div"); h.className = "ttH"; h.textContent = k; el.appendChild(h);
-    v.exec.forEach(r => el.appendChild(ttLinha(r)));
-    v.fila.forEach(x => { const d = document.createElement("div"); d.className = "ttL fila"; d.innerHTML = '<div class="r1"><span></span></div>'; d.querySelector("span").textContent = (x.n ? x.n + ". " : "") + x.t; el.appendChild(d); }); });
-  if(!n) el.insertAdjacentHTML("beforeend", '<div class="vazio vidro">Nenhuma tarefa agora</div>');
+  const nomes = abas.map(a => a.nome), chave = t => { const k = nz(t); return nomes.find(n => nz(n) === k || nz(n).includes(k) || (k && k.includes(nz(n)))) || t || "Jarvis"; };
+  const por = new Map(); nomes.forEach(n => por.set(n, []));
+  /* o que está VIVO vem das abas (o mesmo que a janela do PC mostra agora); a tabela jarvis_tarefas_app só enriquece (título da ordem, passos, progresso, conferência) e traz as concluídas de hoje */
+  const fonte = [], porId = new Map(tarApp.map(r => [r.id, r]));
+  abas.forEach(a => filaDe(a).filter(x => x.e === "exec" || x.e === "fila" || x.e === "erro").forEach(x => {
+    const tx = textoOrdem(a, x), m = /ordens[\\/](?:entregues|entrada)[\\/]([\w.\-]+?)\.md/.exec(tx || ""), r = (m && porId.get(m[1])) || null;
+    fonte.push({ id: (r && r.id) || ("v" + a.nome + "|" + (x.n || "") + "|" + x.t), terminal: a.nome, titulo: (r && r.titulo) || x.t, estado: x.e, total: r ? r.total : 0, feitos: r ? r.feitos : 0, passos: r ? r.passos : [],
+      contexto: (r && r.contexto) || tx, teste: r ? r.teste : "", conferencia: r ? r.conferencia : "sem_conferir", motivo: x.e === "erro" ? (x.m || (r && r.motivo) || "") : "" });
+  }));
+  fonte.forEach(r => { const k = chave(r.terminal); if(!por.has(k)) por.set(k, []); por.get(k).push(r); });
+  const ord = { exec: 0, erro: 1, fila: 2 }, st = a => a.pausada || a._semDados ? "trav" : (a.estado === "trab" ? "trab" : a.estado === "perg" ? "perg" : "livre");
+  const sem = [];
+  // resumo no topo (sem botão)
+  const tot = abas.length, trab = abas.filter(a => st(a) === "trab").length, trav = abas.filter(a => st(a) === "trav").length;
+  $q("tarResumo").textContent = tot ? (tot - trav) + " de pé, " + trab + " trabalhando, " + trav + " travado" + (trav === 1 ? "" : "s") : "Sem dados dos terminais.";
+  por.forEach((v, k) => {
+    if(!v.length){ sem.push(k); return; }
+    const a = abas.find(x => x.nome === k), h = document.createElement("div"); h.className = "ttH";
+    h.innerHTML = '<span class="ttDot"></span><span class="nm"></span><span class="ver">tela ao vivo ›</span>'; h.querySelector(".nm").textContent = k; if(a) h.querySelector(".ttDot").classList.add(st(a));
+    h.onclick = () => { termSel = k; ARM.set("jv_term", termSel); vaiPara("pTerm"); puxa(); };
+    el.appendChild(h); v.sort((p, q) => (ord[p.estado] - ord[q.estado])).forEach(r => el.appendChild(ttLinha(r)));
+  });
+  if(!fonte.length) el.insertAdjacentHTML("beforeend", '<div class="vazio vidro">Nenhuma tarefa agora</div>');
+  if(sem.length){ const d = document.createElement("div"); d.className = "ttSem"; d.textContent = "Sem tarefa: " + sem.join(", "); el.appendChild(d); }
   const hoje = tarApp.filter(r => r.estado === "feito"), cb = document.createElement("button"); cb.className = "ttConc"; cb.textContent = "Concluídas hoje: " + hoje.length + (hoje.length ? (ttConc ? " — fechar" : " — ver") : ""); cb.onclick = () => { ttConc = !ttConc; desenhaTT(); }; el.appendChild(cb);
   if(ttConc) hoje.forEach(r => el.appendChild(ttLinha(r)));
   $q("corpo").scrollTop = y;
 }
-function modoTerm(m){ termModo = m; ARM.set("jv_termmodo", m); $q("pTerm").classList.toggle("modoTar", m === "tar"); document.querySelectorAll("#termSel button").forEach(b => b.classList.toggle("on", b.dataset.m === m)); if(m === "tar"){ puxaTarefasApp(); desenhaTT(); } }
-document.querySelectorAll("#termSel button").forEach(b => b.onclick = () => modoTerm(b.dataset.m));
-modoTerm(termModo);
-setInterval(() => { if(!document.hidden && sess && termModo === "tar" && painelAtual === "pTerm") puxaTarefasApp(); }, 6000);
+function modoTerm(){ }
+setInterval(() => { if(!document.hidden && sess && painelAtual === "pTar") puxaTarefasApp(); }, 5000);
 
 /* ---------- iphone-017: gravação de áudio + transcrição no PC (Whisper). A permissão do microfone é pedida dentro do toque. ---------- */
 let aud = null, audPend = null, audTimer = null;
