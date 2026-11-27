@@ -1073,7 +1073,7 @@ orbRaf = requestAnimationFrame(drawOrb);
 
 
 /* ====== Jarvis iPhone v2 ====== */
-const VERSAO = "v84";
+const VERSAO = "v85";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -3721,6 +3721,7 @@ function jvTexto(t){
   const txt = longo.join(" · ");
   return jvLarg(txt, 11, 500) > 218 ? curto.join(" · ") : txt;                  /* 250 do PC menos margens e o ponto */
 }
+const jvPrecisa = t => !!t.espera && t.espera !== "testando";        /* jarvis-pontinho-testando-001: testando = trabalhando */
 function jvEstado(){
   const l = JV.linha, vivo = !!(l && l.dados && Date.now() - new Date(l.atualizado_em).getTime() < JV_VALE);
   const s = vivo ? l.dados.semana : null;
@@ -3732,7 +3733,7 @@ function desenhaPontinho(){
   if(!ids.includes(JV.id)){ JV.id = ids.length ? ids[0] : null; JV.desde = agora; }
   else if(ids.length > 1 && agora - JV.desde >= JV_REVEZA){ JV.id = ids[(ids.indexOf(JV.id) + 1) % ids.length]; JV.desde = agora; }
   const num = e.semana === null ? "--%" : e.semana + "%", barra = 10 * 4 + 9 * 2 + 5 + Math.ceil(jvLarg(num, 9, 300));
-  const linhas = e.trab.map(t => ({ id: t.id, txt: jvTexto(t), cor: t.espera ? "#FACC5A" : "#4ADE80", letra: t.espera ? "#FACC5A" : "#FFFFFF" }));
+  const linhas = e.trab.map(t => ({ id: t.id, txt: jvTexto(t), cor: jvPrecisa(t) ? "#FACC5A" : "#4ADE80", letra: jvPrecisa(t) ? "#FACC5A" : "#FFFFFF" }));
   const w = Math.max(barra + 20, ...linhas.map(x => Math.ceil(jvLarg(x.txt, 11, 500)) + 32));
   const sig = JSON.stringify([e.semana, linhas, w]);
   if(sig !== JV.sig){                                                          /* só redesenha quando muda: a troca de terminal é só a classe */
