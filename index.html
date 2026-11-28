@@ -34,37 +34,37 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 #resumo:empty{display:none}
 #resumo .erro{display:inline-block;padding:0 .4em;border-radius:999px;background:rgba(248,113,113,.18);color:var(--vermelho)}
 #cartoes{display:flex;flex-direction:column;gap:14px}
-.jan{position:relative;background:var(--cartao);border:1px solid var(--borda);border-radius:22px;padding:18px}
+.jan{position:relative;background:var(--cartao);border:1px solid var(--borda);border-radius:18px;padding:13px 16px}
 .jan .l1{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.jan h2{font-size:20px;font-weight:700;letter-spacing:-.01em;min-width:0}
-.sit{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:14px;font-weight:600;color:var(--cor);background:color-mix(in srgb,var(--cor) 15%,transparent)}
-.sit i{width:8px;height:8px;border-radius:50%;background:var(--cor)}
-.jan .tit{margin-top:12px;font-size:16.5px;line-height:1.4;font-weight:400;color:#E8E9EC;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.jan .nota{margin-top:6px;font-size:14px;font-weight:500;color:var(--cor)}
-.jan .l2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px}
-.jan .parte{font-size:17px;font-weight:600}
-.jan .tempo{font-size:14px;color:var(--apagado);text-align:right}
-.jan .barra{margin-top:9px;height:5px;border-radius:3px;background:var(--livre);overflow:hidden}
-.jan .barra i{display:block;height:100%;border-radius:3px;background:var(--cor);transition:width .5s}
-.jan .fila{margin-top:11px;font-size:14px;color:var(--apagado)}
-.jan .previsao{margin-top:4px;font-size:15px;font-weight:600;color:#D6D8DD}
-.jan.livre{padding:15px 18px}
-.jan.livre h2{font-size:17px;font-weight:600;color:#C9CCD2}
-.jan.livre .fila{margin-top:5px}
+.jan h2{font-size:17px;font-weight:700;letter-spacing:-.01em;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jan .parte{flex:0 0 auto;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--cor)}
+.jan .tit{margin-top:3px;font-size:14px;color:#C9CCD2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jan .barra{margin-top:9px;height:4px;border-radius:2px;background:var(--livre);overflow:hidden}
+.jan .barra i{display:block;height:100%;border-radius:2px;background:var(--cor);transition:width .5s}
+.jan .fila{margin-top:7px;font-size:13px;color:var(--apagado)}
 .jan.trab{border-color:rgba(74,222,128,.55);background:linear-gradient(180deg,rgba(74,222,128,.09),rgba(74,222,128,0) 60%),var(--cartao)}
-.jan.trab::after{content:"";position:absolute;inset:-1px;border-radius:22px;box-shadow:0 0 26px rgba(74,222,128,.38);opacity:.25;animation:pulso 3.2s ease-in-out infinite;pointer-events:none}
-.jan.trab .sit i{animation:respira 1.6s ease-in-out infinite alternate}
+.jan.test{border-color:rgba(96,165,250,.6);background:linear-gradient(180deg,rgba(96,165,250,.1),rgba(96,165,250,0) 60%),var(--cartao)}
+.jan.erro{border-color:rgba(248,113,113,.7);background:linear-gradient(180deg,rgba(248,113,113,.12),rgba(248,113,113,0) 60%),var(--cartao)}
+.jan.trab::after{content:"";position:absolute;inset:-1px;border-radius:18px;box-shadow:0 0 26px rgba(74,222,128,.38);opacity:.25;animation:pulso 3.2s ease-in-out infinite;pointer-events:none}
 @keyframes pulso{0%,100%{opacity:.2}50%{opacity:1}}
-@keyframes respira{from{opacity:.35}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.jan.trab::after,.jan.trab .sit i{animation:none}}
+@media (prefers-reduced-motion:reduce){.jan.trab::after{animation:none}}
 #cartoes.velho{opacity:.45;filter:grayscale(1)}
-#cartoes.velho .jan::after,#cartoes.velho .sit i{animation:none}
+#cartoes.velho .jan::after{animation:none}
 .vazio{padding:40px 12px;text-align:center;font-size:16px;line-height:1.5;color:var(--apagado)}
 #ligaAvisos{padding:7px 15px;border-radius:999px;background:var(--verde);border:1px solid var(--verde);color:#06210f;font-size:13px;font-weight:700}
 #ligaAvisos[hidden]{display:none}
 #pe{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:6px 16px calc(env(safe-area-inset-bottom) + 6px)}
-#renova{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;background:var(--cartao);border:1px solid var(--borda);font-size:13px;font-weight:500;color:var(--apagado)}
-#renova b{font-weight:600;color:#D6D8DD}
+#semana{flex:1 0 100%;padding:11px 16px;border-radius:18px;background:var(--cartao);border:1px solid var(--borda)}
+#semana h3{font-size:12px;font-weight:600;color:var(--apagado)}
+#dez{display:flex;gap:3px;margin-top:7px}
+#dez i{flex:1;height:8px;border-radius:3px;background:var(--livre);overflow:hidden}
+#dez b{display:block;height:100%;width:0;background:var(--cor)}
+#semana .tres{display:flex;justify-content:space-between;gap:10px;margin-top:9px}
+#semana .tres small{display:block;font-size:11px;color:var(--apagado)}
+#semana .tres b{display:block;font-size:18px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+#semana .tres div:last-child{text-align:right}
+#semUltima{display:block;margin-top:4px;font-size:12px;color:var(--apagado)}
+#semUltima:empty{display:none}
 .tela{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:var(--fundo);padding:24px}
 .tela.on{display:flex}
 .caixa{width:100%;max-width:380px;padding:24px;border-radius:22px;background:var(--cartao);border:1px solid var(--borda)}
@@ -84,7 +84,15 @@ body.semlogin #app,body.travado #app{visibility:hidden}
     <h1 id="resumo"></h1>
     <div id="cartoes"><div class="vazio">Carregando…</div></div>
   </main>
-  <footer id="pe"><div id="renova">↻ <span>Renova</span> <b id="renovaTxt">…</b></div><button id="ligaAvisos" hidden>🔔 Ligar avisos</button></footer>
+  <footer id="pe">
+    <section id="semana" aria-label="Limite da semana">
+      <h3>Limite da semana</h3>
+      <div id="dez"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+      <div class="tres"><div><small>Usado</small><b id="semUsado">--%</b></div><div><small>Falta</small><b id="semFalta">--%</b></div><div><small>Renova</small><b id="semRenova">--</b></div></div>
+      <small id="semUltima"></small>
+    </section>
+    <button id="ligaAvisos" hidden>🔔 Ligar avisos</button>
+  </footer>
 </div>
 <div class="tela" id="login"><div class="caixa">
   <h2>Jarvis</h2>
@@ -106,7 +114,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 <script>
 
 /* ====== Jarvis iPhone: uma tela só de vistoria ====== */
-const VERSAO = "v88";
+const VERSAO = "v89";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -213,42 +221,34 @@ $q("sn").addEventListener("keydown", e => { if(e.key === "Enter") entrar(); });
 
 /* ---------- os cartões ---------- */
 const VALE = 70000;          /* o PC grava a cada 20 s: mais que isto sem gravar = sem contato */
-const VALE_RENOVA = 180000;
-const SIT = { trab: ["Trabalhando", "var(--verde)", 0], test: ["Testando", "var(--azul)", 1], erro: ["Com erro", "var(--vermelho)", 2], parado: ["Parado", "var(--precisa)", 3], terminou: ["Terminou", "var(--lilas)", 4], livre: ["Livre", "var(--apagado)", 5] };
-let linhaJan = ARM.get("jv_janelas"), linhaConta = null, falhou = false, tentei = false, sigTela = "";
+const VALE_LEITURA = 15 * 60000;   /* leitura do limite mais velha que isto = "--%" */
+const ERRO_NA_TELA = 30 * 60;        /* segundos que um "com erro" fica na tela */
+/* só estas aparecem na tela (cor, ordem); parado, terminou e livre não têm cartão */
+const SIT = { trab: ["var(--verde)", 0], test: ["var(--azul)", 1], erro: ["var(--vermelho)", 2] };
+const naTela = j => !!SIT[j.sit] && !(j.sit === "erro" && j.desde && Date.now() / 1000 - j.desde > ERRO_NA_TELA);
+let linhaJan = ARM.get("jv_janelas"), falhou = false, tentei = false, sigTela = "";
 const idade = l => l ? Date.now() - new Date(l.atualizado_em).getTime() : Infinity;
 const doisN = x => String(x).padStart(2, "0");
 function quando(ms){
   const d = new Date(ms), h = doisN(d.getHours()) + ":" + doisN(d.getMinutes());
   return d.toDateString() === new Date().toDateString() ? "às " + h : "em " + doisN(d.getDate()) + "/" + doisN(d.getMonth() + 1) + " às " + h;
 }
-function haQuanto(seg){
-  const m = Math.floor((Date.now() / 1000 - seg) / 60);
-  if(m < 1) return "menos de 1 min";
-  if(m < 60) return m + " min";
-  const h = Math.floor(m / 60);
-  return h < 24 ? h + " h " + doisN(m % 60) : Math.floor(h / 24) + (h < 48 ? " dia" : " dias");
-}
 function el(tag, classe, texto){ const d = document.createElement(tag); if(classe) d.className = classe; if(texto != null) d.textContent = texto; return d; }
 function cartao(j, velho){
-  const s = SIT[j.sit] || SIT.livre, c = el("article", "jan " + (SIT[j.sit] ? j.sit : "livre")); c.style.setProperty("--cor", s[1]); c.dataset.id = j.id;
-  const l1 = el("div", "l1"), chip = el("span", "sit"); chip.append(el("i"), el("span", null, s[0])); l1.append(el("h2", null, j.nome), chip); c.append(l1);
-  const fila = j.fila > 0 ? j.fila + (j.fila > 1 ? " tarefas na fila" : " tarefa na fila") : "Nada na fila";
+  const s = SIT[j.sit], c = el("article", "jan " + j.sit); c.style.setProperty("--cor", s[0]); c.dataset.id = j.id;
+  const l1 = el("div", "l1"), x = j.n ? Math.min(j.x, j.n) : 0;               /* o mesmo "X/N" do pontinho do PC */
+  l1.append(el("h2", null, j.nome)); if(j.n) l1.append(el("span", "parte", x + "/" + j.n)); c.append(l1);
   if(j.titulo) c.append(el("div", "tit", j.titulo));
-  if(j.nota) c.append(el("div", "nota", j.nota.charAt(0).toUpperCase() + j.nota.slice(1)));
-  if(j.titulo){
-    const andando = j.sit !== "terminou" && j.sit !== "erro", atual = andando ? Math.min(j.x + 1, j.n) : j.x;
-    const l2 = el("div", "l2");
-    l2.append(el("span", "parte", j.n ? "Parte " + atual + " de " + j.n : "Sem contagem de partes"));
-    const antes = j.sit === "terminou" ? "terminou há " : j.sit === "erro" ? "parou há " : j.n ? "nesta parte há " : "há ";
-    l2.append(el("span", "tempo", j.desde && !velho ? antes + haQuanto(j.desde) : ""));
-    c.append(l2);
-    if(j.n){ const b = el("div", "barra"), i = el("i"); i.style.width = Math.round(100 * Math.min(j.x, j.n) / j.n) + "%"; b.append(i); c.append(b); }
+  if(j.n){ const b = el("div", "barra"), i = el("i"); i.style.width = Math.round(100 * x / j.n) + "%"; b.append(i); c.append(b); }
+  const linha = [];
+  if(j.fila > 0){
+    linha.push("+" + j.fila + " na fila");
+    if(temPrevisao(j, velho)) linha.push("termina por volta de " + horaBrasilia(j.termina * 1000));
   }
-  c.append(el("div", "fila", fila));
-  if(j.fila > 0 && j.termina && !velho && j.termina * 1000 > Date.now()) c.append(el("div", "previsao", "Termina por volta de " + horaBrasilia(j.termina * 1000)));
+  if(linha.length) c.append(el("div", "fila", linha.join(" · ")));
   return c;
 }
+const temPrevisao = (j, velho) => !!(j.fila > 0 && j.termina && !velho && j.termina * 1000 > Date.now());
 /* hora de Brasília, arredondada de 5 em 5 min; outro dia é avisado */
 function horaBrasilia(ms){
   const d = new Date(Math.round(ms / 300000) * 300000), f = o => new Intl.DateTimeFormat("pt-BR", Object.assign({ timeZone: "America/Sao_Paulo" }, o));
@@ -273,31 +273,50 @@ function resumo(lista){
 function ajustaResumo(){ const b = $q("resumo"); let t = 24; b.style.fontSize = t + "px"; while(t > 11 && b.scrollWidth > b.clientWidth){ t -= 1; b.style.fontSize = t + "px"; } }
 addEventListener("resize", ajustaResumo);
 if(document.fonts) document.fonts.ready.then(ajustaResumo);
+/* "Usado", "Falta" e "Renova": a mesma leitura do pontinho do PC. Sem leitura nova o bastante = "--%" */
+function semana(){
+  const lim = linhaJan && linhaJan.dados && linhaJan.dados.limite;
+  if(lim && lim.lida) ARM.set("jv_lida", lim.lida);
+  const lida = (lim && lim.lida) || ARM.get("jv_lida");
+  const vale = !!(lim && typeof lim.pct === "number" && lim.lida && !falhou && idade(linhaJan) <= VALE && Date.now() - lim.lida * 1000 <= VALE_LEITURA && !(lim.renova && lim.renova * 1000 <= Date.now()));
+  const pct = vale ? Math.max(0, Math.min(100, Math.round(lim.pct))) : null;
+  $q("semUsado").textContent = vale ? pct + "%" : "--%";
+  $q("semFalta").textContent = vale ? (100 - pct) + "%" : "--%";
+  $q("semRenova").textContent = vale && lim.renova ? diaHora(lim.renova * 1000) : "--";
+  $q("semUltima").textContent = vale ? "" : lida ? "última leitura " + quando(lida * 1000) : "ainda sem leitura";
+  $q("dez").style.setProperty("--cor", !vale ? "var(--livre)" : pct <= 60 ? "var(--verde)" : pct <= 85 ? "var(--precisa)" : "var(--vermelho)");
+  document.querySelectorAll("#dez b").forEach((b, i) => { b.style.width = (vale ? Math.max(0, Math.min(10, pct - i * 10)) * 10 : 0) + "%"; });
+}
+/* "sáb 14:00", hora de Brasília (+30 s: 13:59:59 vira 14:00, como no PC) */
+function diaHora(ms){
+  const d = new Date(ms + 30000), f = o => new Intl.DateTimeFormat("pt-BR", Object.assign({ timeZone: "America/Sao_Paulo" }, o)).format(d);
+  return f({ weekday: "short" }).replace(".", "") + " " + f({ hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+}
 function desenha(){
   const lista = linhaJan && linhaJan.dados && Array.isArray(linhaJan.dados.janelas) ? linhaJan.dados.janelas : null;
   const velho = tentei && (falhou || idade(linhaJan) > VALE);
   $q("semContato").classList.toggle("on", velho);
   $q("semHora").textContent = !velho ? "" : linhaJan ? "Última informação " + quando(new Date(linhaJan.atualizado_em).getTime()) + ". O que aparece abaixo é dessa hora." : "Ainda não recebi nada do PC.";
-  /* os minutos entram na assinatura: o cartão só é refeito quando algo muda (o brilho não reinicia) */
-  const sig = JSON.stringify([lista, velho, tentei, lista && lista.map(j => j.desde ? haQuanto(j.desde) : "")]);
+  /* o cartão só é refeito quando algo muda (o brilho não reinicia); o erro e a previsão vencem com o tempo */
+  const visiveis = lista ? lista.filter(naTela).sort((a, b) => (SIT[a.sit][1] - SIT[b.sit][1]) || (a.id - b.id)) : [];
+  const sig = JSON.stringify([lista, velho, tentei, visiveis.map(j => [j.id, temPrevisao(j, velho)])]);
   if(sig !== sigTela){
     sigTela = sig;
-    resumo(velho ? null : lista);            /* sem contato: nada de resumo velho como se fosse de agora */
+    resumo(velho || !lista ? null : lista.map(j => naTela(j) ? j : Object.assign({}, j, { sit: "livre" })));   /* sem contato: nada de resumo velho; quem não tem cartão só conta a fila */
     const box = $q("cartoes"); box.innerHTML = ""; box.classList.toggle("velho", velho);
     if(!lista){ if(!velho) box.append(el("div", "vazio", tentei ? "O PC ainda está preparando os cartões. Aguarde um instante." : "Carregando…")); }
-    else lista.slice().sort((a, b) => ((SIT[a.sit] || SIT.livre)[2] - (SIT[b.sit] || SIT.livre)[2]) || (a.id - b.id)).forEach(j => box.append(cartao(j, velho)));
+    else visiveis.forEach(j => box.append(cartao(j, velho)));
   }
-  const d = linhaConta && linhaConta.dados, r = d && d.d7r && !falhou && idade(linhaConta) < VALE_RENOVA ? String(d.d7r) : "";
-  $q("renovaTxt").textContent = r ? "em " + r.replace(/([dh])(?=\d)/g, "$1 ") : "sem leitura";
+  semana();
 }
 let puxando = null;
 function puxa(){
   if(!sess) return Promise.resolve();
   puxando = puxando || (async () => {
     try{
-      const r = (await rest("jarvis_uso?id=in.(pontinho,conta)&select=id,dados,atualizado_em")) || [];
+      const r = (await rest("jarvis_uso?id=eq.pontinho&select=id,dados,atualizado_em")) || [];
       const p = r.find(x => x.id === "pontinho"); if(p){ linhaJan = p; ARM.set("jv_janelas", p); }
-      linhaConta = r.find(x => x.id === "conta") || null; falhou = false;
+      falhou = false;
     }catch(e){ falhou = true; }
     tentei = true; desenha();
   })().finally(() => { puxando = null; });
