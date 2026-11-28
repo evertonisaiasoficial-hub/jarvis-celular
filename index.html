@@ -30,6 +30,9 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 #semContato.on{display:block}
 #semContato b{display:block;font-size:19px;font-weight:700;color:var(--precisa)}
 #semContato small{display:block;margin-top:4px;font-size:14px;color:#e6d9b4}
+#resumo{margin:2px 2px 14px;font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#resumo:empty{display:none}
+#resumo .erro{display:inline-block;padding:0 .4em;border-radius:999px;background:rgba(248,113,113,.18);color:var(--vermelho)}
 #cartoes{display:flex;flex-direction:column;gap:14px}
 .jan{position:relative;background:var(--cartao);border:1px solid var(--borda);border-radius:22px;padding:18px}
 .jan .l1{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -44,6 +47,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 .jan .barra{margin-top:9px;height:5px;border-radius:3px;background:var(--livre);overflow:hidden}
 .jan .barra i{display:block;height:100%;border-radius:3px;background:var(--cor);transition:width .5s}
 .jan .fila{margin-top:11px;font-size:14px;color:var(--apagado)}
+.jan .previsao{margin-top:4px;font-size:15px;font-weight:600;color:#D6D8DD}
 .jan.livre{padding:15px 18px}
 .jan.livre h2{font-size:17px;font-weight:600;color:#C9CCD2}
 .jan.livre .fila{margin-top:5px}
@@ -56,7 +60,9 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 #cartoes.velho{opacity:.45;filter:grayscale(1)}
 #cartoes.velho .jan::after,#cartoes.velho .sit i{animation:none}
 .vazio{padding:40px 12px;text-align:center;font-size:16px;line-height:1.5;color:var(--apagado)}
-#pe{flex:0 0 auto;display:flex;justify-content:center;padding:6px 16px calc(env(safe-area-inset-bottom) + 6px)}
+#ligaAvisos{padding:7px 15px;border-radius:999px;background:var(--verde);border:1px solid var(--verde);color:#06210f;font-size:13px;font-weight:700}
+#ligaAvisos[hidden]{display:none}
+#pe{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:6px 16px calc(env(safe-area-inset-bottom) + 6px)}
 #renova{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;background:var(--cartao);border:1px solid var(--borda);font-size:13px;font-weight:500;color:var(--apagado)}
 #renova b{font-weight:600;color:#D6D8DD}
 .tela{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:var(--fundo);padding:24px}
@@ -75,9 +81,10 @@ body.semlogin #app,body.travado #app{visibility:hidden}
   <main id="rola">
     <div id="puxa">Puxe para atualizar</div>
     <div id="semContato" role="status"><b>Sem contato com o PC</b><small id="semHora"></small></div>
+    <h1 id="resumo"></h1>
     <div id="cartoes"><div class="vazio">Carregando…</div></div>
   </main>
-  <footer id="pe"><div id="renova">↻ <span>Renova</span> <b id="renovaTxt">…</b></div></footer>
+  <footer id="pe"><div id="renova">↻ <span>Renova</span> <b id="renovaTxt">…</b></div><button id="ligaAvisos" hidden>🔔 Ligar avisos</button></footer>
 </div>
 <div class="tela" id="login"><div class="caixa">
   <h2>Jarvis</h2>
@@ -99,7 +106,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 <script>
 
 /* ====== Jarvis iPhone: uma tela só de vistoria ====== */
-const VERSAO = "v86";
+const VERSAO = "v88";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -239,8 +246,33 @@ function cartao(j, velho){
     if(j.n){ const b = el("div", "barra"), i = el("i"); i.style.width = Math.round(100 * Math.min(j.x, j.n) / j.n) + "%"; b.append(i); c.append(b); }
   }
   c.append(el("div", "fila", fila));
+  if(j.fila > 0 && j.termina && !velho && j.termina * 1000 > Date.now()) c.append(el("div", "previsao", "Termina por volta de " + horaBrasilia(j.termina * 1000)));
   return c;
 }
+/* hora de Brasília, arredondada de 5 em 5 min; outro dia é avisado */
+function horaBrasilia(ms){
+  const d = new Date(Math.round(ms / 300000) * 300000), f = o => new Intl.DateTimeFormat("pt-BR", Object.assign({ timeZone: "America/Sao_Paulo" }, o));
+  const hora = f({ hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(d), dia = f({ day: "2-digit", month: "2-digit" });
+  if(dia.format(d) === dia.format(new Date())) return hora;
+  return hora + (dia.format(d) === dia.format(new Date(Date.now() + 86400000)) ? " de amanhã" : " de " + dia.format(d));
+}
+/* uma linha só no topo, montada dos mesmos dados dos cartões; erro primeiro e em destaque */
+const FRASE = [["erro", "com erro", "com erro"], ["trab", "trabalhando", "trabalhando"], ["test", "testando", "testando"], ["parado", "parado", "parados"], ["terminou", "terminou", "terminaram"]];
+function resumo(lista){
+  const box = $q("resumo"); box.innerHTML = "";
+  if(!lista) return;
+  const partes = [];
+  FRASE.forEach(([sit, um, varios]) => { const n = lista.filter(j => j.sit === sit).length; if(n) partes.push(el("span", sit, n + " " + (n > 1 ? varios : um))); });
+  if(partes.length > 1 && partes[partes.length - 1].className === "terminou") partes.pop();      /* "terminou" só entra se não houver outra situação: a linha fica grande */
+  const fila = lista.reduce((s, j) => s + (j.fila || 0), 0);
+  if(fila) partes.push(el("span", null, fila + " na fila"));
+  if(!partes.length) partes.push(el("span", null, "Tudo parado, nada na fila"));
+  partes.forEach((p, i) => { if(i) box.append(", "); box.append(p); });
+  ajustaResumo();
+}
+function ajustaResumo(){ const b = $q("resumo"); let t = 24; b.style.fontSize = t + "px"; while(t > 11 && b.scrollWidth > b.clientWidth){ t -= 1; b.style.fontSize = t + "px"; } }
+addEventListener("resize", ajustaResumo);
+if(document.fonts) document.fonts.ready.then(ajustaResumo);
 function desenha(){
   const lista = linhaJan && linhaJan.dados && Array.isArray(linhaJan.dados.janelas) ? linhaJan.dados.janelas : null;
   const velho = tentei && (falhou || idade(linhaJan) > VALE);
@@ -250,6 +282,7 @@ function desenha(){
   const sig = JSON.stringify([lista, velho, tentei, lista && lista.map(j => j.desde ? haQuanto(j.desde) : "")]);
   if(sig !== sigTela){
     sigTela = sig;
+    resumo(velho ? null : lista);            /* sem contato: nada de resumo velho como se fosse de agora */
     const box = $q("cartoes"); box.innerHTML = ""; box.classList.toggle("velho", velho);
     if(!lista){ if(!velho) box.append(el("div", "vazio", tentei ? "O PC ainda está preparando os cartões. Aguarde um instante." : "Carregando…")); }
     else lista.slice().sort((a, b) => ((SIT[a.sit] || SIT.livre)[2] - (SIT[b.sit] || SIT.livre)[2]) || (a.id - b.id)).forEach(j => box.append(cartao(j, velho)));
@@ -270,9 +303,32 @@ function puxa(){
   })().finally(() => { puxando = null; });
   return puxando;
 }
+/* ---------- aviso do próprio app (só: janela parou com erro / fila terminou). No iPhone, só no ícone da Tela de Início ---------- */
+const podeAvisar = () => !!(CFG.vapid && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window);
+const b64u = s => Uint8Array.from(atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+async function inscreve(){
+  const reg = await navigator.serviceWorker.ready;
+  const sub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(CFG.vapid) });
+  const j = sub.toJSON();           /* "tela:" separa dos avisos antigos do servidor ("o PC caiu"), que o dono não quer */
+  await rest("jarvis_push?on_conflict=endpoint", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: "tela:" + j.keys.p256dh, auth: j.keys.auth }) });
+}
+async function preparaAvisos(){
+  const b = $q("ligaAvisos");
+  if(!podeAvisar()){ b.hidden = true; return; }
+  if(Notification.permission === "granted"){ try{ await inscreve(); b.hidden = true; return; }catch(e){} }
+  b.hidden = false;
+}
+$q("ligaAvisos").onclick = async () => {
+  const b = $q("ligaAvisos");
+  try{
+    if(await Notification.requestPermission() !== "granted"){ b.textContent = "Libere em Ajustes > Notificações > Jarvis"; return; }
+    b.textContent = "Ligando…"; await inscreve();
+    b.textContent = "Avisos ligados ✓"; setTimeout(() => { b.hidden = true; }, 4000);
+  }catch(e){ b.textContent = "Não deu. Toque para tentar de novo"; }
+};
 let relogio = null;
 function comeca(){
-  desenha(); puxa();
+  desenha(); puxa(); preparaAvisos();
   if(!relogio) relogio = setInterval(() => { if(!document.hidden){ puxa(); desenha(); } }, 5000);
 }
 addEventListener("offline", () => { falhou = true; tentei = true; desenha(); });
