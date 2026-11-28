@@ -30,8 +30,20 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 #semContato.on{display:block}
 #semContato b{display:block;font-size:19px;font-weight:700;color:var(--precisa)}
 #semContato small{display:block;margin-top:4px;font-size:14px;color:#e6d9b4}
-#resumo{margin:2px 2px 14px;font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#resumo:empty{display:none}
+#linhaResumo{display:flex;align-items:center;gap:14px;margin:2px 2px 14px}
+#linhaResumo:has(#resumo:empty){display:none}
+#resumo{flex:1;min-width:0;font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* a bolinha de "está trabalhando" (como no pontinho do PC): do tamanho de uma maiúscula, acende e apaga com um halo que abre e some */
+.bola{flex:0 0 auto;position:relative;width:15px;height:15px;--t:1.6s;--cor:var(--verde)}
+.bola[hidden]{display:none}
+.bola::before,.bola::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--cor)}
+.bola::after{opacity:0}
+.jan .bola{--cor:inherit;margin-top:5px}
+.jan.test .bola{--t:3.2s}
+#bolaTopo::before,.jan.trab:not(.parada) .bola::before,.jan.test:not(.parada) .bola::before{animation:acende var(--t) ease-in-out infinite}
+#bolaTopo::after,.jan.trab:not(.parada) .bola::after,.jan.test:not(.parada) .bola::after{animation:halo var(--t) ease-out infinite}
+@keyframes acende{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes halo{0%{transform:scale(1);opacity:.6}80%,100%{transform:scale(2.3);opacity:0}}
 #resumo .erro{display:inline-block;padding:0 .4em;border-radius:999px;background:rgba(248,113,113,.18);color:var(--vermelho)}
 #cartoes{display:flex;flex-direction:column;gap:14px}
 .jan{position:relative;background:var(--cartao);border:2px solid var(--cor);border-radius:18px;padding:14px 16px}
@@ -40,6 +52,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 .jan.erro{background:linear-gradient(180deg,rgba(248,113,113,.16),rgba(248,113,113,.03)),var(--cartao)}
 .jan.parada{background:linear-gradient(180deg,rgba(251,146,60,.16),rgba(251,146,60,.03)),var(--cartao)}
 .jan .l1{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.jan .nome{display:flex;align-items:flex-start;gap:12px;min-width:0}
 .jan h2{font-size:20px;font-weight:700;letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
 .jan .parte{flex:0 0 auto;font-size:32px;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums;color:var(--cor)}
 .jan .tit{margin-top:5px;font-size:18px;line-height:1.35;font-weight:500;color:var(--texto);overflow-wrap:break-word}
@@ -57,9 +70,9 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 .jan.trab::after{content:"";position:absolute;inset:-2px;border-radius:18px;box-shadow:0 0 26px rgba(74,222,128,.55);animation:pulso 2.4s ease-in-out infinite;pointer-events:none}
 .jan.parada::after{display:none}
 @keyframes pulso{0%,100%{opacity:.25}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.jan.trab::after,.jan .vida::before{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.jan.trab::after,.jan .vida::before,.bola::after{animation:none!important}}
 #cartoes.velho{filter:grayscale(1)}
-#cartoes.velho .jan::after,#cartoes.velho .vida::before{animation:none}
+#cartoes.velho .jan::after,#cartoes.velho .vida::before,#cartoes.velho .bola::before,#cartoes.velho .bola::after{animation:none!important}
 .vazio{padding:40px 12px;text-align:center;font-size:16px;line-height:1.5;color:var(--apagado)}
 #ligaAvisos{padding:7px 15px;border-radius:999px;background:var(--verde);border:1px solid var(--verde);color:#06210f;font-size:13px;font-weight:700}
 #ligaAvisos[hidden]{display:none}
@@ -91,7 +104,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
   <main id="rola">
     <div id="puxa">Puxe para atualizar</div>
     <div id="semContato" role="status"><b>Sem contato com o PC</b><small id="semHora"></small></div>
-    <h1 id="resumo"></h1>
+    <div id="linhaResumo"><i class="bola" id="bolaTopo" aria-hidden="true" hidden></i><h1 id="resumo"></h1></div>
     <div id="cartoes"><div class="vazio">Carregando…</div></div>
   </main>
   <footer id="pe">
@@ -124,7 +137,7 @@ body.semlogin #app,body.travado #app{visibility:hidden}
 <script>
 
 /* ====== Jarvis iPhone: uma tela só de vistoria ====== */
-const VERSAO = "v90";
+const VERSAO = "v91";
 const CFG = window.JARVIS_CFG;
 /* v10.4: o iOS limpa o localStorage de PWA parada; a sessão, a chave do Face ID e a hora do último Face ID também ficam em IndexedDB e num cookie de longa duração (reserva). */
 const DUR = { jv_sess: "jv_r", jv_passkey: "jv_p", jv_faceok: "jv_f" };
@@ -247,7 +260,8 @@ function el(tag, classe, texto){ const d = document.createElement(tag); if(class
 function cartao(j, velho){
   const s = SIT[j.sit], c = el("article", "jan " + j.sit); c.style.setProperty("--cor", s[0]); c.dataset.id = j.id;
   const l1 = el("div", "l1"), x = j.n ? Math.min(j.x, j.n) : 0;               /* o mesmo "X/N" do pontinho do PC */
-  l1.append(el("h2", null, j.nome)); if(j.n) l1.append(el("span", "parte", x + "/" + j.n)); c.append(l1);
+  const nome = el("div", "nome"), bola = el("i", "bola"); bola.setAttribute("aria-hidden", "true");
+  nome.append(bola, el("h2", null, j.nome)); l1.append(nome); if(j.n) l1.append(el("span", "parte", x + "/" + j.n)); c.append(l1);
   if(j.titulo) c.append(el("div", "tit", j.titulo));
   if(j.n){ const b = el("div", "barra"), i = el("i"); i.style.width = Math.round(100 * x / j.n) + "%"; b.append(i); c.append(b); }
   if(j.sit !== "erro" && j.agora){ c.append(el("div", "agora"), el("div", "vida")); }          /* quem preenche é o vivo() */
@@ -278,6 +292,9 @@ function vivo(){
     a.dataset.t = j.agora;
     escreve(c.querySelector(".vida"), seg === null || parada ? "" : "há " + haQuanto(seg));
   });
+  /* bolinha do topo: só quando alguma janela está trabalhando de verdade (não "Parado há") */
+  const alguma = !velho && lista.some(j => j.sit === "trab" && !(j.agora && j.visto && Date.now() / 1000 - j.visto >= PARADO_S + 1));
+  if($q("bolaTopo").hidden === alguma){ $q("bolaTopo").hidden = !alguma; ajustaResumo(); }
 }
 const temPrevisao = (j, velho) => !!(j.fila > 0 && j.termina && !velho && j.termina * 1000 > Date.now());
 /* hora de Brasília, arredondada de 5 em 5 min; outro dia é avisado */
